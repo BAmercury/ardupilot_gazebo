@@ -43,6 +43,7 @@ LOITER> mode LAND
 
 <sdf version="1.6">
   <world name="default">
+    <!-- Physics ODE Solver Configuration -->
     <physics type="ode">
       <ode>
         <solver>
@@ -68,7 +69,7 @@ LOITER> mode LAND
     <include>
       <uri>model://ground_plane</uri>
     </include>
-
+    <!-- Import Drone Model -->
     <model name="iris">
       <include>
         <uri>model://iris_with_standoffs_demo</uri>
