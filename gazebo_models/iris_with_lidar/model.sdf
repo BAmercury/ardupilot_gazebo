@@ -29,7 +29,5 @@
           </limit>
         </axis>
       </joint>
-
-      <!-- For Another Lidar Payload -->
     </model>
   </sdf>
