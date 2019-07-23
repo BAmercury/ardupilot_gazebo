@@ -27,7 +27,7 @@
 
     <include>
       <uri>model://sun</uri>
-    </include>
+    </include>i
 
     <model name="ground_plane">
       <static>true</static>

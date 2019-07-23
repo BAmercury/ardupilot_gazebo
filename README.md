@@ -1,47 +1,17 @@
 # Ardupilot Gazebo Plugin & Models
 
 ## Requirements :
-Native Ubuntu Xenial(16.04 LTS) able to run full 3D graphics.
+Ubuntu Bionic (18.04 LTS)
 
-Note : Virtual Machine such as VMWare Player does not support full 3D graphics.
+Gazebo 9.0
 
-but, possible solution is here
-
-Type follow in the terminal,
-````
-echo "export SVGA_VGPU10=0" >> ~/.bashrc
-source ~/.bashrc
-````
-solution retreived from here http://answers.gazebosim.org/question/13214/virtual-machine-not-launching-gazebo/
-
-Gazebo version 7.x or 8.x  
-The dev branch will works on gazebo >= 9.x  
-
-## Disclamer : 
-This is a playground until I get some time to push the correct patch to gazebo master (I got hard time to work with mercurial..)!  
-So you can expect things to not be up-to-date.  
-This assume that your are using Ubuntu 16.04
+ROS Melodic Morenia
 
 ## Usage :
-I assume you already have Gazebo installed with ROS (or without).  
-If you don't have it yet, install ROS with sudo apt install ros-kinetic-desktop-full 
-(follow instruction here http://wiki.ros.org/kinetic/Installation/Ubuntu).  
 
-Or install directly gazebo8 from http://gazebosim.org/tutorials?tut=install_ubuntu  
 
-libgazebo7-dev or libgazebo8-dev must be installed.
-
-For Gazebo 7
 ````
-sudo apt-get install libgazebo7-dev
-````
-OR  
-For Gazebo 8
-````
-sudo apt-get install libgazebo8-dev
-````
-````
-git clone https://github.com/SwiftGust/ardupilot_gazebo
+git clone https://github.com/BAmercury/ardupilot_gazebo
 cd ardupilot_gazebo
 mkdir build
 cd build
@@ -59,11 +29,6 @@ Set Path of Gazebo Worlds
 export GAZEBO_RESOURCE_PATH=~/ardupilot_gazebo/gazebo_worlds:${GAZEBO_RESOURCE_PATH}
 source ~/.bashrc
 ````
-
-Install is done !!
-
-Now launch a world file with a copter/rover/plane and ardupilot plugin, and it should work! 
-(I will try to add some world file and model later)
 
 ## HELP
 
