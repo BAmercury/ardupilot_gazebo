@@ -51,6 +51,7 @@
       <visualize>true</visualize>
     </sensor>
   </link>
+<<<<<<< HEAD:models/iris_with_standoffs_demo/model.sdf
 
   <joint name="camera_mount" type="fixed">
     <child>cam_link</child>
@@ -420,6 +421,19 @@
       </visual>
     </link>
     -->
+=======
+    <joint name="camera_mount" type="fixed">
+      <child>cam_link</child>
+      <parent>iris::base_link</parent>
+      <axis>
+        <xyz>0 0 1</xyz>
+        <limit>
+          <upper>0</upper>
+          <lower>0</lower>
+        </limit>
+      </axis>
+    </joint>
+>>>>>>> gazebo9_update:gazebo_models/iris_with_standoffs_demo/model.sdf
 
     <!-- plugins -->
     <plugin name="rotor_0_blade_1" filename="libLiftDragPlugin.so">
@@ -553,6 +567,11 @@
       <upward>0 0 1</upward>
       <link_name>iris::rotor_3</link_name>
     </plugin>
+    
+    
+    
+    
+    <!-- Ardupilot Plugin -->
     <plugin name="arducopter_plugin" filename="libArduPilotPlugin.so">
       <fdm_addr>127.0.0.1</fdm_addr>
       <fdm_port_in>9002</fdm_port_in>
@@ -565,6 +584,7 @@
       <gazeboXYZToNED>0 0 0 3.141593 0 0</gazeboXYZToNED>
       <imuName>iris_demo::iris::iris/imu_link::imu_sensor</imuName>
       <connectionTimeoutMaxCount>5</connectionTimeoutMaxCount>
+      
       <control channel="0">
       <!--
           incoming control command [0, 1]
@@ -586,6 +606,7 @@
         <multiplier>838</multiplier>
         <controlVelocitySlowdownSim>1</controlVelocitySlowdownSim>
       </control>
+
       <control channel="1">
         <type>VELOCITY</type>
         <offset>0</offset>
@@ -600,6 +621,7 @@
         <multiplier>838</multiplier>
         <controlVelocitySlowdownSim>1</controlVelocitySlowdownSim>
       </control>
+
       <control channel="2">
         <type>VELOCITY</type>
         <offset>0</offset>
@@ -614,9 +636,10 @@
         <multiplier>-838</multiplier>
         <controlVelocitySlowdownSim>1</controlVelocitySlowdownSim>
       </control>
+      
       <control channel="3">
         <type>VELOCITY</type>
-        <offset>0</offset>
+        <offset>0</offset>	
         <p_gain>0.20</p_gain>
         <i_gain>0</i_gain>
         <d_gain>0</d_gain>

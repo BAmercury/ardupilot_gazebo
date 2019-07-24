@@ -87,7 +87,7 @@ LOITER> mode LAND
           </material>
         </visual>
         <sensor name="camera" type="camera">
-          <pose>0 0 0 -1.57 1.57 3.14</pose>
+          <pose>0 0 0 -1.57 -1.57 0</pose>
           <camera>
             <horizontal_fov>1.0472</horizontal_fov>
             <image>
@@ -104,7 +104,7 @@ LOITER> mode LAND
           <visualize>true</visualize>
 
           <plugin name="irlock" filename="libArduCopterIRLockPlugin.so">
-              <fiducial>irlock_beacon_01</fiducial>
+              <fiducial>ir_beacon_cart</fiducial>
           </plugin>
         </sensor>
       </link>
@@ -125,70 +125,11 @@ LOITER> mode LAND
       </joint>
     </model>
 
-    <model name="irlock_beacon_01">
-      <pose>1.0 -1.0 0.005 0 0 0</pose>
-      <link name="link">
-         <inertial>
-          <pose>0 0 0 0 0 0</pose>
-          <mass>3.0</mass>
-          <inertia>
-            <ixx>0.019</ixx>
-            <ixy>0</ixy>
-            <ixz>0</ixz>
-            <iyy>0.01</iyy>
-            <iyz>0</iyz>
-            <izz>0.01</izz>
-          </inertia>
-        </inertial>
-        <collision name="collision">
-          <geometry>
-            <box>
-              <size>1.0 1.0 0.02</size>
-            </box>
-          </geometry>
-          <surface>
-            <friction>
-              <ode>
-                <mu>1.0</mu>
-                <mu2>1.0</mu2>
-                <fdir1>1 0 0</fdir1>
-              </ode>
-            </friction>
-            <contact>
-              <ode>
-                <kp>1e+12</kp>
-                <kd>1</kd>
-                <max_vel>10</max_vel>
-                <min_depth>0.003</min_depth>
-              </ode>
-            </contact>
-          </surface>
-        </collision>
-        <visual name="visual2">
-          <geometry>
-            <box>
-              <size>1.0 1.0 0.018</size>
-            </box>
-          </geometry>
-          <material>
-            <script>
-              <name>Gazebo/Green</name>
-            </script>
-          </material>
-        </visual>
-        <visual name="visual">
-          <geometry>
-            <box>
-              <size>0.1 0.1 0.02</size>
-            </box>
-          </geometry>
-          <material>
-            <script>
-              <name>Gazebo/Red</name>
-            </script>
-          </material>
-        </visual>
-      </link>
+    <model name="ir_beacon_cart">
+      <pose> 1 1 0 0 0 0 </pose>
+      <include>
+        <uri>model://rail_system</uri>
+      </include>
     </model>
 
   </world>
