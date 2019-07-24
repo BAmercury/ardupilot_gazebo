@@ -130,7 +130,7 @@ LOITER> mode LAND
       <include>
         <uri>model://rail_system</uri>
       </include>
-      <plugin name="RailSim" filename="libRailSimPlugin.so"/>
+      <!-- plugin name="RailSim" filename="libRailSimPlugin.so"/ -->
     </model>
 
   </world>

@@ -6,7 +6,7 @@
       <pose>0  0 0.15  0 0 0</pose>
       <inertial>
         <pose>0.1 0 0  0 0 0</pose>
-        <mass>10</mass>
+        <mass>50</mass>
         <inertia>
           <ixx>0.21666666666666667</ixx>
           <iyy>0.8416666666666667</iyy>
@@ -22,6 +22,23 @@
             <size>1.0 0.5 0.1</size>
           </box>
         </geometry>
+        <surface>
+          <friction>
+            <ode>
+              <mu>1.0</mu>
+              <mu2>1.0></mu2>
+              <fdir1>1 0 0</fdir1>
+            </ode>
+          </friction>
+          <contact>
+            <ode>
+              <kp>1e+12</kp>
+              <kd>1</kd>
+              <max_vel>10</max_vel>
+              <min_depth>0.003</min_depth>
+            </ode>
+          </contact>
+        </surface>
       </collision>
       <visual name="visual">
         <geometry>
