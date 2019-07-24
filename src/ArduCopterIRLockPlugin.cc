@@ -286,16 +286,11 @@ void ArduCopterIRLockPlugin::Publish(const std::string &/*_fiducial*/,
   pkt.size_x = static_cast<float>(1);
   pkt.size_y = static_cast<float>(1);
 
-<<<<<<< HEAD
-//   std::cerr << "fiducial '" << _fiducial << "':" << _x << ", " << _y
-//       << ", pos: " << pkt.pos_x << ", " << pkt.pos_y << std::endl;
-=======
   // Attempting to Log Data
   gzdbg << "Angle X: " << angleX << std::endl;
   gzdbg << "Angle Y: " << angleY << std::endl;
   // std::cerr << "fiducial '" << _fiducial << "':" << _x << ", " << _y
   //     << ", pos: " << pkt.pos_x << ", " << pkt.pos_y << std::endl;
->>>>>>> gazebo9_update
 
   struct sockaddr_in sockaddr;
   memset(&sockaddr, 0, sizeof(sockaddr));

@@ -39,20 +39,10 @@ link_directories(
 set (plugins_single_header
         ArduPilotPlugin
         ArduCopterIRLockPlugin
-<<<<<<< HEAD
-				ArduCopterPlugin
-        # GimbalSmall2dPlugin
-	# WindPlugin
-        )
-
-add_library(ArduCopterIRLockPlugin SHARED src/ArduCopterIRLockPlugin.cc)
-target_link_libraries(ArduCopterIRLockPlugin ${GAZEBO_LIBRARIES})
-=======
 	# WindPlugin
         )
 
 
->>>>>>> gazebo9_update
 
 add_library(ArduPilotPlugin SHARED src/ArduPilotPlugin.cc)
 target_link_libraries(ArduPilotPlugin ${GAZEBO_LIBRARIES})
@@ -63,9 +53,5 @@ target_link_libraries(ArduCopterIRLockPlugin ${GAZEBO_LIBRARIES})
 
 
 
-<<<<<<< HEAD
-install(TARGETS ArduCopterIRLockPlugin DESTINATION ${GAZEBO_PLUGIN_PATH})
-=======
->>>>>>> gazebo9_update
 install(TARGETS ArduPilotPlugin DESTINATION ${GAZEBO_PLUGIN_PATH})
 install(TARGETS ArduCopterIRLockPlugin DESTINATION ${GAZEBO_PLUGIN_PATH})
