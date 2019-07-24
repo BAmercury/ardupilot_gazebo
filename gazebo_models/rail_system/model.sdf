@@ -1,7 +1,7 @@
 <?xml version="1.0" ?>
 
 <sdf version="1.5">
-  <model name="cart_front_steer">
+  <model name="rail_system">
     <link name="chassis">
       <pose>0  0 0.15  0 0 0</pose>
       <inertial>
