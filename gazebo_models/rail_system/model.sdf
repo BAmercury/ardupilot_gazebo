@@ -23,6 +23,11 @@
           </box>
         </geometry>
         <surface>
+          <bounce>
+            <restitution_coefficient>0</restitution_coefficient>
+            <!-- Threshold for Bounce Capture velocity (Velocity below this value will yield COR of 0 -->
+            <threshold>200000</threshold>
+          </bounce>
           <friction>
             <ode>
               <mu>1.0</mu>
@@ -33,7 +38,7 @@
           <contact>
             <ode>
               <kp>1e+12</kp>
-              <kd>1</kd>
+              <kd>0.01</kd>
               <max_vel>10</max_vel>
               <min_depth>0.003</min_depth>
             </ode>
