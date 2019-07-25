@@ -11,13 +11,20 @@ namespace gazebo
 {
     class RailSim : public ModelPlugin
     {
-        // Plugin to control movement of a simple cart based on motion profiles
+        /*
+            Loads model and optionally sdf of the model
+            Also adds subscriber for World update Events
+        */
         public: void Load(physics::ModelPtr _parent, sdf::ElementPtr /*_sdf*/)
         {
             // Store pointers for the model
             this->model = _parent;
 
-            // Listen for update event
+            /*
+                worldUpdateBegin event is fired at each physics iteration
+                
+                ConnectWorldBegin takes in a callback for the triggered event
+            */
             this->updateConnection = event::Events::ConnectWorldUpdateBegin(
                 std::bind(&RailSim::OnUpdate, this, std::placeholders::_1));
         }
@@ -26,10 +33,14 @@ namespace gazebo
         {
             // Apply Linear Velocity to the model
             // Velocity = -aw * sin(wt)
-            static double desired_cart_vel = 0.3000;
-            gzdbg << "Simulation Time" << _info.simTime.Double() << std::endl; // Time in seconds
+            double desired_vel = (-amplitude * frequency_w) * sin( (frequency_w) * _info.simTime.Double());
+            gzdbg << "Cart Speed: " << desired_vel << std::endl; // Time in seconds
             //gzdbg << "Cart Speed " << desired_cart_vel << std::endl;
-            this->model->SetLinearVel(ignition::math::Vector3d(desired_cart_vel, 0, 0));
+
+            // Should oscillate between 0.6096:-0.6096 m/s ? 
+            desired_vel = desired_vel * 0.2;
+            gzdbg << "Cart Scaled Speed: " << desired_vel << std::endl;
+            this->model->SetLinearVel(ignition::math::Vector3d(desired_vel, 0, 0));
         }
 
 
