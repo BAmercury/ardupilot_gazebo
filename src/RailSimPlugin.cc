@@ -3,6 +3,7 @@
 #include <gazebo/gazebo.hh>
 #include <gazebo/physics/physics.hh>
 #include <gazebo/common/common.hh>
+#include <gazebo/sensors/sensors.hh>
 #include <ignition/math4/ignition/math/Vector3.hh>
 #include <stdio.h>
 #include <math.h>
@@ -20,6 +21,10 @@ namespace gazebo
             // Store pointers for the model
             this->model = _parent;
 
+            // Create a sensor
+            sensors::SensorManager *manager = sensors::SensorManager::Instance();
+            this->sensor =  std::dynamic_pointer_cast<sensors::ContactSensor>(manager->GetSensor(this->sensor_name));
+            this->sensor->SetActive(true);
             /*
                 worldUpdateBegin event is fired at each physics iteration
                 
@@ -33,14 +38,29 @@ namespace gazebo
         {
             // Apply Linear Velocity to the model
             // Velocity = -aw * sin(wt)
-            double desired_vel = (-amplitude * frequency_w) * sin( (frequency_w) * _info.simTime.Double());
-            gzdbg << "Cart Speed: " << desired_vel << std::endl; // Time in seconds
+            //double desired_vel = (-amplitude * frequency_w) * sin( (frequency_w) * _info.simTime.Double());
+            //this->sensor->Update(true);
+            // 
+            msgs::Contacts contacts;
+            contacts = this->sensor->Contacts();
+            for (unsigned int i = 0; i < contacts.contact_size(); ++i)
+            {
+
+                if (contacts.contact(i).collision1 == this->drone_coll_name)
+                {
+                    gzdbg << "Collision has been detected"<< std::endl;
+
+                }
+
+
+            }
+            //gzdbg << "Cart Speed: " << desired_vel << std::endl; // Time in seconds
             //gzdbg << "Cart Speed " << desired_cart_vel << std::endl;
 
             // Should oscillate between 0.6096:-0.6096 m/s ? 
-            desired_vel = desired_vel * 0.2;
-            gzdbg << "Cart Scaled Speed: " << desired_vel << std::endl;
-            this->model->SetLinearVel(ignition::math::Vector3d(desired_vel, 0, 0));
+            //desired_vel = desired_vel * 0.2;
+            //gzdbg << "Cart Scaled Speed: " << desired_vel << std::endl;
+            //this->model->SetLinearVel(ignition::math::Vector3d(desired_vel, 0, 0));
         }
 
 
@@ -56,6 +76,11 @@ namespace gazebo
         private: const double amplitude = 15.0;
         private: const double max_velocity = 2.0; // ft/s
         private: const double frequency_w = 0.133;  // maxVel/Amplitude
+
+        // Contact Sensor:
+        private: sensors::ContactSensorPtr sensor;
+        private: const std::string sensor_name = "contact_sensor";
+        private: const std::string drone_coll_name = "iris::base_link::base_link_collision";
     };
 	// Register the plugin with the simulator
 	GZ_REGISTER_MODEL_PLUGIN(RailSim)
