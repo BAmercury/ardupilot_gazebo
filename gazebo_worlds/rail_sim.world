@@ -1,0 +1,47 @@
+<?xml version="1.0" ?>
+
+
+<sdf version="1.6">
+  <world name="default">
+    <!-- Physics ODE Solver Configuration -->
+    <physics type="ode">
+      <ode>
+        <solver>
+          <type>quick</type>
+          <iters>100</iters>
+          <sor>1.0</sor>
+        </solver>
+        <constraints>
+          <cfm>0.0</cfm>
+          <erp>0.9</erp>
+          <contact_max_correcting_vel>0.1</contact_max_correcting_vel>
+          <contact_surface_layer>0.0</contact_surface_layer>
+        </constraints>
+      </ode>
+      <!-- Gazebo Unstable Flight issue: 
+          https://discuss.ardupilot.org/t/arducopter-3-6-sitl-with-gazebo-unstable-flight/34451/12
+          Set update params accordingly to attempt to fix 
+      -->
+      <!-- real_time_update_rate>0</real_time_update_rate -->
+      <real_time_update_rate>-1</real_time_update_rate>
+      <!-- max_step_size>0.0025</max_step_size -->
+    </physics>
+
+    <include>
+      <uri>model://sun</uri>
+    </include>
+
+    <include>
+      <uri>model://ground_plane</uri>
+    </include>
+
+    <model name="ir_beacon_cart">
+      <pose> 1 1 0 0 0 0 </pose>
+      <include>
+        <uri>model://rail_system</uri>
+      </include>
+      <plugin name="RailSim" filename="libRailSimPlugin.so"/>
+    </model>
+
+  </world>
+</sdf>
