@@ -2,8 +2,8 @@
 
 <sdf version="1.5">
   <model name="rail_system">
-    <link name="chassis">
-      <pose>1.0 -1.0 0.005 0 0 0</pose>
+    <link name="link">
+      <!-- pose>1.0 -1.0 0.005 0 0 0</pose -->
       <inertial>
         <pose>0 0 0  0 0 0</pose>
         <mass>50</mass>
@@ -30,8 +30,8 @@
           </bounce>
           <friction>
             <ode>
-              <mu>0.0</mu>
-              <mu2>0.0></mu2>
+              <mu>1.0</mu>
+              <mu2>1.0></mu2>
               <!-- fdir1>1 0 0</fdir1 -->
             </ode>
           </friction>

@@ -1,22 +1,4 @@
 <?xml version="1.0" ?>
-
-<!--
-
-# arm the motors
-STABILIZE> arm throttle
-
-# switch to LOITER mode
-STABILIZE> mode LOITER
-
-# take off using rc command
-LOITER> rc 3 1700
-
-# wait until the irlock beacon is within the view then switch to land mode
-# to begin precision landing
-LOITER> mode LAND
-
--->
-
 <sdf version="1.6">
   <world name="default">
     <!-- Physics ODE Solver Configuration -->
@@ -104,7 +86,7 @@ LOITER> mode LAND
           <visualize>true</visualize>
 
           <plugin name="irlock" filename="libArduCopterIRLockPlugin.so">
-              <fiducial>ir_beacon_cart</fiducial>
+              <fiducial>rail_system</fiducial>
           </plugin>
         </sensor>
       </link>
@@ -125,12 +107,12 @@ LOITER> mode LAND
       </joint>
     </model>
 
-    <model name="ir_beacon_cart">
-      <pose> 1 1 0 0 0 0 </pose>
+    <model name="rail_system">
+      <pose>1.0 -1.0 0.005 0 0 0</pose>
       <include>
         <uri>model://rail_system</uri>
       </include>
-      <!-- plugin name="RailSim" filename="libRailSimPlugin.so"/ -->
+      <plugin name="RailSim" filename="libRailSimPlugin.so"/>
     </model>
 
   </world>
