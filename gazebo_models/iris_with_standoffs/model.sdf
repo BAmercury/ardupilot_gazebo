@@ -27,8 +27,13 @@
           </box>
         </geometry>
         <surface>
+          <bounce>
+            <restitution_coefficient>0</restitution_coefficient>
+            <threshold>200000</threshold>
+          </bounce>
           <contact>
             <ode>
+              <kd>0.01</kd>
               <max_vel>100.0</max_vel>
               <min_depth>0.001</min_depth>
             </ode>

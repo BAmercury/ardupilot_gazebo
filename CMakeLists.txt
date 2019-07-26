@@ -39,6 +39,7 @@ link_directories(
 set (plugins_single_header
         ArduPilotPlugin
         ArduCopterIRLockPlugin
+        RailSimPlugin
 	# WindPlugin
         )
 
@@ -55,3 +56,10 @@ target_link_libraries(ArduCopterIRLockPlugin ${GAZEBO_LIBRARIES})
 
 install(TARGETS ArduPilotPlugin DESTINATION ${GAZEBO_PLUGIN_PATH})
 install(TARGETS ArduCopterIRLockPlugin DESTINATION ${GAZEBO_PLUGIN_PATH})
+
+
+# Rail Sim plugin
+add_library(RailSimPlugin SHARED src/RailSimPlugin.cc)
+target_link_libraries(RailSimPlugin ${GAZEBO_LIBRARIES})
+install(TARGETS RailSimPlugin DESTINATION ${GAZEBO_PLUGIN_PATH})
+
