@@ -46,7 +46,7 @@ namespace gazebo
             for (unsigned int i = 0; i < contacts.contact_size(); ++i)
             {
 
-                if (contacts.contact(i).collision1 == this->drone_coll_name)
+                if (contacts.contact(i).collision1() == this->drone_coll_name)
                 {
                     gzdbg << "Collision has been detected"<< std::endl;
 
@@ -80,7 +80,7 @@ namespace gazebo
         // Contact Sensor:
         private: sensors::ContactSensorPtr sensor;
         private: const std::string sensor_name = "contact_sensor";
-        private: const std::string drone_coll_name = "iris::base_link::base_link_collision";
+        private: const std::string drone_coll_name = "iris::iris_demo::iris::base_link::base_link_collision";
     };
 	// Register the plugin with the simulator
 	GZ_REGISTER_MODEL_PLUGIN(RailSim)
