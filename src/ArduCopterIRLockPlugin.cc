@@ -287,8 +287,8 @@ void ArduCopterIRLockPlugin::Publish(const std::string &/*_fiducial*/,
   pkt.size_y = static_cast<float>(1);
 
   // Attempting to Log Data
-  //gzdbg << "Angle X: " << angleX << std::endl;
-  //gzdbg << "Angle Y: " << angleY << std::endl;
+  gzdbg << "Angle X: " << angleX << std::endl;
+  gzdbg << "Angle Y: " << angleY << std::endl;
   // std::cerr << "fiducial '" << _fiducial << "':" << _x << ", " << _y
   //     << ", pos: " << pkt.pos_x << ", " << pkt.pos_y << std::endl;
 
