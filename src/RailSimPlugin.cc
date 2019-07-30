@@ -66,7 +66,7 @@ namespace gazebo
                     // Should oscillate between 0.6096:-0.6096 m/s ? 
                     desired_vel = desired_vel * 0.2;
                     //gzdbg << "Cart Scaled Speed: " << desired_vel << std::endl;
-                    this->model->SetLinearVel(ignition::math::Vector3d(desired_vel, 0, 0));
+                    this->model->SetLinearVel(ignition::math::Vector3d(0, desired_vel, 0));
 
                 }
 
