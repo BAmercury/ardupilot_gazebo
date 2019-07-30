@@ -22,7 +22,7 @@
       -->
       <real_time_update_rate>1000</real_time_update_rate>
       <!-- real_time_update_rate>-1</real_time_update_rate-->
-      <max_step_size>0.001</max_step_size>
+      <max_step_size>0.0025</max_step_size>
     </physics>
 
     <include>
@@ -83,7 +83,7 @@
           </camera>
           <always_on>1</always_on>
           <update_rate>10</update_rate>
-          <visualize>true</visualize>
+          <visualize>false</visualize>
 
           <plugin name="irlock" filename="libArduCopterIRLockPlugin.so">
               <fiducial>rail_system</fiducial>
