@@ -5,7 +5,7 @@
     <link name="link">
       <!-- pose>1.0 -1.0 0.005 0 0 0</pose -->
       <inertial>
-        <pose>0 0 0  0 0 0</pose>
+        <pose>0 0 0 0 0 0</pose>
         <mass>50</mass>
         <inertia>
             <ixx>0.019</ixx>
@@ -30,9 +30,9 @@
           </bounce>
           <friction>
             <ode>
-              <mu>1.0</mu>
-              <mu2>1.0></mu2>
-              <!-- fdir1>1 0 0</fdir1 -->
+              <mu>0.5</mu>
+              <mu2>0.5</mu2>
+              <!-- fdir1>1 0 0</fdir1-->
             </ode>
           </friction>
           <contact>
@@ -53,7 +53,7 @@
       </sensor>
 
       
-      <visual name="visual">
+      <visual name="visual2">
         <geometry>
           <box>
             <size>1.0 1.0 0.018</size>
@@ -65,7 +65,7 @@
           </script>
         </material>
       </visual>
-      <visual name="visual2">
+      <visual name="visual">
         <geometry>
           <box>
             <size>0.1 0.1 0.02</size>
