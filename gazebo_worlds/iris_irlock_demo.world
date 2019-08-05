@@ -44,7 +44,7 @@ LOITER> mode LAND
     </physics>
 
     <include>
-      <uri>model://sun</uri>
+      <uri>model://sun2</uri>
     </include>
 
     <include>
