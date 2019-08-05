@@ -44,7 +44,7 @@ set (plugins_single_header
 	# WindPlugin
         )
 
-add_library(ArduCopterIRLockPlugin SHARED src ArduCopterIRLockPlugin.cc)
+add_library(ArduCopterIRLockPlugin SHARED src/ArduCopterIRLockPlugin.cc)
 target_link_libraries(ArduCopterIRLockPlugin ${GAZEBO_LIBRARIES})
 
 add_library(ArduPilotPlugin SHARED src/ArduPilotPlugin.cc)
