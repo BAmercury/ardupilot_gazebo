@@ -62,7 +62,8 @@ namespace gazebo
   /// \param[in] _verbose If true, gzerror if the parameter is not available.
   /// \return True if the parameter was found in _sdf, false otherwise.
   template<class T>
-  bool getSdfParam(sdf::ElementPtr _sdf, const std::string &_name, T &_param, const T &_defaultValue, const bool &_verbose = false)
+  bool getSdfParam(sdf::ElementPtr _sdf, const std::string &_name,
+    T &_param, const T &_defaultValue, const bool &_verbose = false)
   {
     if (_sdf->HasElement(_name))
     {
@@ -114,7 +115,8 @@ namespace gazebo
 }
 
 /////////////////////////////////////////////////
-ignition::math::Vector2i GetScreenSpaceCoords(ignition::math::Vector3d _pt, gazebo::rendering::CameraPtr _cam)
+ignition::math::Vector2i GetScreenSpaceCoords(ignition::math::Vector3d _pt,
+    gazebo::rendering::CameraPtr _cam)
 {
   // Convert from 3D world pos to 2D screen pos
   Ogre::Vector3 pos = _cam->OgreCamera()->getProjectionMatrix() *
@@ -163,9 +165,11 @@ ArduCopterIRLockPlugin::~ArduCopterIRLockPlugin()
 }
 
 /////////////////////////////////////////////////
-void ArduCopterIRLockPlugin::Load(sensors::SensorPtr _sensor, sdf::ElementPtr _sdf)
+void ArduCopterIRLockPlugin::Load(sensors::SensorPtr _sensor,
+                                  sdf::ElementPtr _sdf)
 {
-  this->dataPtr->parentSensor = std::dynamic_pointer_cast<sensors::CameraSensor>(_sensor);
+  this->dataPtr->parentSensor =
+    std::dynamic_pointer_cast<sensors::CameraSensor>(_sensor);
 
   if (!this->dataPtr->parentSensor)
   {
@@ -185,18 +189,22 @@ void ArduCopterIRLockPlugin::Load(sensors::SensorPtr _sensor, sdf::ElementPtr _s
   }
   else
   {
-    gzerr << "No fidicuals specified. ArduCopterIRLockPlugin will not be run." << std::endl;
+    gzerr << "No fidicuals specified. ArduCopterIRLockPlugin will not be run."
+        << std::endl;
     return;
   }
-  getSdfParam<std::string>(_sdf, "irlock_addr", this->dataPtr->irlock_addr, "127.0.0.1");
-  getSdfParam<uint16_t>(_sdf, "irlock_port", this->dataPtr->irlock_port, 9005);
+  getSdfParam<std::string>(_sdf, "irlock_addr",
+      this->dataPtr->irlock_addr, "127.0.0.1");
+  getSdfParam<uint16_t>(_sdf, "irlock_port",
+      this->dataPtr->irlock_port, 9005);
 
   this->dataPtr->parentSensor->SetActive(true);
 
-  this->dataPtr->connections.push_back(this->dataPtr->parentSensor->Camera()->ConnectNewImageFrame(
-    std::bind(&ArduCopterIRLockPlugin::OnNewFrame, this,
-    std::placeholders::_1, std::placeholders::_2, std::placeholders::_3,
-    std::placeholders::_4, std::placeholders::_5)));
+  this->dataPtr->connections.push_back(
+      this->dataPtr->parentSensor->Camera()->ConnectNewImageFrame(
+      std::bind(&ArduCopterIRLockPlugin::OnNewFrame, this,
+        std::placeholders::_1, std::placeholders::_2, std::placeholders::_3,
+        std::placeholders::_4, std::placeholders::_5)));
 }
 
 /////////////////////////////////////////////////
@@ -225,7 +233,8 @@ void ArduCopterIRLockPlugin::OnNewFrame(const unsigned char * /*_image*/,
     if (!camera->IsVisible(vis))
       continue;
 
-    ignition::math::Vector2i pt = GetScreenSpaceCoords(vis->WorldPose().Pos(), camera);
+    ignition::math::Vector2i pt = GetScreenSpaceCoords(
+        vis->GetWorldPose().pos.Ign(), camera);
 
     // use selection buffer to check if visual is occluded by other entities
     // in the camera view
@@ -250,7 +259,7 @@ void ArduCopterIRLockPlugin::OnNewFrame(const unsigned char * /*_image*/,
 
     if (result && result->GetRootVisual() == vis)
     {
-      this->Publish(vis->Name(), pt.X(), pt.Y());
+      this->Publish(vis->GetName(), pt.X(), pt.Y());
     }
   }
 }
@@ -278,14 +287,15 @@ void ArduCopterIRLockPlugin::Publish(const std::string &/*_fiducial*/,
   pkt.timestamp = static_cast<uint64_t>
     (1.0e3 * this->dataPtr->parentSensor->LastMeasurementTime().Double());
   pkt.num_targets = static_cast<uint16_t>(1);
-  
   pkt.pos_x = angleX;
   pkt.pos_y = angleY;
-
   // 1x1 pixel box for now
   pkt.size_x = static_cast<float>(1);
   pkt.size_y = static_cast<float>(1);
 
+//   std::cerr << "fiducial '" << _fiducial << "':" << _x << ", " << _y
+//       << ", pos: " << pkt.pos_x << ", " << pkt.pos_y << std::endl;
+  
   // Attempting to Log Data
   //gzdbg << "Angle X: " << angleX << std::endl;
   //gzdbg << "Angle Y: " << angleY << std::endl;

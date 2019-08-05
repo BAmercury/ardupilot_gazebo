@@ -11,8 +11,8 @@ project(ardupilot_sitl_gazebo)
 find_package(gazebo REQUIRED)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${GAZEBO_CXX_FLAGS}")
 
-if("${GAZEBO_VERSION}" VERSION_LESS "9.0")
-    message(FATAL_ERROR "You need at least Gazebo 9.0. Your version: ${GAZEBO_VERSION}")
+if("${GAZEBO_VERSION}" VERSION_LESS "7.0")
+    message(FATAL_ERROR "You need at least Gazebo 7.0. Your version: ${GAZEBO_VERSION}")
 else()
     message("Gazebo version: ${GAZEBO_VERSION}")
 endif()
@@ -40,26 +40,23 @@ set (plugins_single_header
         ArduPilotPlugin
         ArduCopterIRLockPlugin
         RailSimPlugin
+        GimbalSmall2dPlugin
 	# WindPlugin
         )
 
-
+add_library(ArduCopterIRLockPlugin SHARED src ArduCopterIRLockPlugin.cc)
+target_link_libraries(ArduCopterIRLockPlugin ${GAZEBO_LIBRARIES})
 
 add_library(ArduPilotPlugin SHARED src/ArduPilotPlugin.cc)
 target_link_libraries(ArduPilotPlugin ${GAZEBO_LIBRARIES})
 
 
-add_library(ArduCopterIRLockPlugin SHARED src/ArduCopterIRLockPlugin.cc)
-target_link_libraries(ArduCopterIRLockPlugin ${GAZEBO_LIBRARIES})
+add_library(GimbalSmall2dPlugin SHARED src/GimbalSmall2dPlugin.cc)
+target_link_libraries(GimbalSmall2dPlugin ${GAZEBO_LIBRARIES})
 
 
 
-install(TARGETS ArduPilotPlugin DESTINATION ${GAZEBO_PLUGIN_PATH})
+
 install(TARGETS ArduCopterIRLockPlugin DESTINATION ${GAZEBO_PLUGIN_PATH})
-
-
-# Rail Sim plugin
-add_library(RailSimPlugin SHARED src/RailSimPlugin.cc)
-target_link_libraries(RailSimPlugin ${GAZEBO_LIBRARIES})
-install(TARGETS RailSimPlugin DESTINATION ${GAZEBO_PLUGIN_PATH})
-
+install(TARGETS ArduPilotPlugin DESTINATION ${GAZEBO_PLUGIN_PATH})
+install(TARGETS GimbalSmall2dPlugin DESTINATION ${GAZEBO_PLUGIN_PATH})
