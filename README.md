@@ -1,40 +1,17 @@
 # Ardupilot Gazebo Plugin & Models
 
 ## Requirements :
-Native Ubuntu Xenial(16.04 LTS) able to run full 3D graphics.
 
-**Note :** Virtual Machine such as VMWare Player does not support full 3D graphics.
-
-but, possible solution is here
-
-Type follow in the terminal,
-````
-echo "export SVGA_VGPU10=0" >> ~/.bashrc
-source ~/.bashrc
-````
-solution retreived from here http://answers.gazebosim.org/question/13214/virtual-machine-not-launching-gazebo/
-
-**Note :** This just enables running gazebo in virtual machine, does not guarantee the performance and Gazebo require much of CPU & GPU processing power depending on what you are running the simulation.
+Ubuntu Xenial(16.04 LTS)
 
 ArduPilot setup for SITL launch
-Gazebo version 7.x or 8.x  
-The gazebo9 branch will works on gazebo >= 9.x  
 
-## Disclamer :
-This is a playground until I get some time to push the correct patch to gazebo master (I got hard time to work with mercurial..)!  
-So you can expect things to not be up-to-date.  
-This assume that your are using Ubuntu 16.04
+Gazebo version 7.0
+
 
 ## Repository Structure : 
-**models_gazebo :** Gazebo Original models retrieved from OSRF bitbucket repository (you can find more in https://bitbucket.org/osrf/gazebo_models/src)
 
-**models :** Ardupilot SITL compatible models.
-
-**worlds :** Ardupilot SITL example worlds.
-
-**src :** source files for Gazebo - ArduPilot Plugin
-
-**include :** header files for Gazebo - ArduPilot Plugin
+TBA
 
 # Getting Started :
 ## How to Install :
@@ -52,15 +29,11 @@ sudo apt-get install libgazebo7-dev
 ````
 OR
 
-**For Gazebo 8**
-````
-sudo apt-get install libgazebo8-dev
-````
-
 **Common :**
 ````
-git clone https://github.com/SwiftGust/ardupilot_gazebo
+git clone https://github.com/BAmercury/ardupilot_gazebo
 cd ardupilot_gazebo
+git checkout gazebo7-ver
 mkdir build
 cd build
 cmake ..
@@ -76,15 +49,14 @@ Copy & Paste Followings at the end of .bashrc file
 ````
 source /usr/share/gazebo/setup.sh
 
-export GAZEBO_MODEL_PATH=~/ardupilot_gazebo/models:${GAZEBO_MODEL_PATH}
-export GAZEBO_MODEL_PATH=~/ardupilot_gazebo/models_gazebo:${GAZEBO_MODEL_PATH}
-export GAZEBO_RESOURCE_PATH=~/ardupilot_gazebo/worlds:${GAZEBO_RESOURCE_PATH}
+export GAZEBO_MODEL_PATH=~/Documents/ardupilot_gazebo/gazebo_models
+export GAZEBO_RESOURCE_PATH=~/ardupilot_gazebo/gazebo_worlds:${GAZEBO_RESOURCE_PATH}
+
+export PATH=$PATH:$HOME/ardupilot/Tools/autotest
+export PATH=/usr/lib/ccache:$PATH
 ````
 
 Install is complete
-
-Now launch a world file with a copter/rover/plane and ardupilot plugin, and it should work!
-(I will try to add some world file and model later)
 
 ## HELP
 
@@ -92,16 +64,7 @@ Now launch a world file with a copter/rover/plane and ardupilot plugin, and it s
 Launch Ardupilot Software In the Loop Simulation for each vehicle.
 On new terminal, Launch Gazebo with basic demo world.
 
-**ROVER**
 
-````
-On 1st Terminal(Launch Ardupilot SITL)
-sim_vehicle.py -v APMrover2 -f gazebo-rover  -m --mav10 --map --console -I1
-
-On 2nd Termianal(Launch Gazebo with differential drive Rover model, Retrieved from Husky Model)
-gazebo --verbose rover_ardupilot.world
-
-````
 **COPTER (3DR IRIS)**
 ````
 On 1st Terminal(Launch Ardupilot SITL)
@@ -109,15 +72,6 @@ sim_vehicle.py -v ArduCopter -f gazebo-iris  -m --mav10 --map --console -I0
 
 On 2nd Terminal(Launch Gazebo with demo 3DR Iris model)
 gazebo --verbose iris_ardupilot.world
-````
-
-**PLANE**
-````
-On 1st Terminal(Launch Ardupilot SITL)
-sim_vehicle.py -v ArduPlane -f gazebo-zephyr  -m --mav10 --map --console -I0
-
-On 2nd Terminal(Launch Gazebo with demo Zephyr flying wing model)
-gazebo --verbose zephyr_ardupilot_demo.world
 ````
 
 In addition, you can use any GCS that can connect to the Ardupilot locally or remotely(will require connection setup).
