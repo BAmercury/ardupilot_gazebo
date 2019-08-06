@@ -54,9 +54,11 @@ target_link_libraries(ArduPilotPlugin ${GAZEBO_LIBRARIES})
 add_library(GimbalSmall2dPlugin SHARED src/GimbalSmall2dPlugin.cc)
 target_link_libraries(GimbalSmall2dPlugin ${GAZEBO_LIBRARIES})
 
+add_library(RailSimPlugin SHARED src/RailSimPlugin.cc)
+target_link_libraries(RailSimPlugin ${GAZEBO_LIBRARIES})
 
 
-
+install(TARGETS RailSimPlugin DESTINATION ${GAZEBO_PLUGIN_PATH})
 install(TARGETS ArduCopterIRLockPlugin DESTINATION ${GAZEBO_PLUGIN_PATH})
 install(TARGETS ArduPilotPlugin DESTINATION ${GAZEBO_PLUGIN_PATH})
 install(TARGETS GimbalSmall2dPlugin DESTINATION ${GAZEBO_PLUGIN_PATH})
