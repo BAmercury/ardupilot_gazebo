@@ -4,7 +4,7 @@
 #include <gazebo/physics/physics.hh>
 #include <gazebo/common/common.hh>
 #include <gazebo/sensors/sensors.hh>
-#include <ignition/math4/ignition/math/Vector3.hh>
+#include <ignition/math/Vector3.hh>
 #include <stdio.h>
 #include <math.h>
 
