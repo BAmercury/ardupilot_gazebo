@@ -21,8 +21,8 @@ LOITER> mode LAND
   <world name="default">
     <!-- Set default global camera pose -->
     <gui>
-      <camera>
-        <pose>-3,0.5,16,0,1.4,0.013</pose>
+      <camera name="user_camera">
+        <pose>-3.012870 0.455695 15.817830 -0.000002 1.393796 0.013203</pose>
       </camera>
     </gui>
     <!-- Physics ODE Solver Configuration -->
@@ -96,10 +96,10 @@ LOITER> mode LAND
           <pose>0 0 0 -1.57 1.57 3.14</pose>
           <camera>
             <!-- horizontal_fov>1.0472</horizontal_fov -->
-            <horizontal_fov>1.5708</horizontal_fov> <!-- 90 degrees -->
+            <horizontal_fov>3.1415</horizontal_fov> <!-- 180 degrees -->
             <image>
-              <width>320</width>
-              <height>200</height>
+              <width>1920</width>
+              <height>1800</height>
             </image>
             <clip>
               <near>0.05</near>
