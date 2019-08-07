@@ -19,6 +19,12 @@ LOITER> mode LAND
 
 <sdf version="1.6">
   <world name="default">
+    <!-- Set default global camera pose -->
+    <gui>
+      <camera>
+        <pose>-3,0.5,16,0,1.4,0.013</pose>
+      </camera>
+    </gui>
     <!-- Physics ODE Solver Configuration -->
     <physics type="ode">
       <ode>
