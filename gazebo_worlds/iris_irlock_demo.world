@@ -25,6 +25,13 @@ LOITER> mode LAND
         <pose>-3.012870 0.455695 15.817830 -0.000002 1.393796 0.013203</pose>
       </camera>
     </gui>
+
+    <!-- Wind -->
+    <wind>
+      <linear_velocity>10 0 0</linear_velocity>
+    </wind>
+
+
     <!-- Physics ODE Solver Configuration -->
     <physics type="ode">
       <ode>
