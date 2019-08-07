@@ -19,6 +19,13 @@ LOITER> mode LAND
 
 <sdf version="1.6">
   <world name="default">
+    <gui>
+      <camera name="user_camera">
+        <pose>-3.012870 0.455695 15.817830 -0.000002 1.393796 0.013203</pose>
+      </camera>
+    </gui>
+
+
     <!-- Physics ODE Solver Configuration -->
     <physics type="ode">
       <ode>
@@ -89,10 +96,10 @@ LOITER> mode LAND
         <sensor name="camera" type="camera">
           <pose>0 0 0 -1.57 -1.57 0</pose>
           <camera>
-            <horizontal_fov>1.0472</horizontal_fov>
+            <horizontal_fov>2.35619</horizontal_fov> <!-- 135 degrees -->
             <image>
               <width>320</width>
-              <height>200</height>
+              <height>240</height>
             </image>
             <clip>
               <near>0.05</near>
