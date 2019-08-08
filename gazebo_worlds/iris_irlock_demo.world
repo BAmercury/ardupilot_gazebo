@@ -28,6 +28,7 @@ LOITER> mode LAND
 
     <!-- Wind -->
     <wind>
+      <!-- X (North) Y (West) Z (Up) in m/s -->
       <linear_velocity>10 0 0</linear_velocity>
     </wind>
 
