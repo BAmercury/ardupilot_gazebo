@@ -163,8 +163,9 @@ From these world files, you can access various parameters such as the following:
     - update rate
     - max step size
     - camera configurations for Drone
+    - Wind
 
-To access specfic paramters for a model itself (Drone or Rail Sim) you will have to navigate to the gazebo_models folder and edit the corresponding model sdf file:
+To access specfic parameters for a model itself (Drone or Rail Sim) you will have to navigate to the gazebo_models folder and edit the corresponding model sdf file:
 
 For the drone there is a small tree of .sdf's to go through:
 
@@ -189,3 +190,5 @@ For model-level editing you can access properties such as:
         - Inertia
         - Mass
         - Velocity/Accelerations
+
+
