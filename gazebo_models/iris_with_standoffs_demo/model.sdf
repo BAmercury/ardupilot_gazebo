@@ -4,6 +4,28 @@
     <include>
       <uri>model://iris_with_standoffs</uri>
     </include>
+    
+    
+    <include>
+      <uri>model://gimbal_small_2d</uri>
+      <pose>0 -0.01 0.070 1.57 0 1.57</pose>
+    </include>
+
+
+    <joint name="iris_gimbal_mount" type="revolute">
+      <parent>iris::base_link</parent>
+      <child>gimbal_small_2d::base_link</child>
+      <axis>
+        <limit>
+          <lower>0</lower>
+          <upper>0</upper>
+        </limit>
+        <xyz>0 0 1</xyz>
+        <use_parent_model_frame>true</use_parent_model_frame>
+      </axis>
+    </joint>
+
+
     <link name="cam_link">
       <pose>0 0 0 0 0 0 </pose>
       <inertial>
@@ -262,5 +284,7 @@
       </control>
     </plugin>
 
+
+    <enable_wind>1</enable_wind>
   </model>
 </sdf>

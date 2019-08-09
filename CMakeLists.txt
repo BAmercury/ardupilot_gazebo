@@ -40,10 +40,11 @@ set (plugins_single_header
         ArduPilotPlugin
         ArduCopterIRLockPlugin
         RailSimPlugin
-	# WindPlugin
+	WindPlugin
         )
-
-
+add_library(WindPlugin SHARED src/WindPlugin.cc)
+target_link_libraries(WindPlugin ${GAZEBO_LIBRARIES})
+install(TARGETS WindPlugin DESTINATION ${GAZEBO_PLUGIN_PATH})
 
 add_library(ArduPilotPlugin SHARED src/ArduPilotPlugin.cc)
 target_link_libraries(ArduPilotPlugin ${GAZEBO_LIBRARIES})

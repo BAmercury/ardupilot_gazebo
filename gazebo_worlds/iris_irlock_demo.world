@@ -50,6 +50,10 @@ LOITER> mode LAND
       <max_step_size>0.001</max_step_size>
     </physics>
 
+    <wind>
+      <linear_velocity>100 0 0 </linear_velocity>
+    </wind>
+
     <include>
       <uri>model://sun</uri>
     </include>

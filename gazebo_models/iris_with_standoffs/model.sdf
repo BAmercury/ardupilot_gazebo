@@ -480,5 +480,7 @@
       </physics>
     </joint>
     <static>0</static>
+
+    <enable_wind>1</enable_wind>
   </model>
 </sdf>
