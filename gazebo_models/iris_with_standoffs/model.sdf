@@ -1,4 +1,4 @@
-<?xml version='1.0'?>
+<?xml version='0.0'?>
 <sdf version='1.6'>
   <model name='iris'>
     <pose>0 0 0.194923 0 0 0</pose>
@@ -480,7 +480,5 @@
       </physics>
     </joint>
     <static>0</static>
-
-    <enable_wind>1</enable_wind>
   </model>
 </sdf>
