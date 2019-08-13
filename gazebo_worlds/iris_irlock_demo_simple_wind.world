@@ -60,6 +60,7 @@ LOITER> mode LAND
     </include>
     <!-- Import Drone Model -->
     <model name="iris">
+      <enable_wind>true</enable_wind>
       <include>
         <uri>model://iris_with_standoffs_demo</uri>
       </include>
@@ -132,6 +133,11 @@ LOITER> mode LAND
         </axis>
       </joint>
     </model>
+
+    <!-- Wind Control -->
+    <wind>
+      <linear_velocity>10 0 0</linear_velocity>
+    </wind>
 
     <model name="irlock_beacon_01">
       <pose>1.0 -1.0 0.005 0 0 0</pose>
