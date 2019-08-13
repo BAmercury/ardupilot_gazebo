@@ -31,6 +31,13 @@ void RailSim::Load(physics::ModelPtr _parent, sdf::ElementPtr _sdf)
     // Get World Pointer
     this->world_ptr = this->model->GetWorld();
 
+    // Go through SDF parameters to setup motion profile
+    if (_sdf->HasElement("motion_type"))
+    {
+        sdf::ElementPtr motion_type = _sdf->GetElement("motion_type");
+        
+    }
+
 
     /*
         worldUpdateBegin event is fired at each physics iteration

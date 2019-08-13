@@ -11,6 +11,8 @@
 #include <gazebo/common/common.hh>
 #include <gazebo/sensors/sensors.hh>
 #include <ignition/math4/ignition/math/Vector3.hh>
+#include <stdio.h>
+#include <math.h>
 
 namespace gazebo
 {
@@ -40,6 +42,9 @@ namespace gazebo
 
         // World Pointer
         private: physics::WorldPtr world_ptr;
+
+        // Variable to specify the motion profile for the rail sim
+        private: std::string desired_motion;
     };
 }
 
