@@ -8,6 +8,27 @@ project(ardupilot_sitl_gazebo)
 ## Find Dependencies ##
 #######################
 
+# Set up Custom Boost Path
+execute_process(COMMAND lsb_release -sr OUTPUT_VARIABLE DISTRO_VER)
+message("${DISTRO_VER}")
+if ("${DISTRO_VER}" VERSION_EQUAL "16.04")
+        message(STATUS "Ubuntu xenial, using custom update to date BOOST libraries")
+        set(BOOSTROOT /home/james/boost/)
+        set(BOOST_INCLUDEDIR /home/james/boost/boost_1_69_0_build/include/)
+        set(BOOST_LIBRARYDIR /home/james/boost/boost_1_69_0_build/lib/)
+        set(BOOST_NO_SYSTEM_PATHS ON)
+elseif("$DISTRO_VER}" VERSION_EQUAL "18.04")
+        message(STATUS "Ubuntu biotic, using system installation path for BOOST libraries")
+else()
+        message(FATAL_ERROR "You need either Ubuntu 16.04 or 18.04 to use these plugins")
+endif()
+
+
+
+
+
+
+
 find_package(gazebo REQUIRED)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${GAZEBO_CXX_FLAGS}")
 
@@ -16,6 +37,8 @@ if("${GAZEBO_VERSION}" VERSION_LESS "9.0")
 else()
     message("Gazebo version: ${GAZEBO_VERSION}")
 endif()
+
+
 
 ###########
 ## Build ##

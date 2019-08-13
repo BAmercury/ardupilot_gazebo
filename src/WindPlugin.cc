@@ -226,7 +226,7 @@ void WindPlugin::OnUpdate()
       // Add wind velocity as a force to the body
       link->AddRelativeForce(link->GetInertial()->Mass() *
           this->forceApproximationScalingFactor *
-          (link->RelativeWindLinearVel() - link->RelativeLinearVel().Ign()));
+          (link->RelativeWindLinearVel() - link->RelativeLinearVel()));
     }
   }
 }
