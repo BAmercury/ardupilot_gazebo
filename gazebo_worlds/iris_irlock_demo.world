@@ -104,7 +104,7 @@ LOITER> mode LAND
           <pose>0 0 0 -1.57 1.57 3.14</pose>
           <camera>
             <!-- horizontal_fov>1.0472</horizontal_fov -->
-            <horizontal_fov>2.35619</horizontal_fov> <!-- 135 degrees -->
+            <horizontal_fov>1.57</horizontal_fov> <!-- 90 degrees -->
             <image>
               <width>320</width>
               <height>240</height>
