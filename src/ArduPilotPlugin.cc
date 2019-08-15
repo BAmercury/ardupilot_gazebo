@@ -996,7 +996,7 @@ void ArduPilotPlugin::ApplyMotorForces(const double _dt)
         const double scaler = 5*(upper_Lim - lower_Lim);
         */
         const double posTarget = this->dataPtr->controls[i].cmd;
-        const double pos = this->dataPtr->controls[i].joint->Position(0);
+        const double pos = this->dataPtr->controls[i].joint->Position();
         const double error = pos - posTarget;
         const double force = this->dataPtr->controls[i].pid.Update(error, _dt);
         this->dataPtr->controls[i].joint->SetForce(0, force);
