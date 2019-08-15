@@ -46,6 +46,7 @@ namespace gazebo
 
     /// \brief Connection to World Update events.
     private: event::ConnectionPtr updateConnection;
+  };
 }
 
 #endif
