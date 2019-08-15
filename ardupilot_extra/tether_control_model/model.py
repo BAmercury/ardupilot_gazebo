@@ -36,7 +36,7 @@ n_u = N[1]
 Nbar = n_u + G*n_x
 FFG = Nbar.item(1)
 print(FFG)
-r = 30 # M/s
+r = 10 # M/s
 u = r
 u = FFG*r
 # Add distrubance from gravity/other process variation

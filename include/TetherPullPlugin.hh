@@ -21,7 +21,7 @@ namespace gazebo
         public: virtual void Load(physics::ModelPtr _model, sdf::ElementPtr _sdf);
 
 
-        private: void OnUpdate(const common::UpdateInfo &_info);
+        private: void OnUpdate();
 
         private: void ApplyPullForce(const double *setpoint);
 
@@ -32,14 +32,12 @@ namespace gazebo
         private: physics::WorldPtr world_ptr;
         private: physics::ModelPtr model;
         private: event::ConnectionPtr updateConnection;
-        private: sensors::ContactSensorPtr sensor;
-        private: const std::string sensor_name = "contact_sensor";
-        private: const std::string drone_coll_name = "iris::iris_demo::iris::base_link::base_link_collision";
-        private: bool contacted = false;
-        private: bool enable_control = false;
-        private: volatile double setpoint = 0; // M/s
-        private: volatile double* setpoint_ptr = &setpoint; // pointer to the setpoitn variable
-
+        //private: sensors::ContactSensorPtr sensor;
+        //private: const std::string sensor_name = "contact_sensor";
+        //private: const std::string drone_coll_name = "iris::iris_demo::iris::base_link::base_link_collision";
+        //private: bool contacted = false;
+        //private: bool enable_control = false;
+        private: std::string drone_base_link_name = "iris_demo::iris::base_link";
 
 
         // TCP Client
@@ -48,8 +46,16 @@ namespace gazebo
         struct sockaddr_in server_addr;
         private: char buffer[1024] = {0};
         private: const char *server_ip = "127.0.0.1";
-        private: uint16_t server_port = 8080; 
+        private: uint16_t server_port = 8080;
  
+
+        // Tether Control system
+        private: double output_force = 0; // Newtons
+        private: volatile double setpoint = 0; // M/s
+        private: const double ff_gain = 12.4;
+        private: const double state_fdbk_gain = 7.4;
+        //private: volatile double* setpoint_ptr = &setpoint; // pointer to the setpoitn variable
+
 
     };
 

@@ -64,6 +64,7 @@ LOITER> mode LAND
         <uri>model://iris_with_standoffs_demo</uri>
       </include>
 
+     
       <!-- add new camera -->
       <link name='camera'>
         <pose>0 -0.01 0.070 1.57 0 1.57</pose>
@@ -132,6 +133,8 @@ LOITER> mode LAND
           <use_parent_model_frame>true</use_parent_model_frame>
         </axis>
       </joint>
+
+      <plugin name="TetherPullPlugin" filename="libTetherPullPlugin.so"/>
     </model>
 
     <model name="irlock_beacon_01">

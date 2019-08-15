@@ -18,6 +18,8 @@ using raw_type = void;
 using namespace gazebo;
 
 
+GZ_REGISTER_MODEL_PLUGIN(TetherPullPlugin)
+
 void TetherPullPlugin::Load(physics::ModelPtr _model, sdf::ElementPtr _sdf)
 {
     // Store pointers to model and sdf
@@ -26,82 +28,70 @@ void TetherPullPlugin::Load(physics::ModelPtr _model, sdf::ElementPtr _sdf)
     // Get the world pointer
     this->world_ptr = this->model->GetWorld();
 
-    // Get the contact sensor
-    sensors::SensorManager *manager = sensors::SensorManager::Instance();
-    this->sensor = std::dynamic_pointer_cast<sensors::ContactSensor>(manager->GetSensor(this->sensor_name));
 
-    // Setup socket TCP client connection
-    if ((sock = socket(AF_INET, SOCK_STREAM, 0)) < 0)
-    {
-        gzerr << "Tether Pull Client socket failed to create" << std::endl;
+    // // Setup socket TCP client connection
+    // if ((sock = socket(AF_INET, SOCK_STREAM, 0)) < 0)
+    // {
+    //     gzerr << "Tether Pull Client socket failed to create" << std::endl;
 
-    }
+    // }
 
-    server_addr.sin_family = AF_INET;
-    server_addr.sin_port = htons(this->server_port);
+    // server_addr.sin_family = AF_INET;
+    // server_addr.sin_port = htons(this->server_port);
 
-    // Convert the IPv4 address from text to binary
-    if (inet_pton(AF_INET, this->server_ip, &server_addr.sin_addr) <= 0)
-    {
-        gzerr << "Tether Pull Client Socket: Invalid Address Given" << std::endl;
+    // // Convert the IPv4 address from text to binary
+    // if (inet_pton(AF_INET, this->server_ip, &server_addr.sin_addr) <= 0)
+    // {
+    //     gzerr << "Tether Pull Client Socket: Invalid Address Given" << std::endl;
 
-    }
+    // }
 
-    // Connect the client to the socket now
-    if (connect(sock, (struct sockaddr *)&server_addr, sizeof(server_addr)) < 0 )
-    {
-        gzerr << "Tether Pull Client Socket: Connection Failed" << std::endl;
+    // // Connect the client to the socket now
+    // if (connect(sock, (struct sockaddr *)&server_addr, sizeof(server_addr)) < 0 )
+    // {
+    //     gzerr << "Tether Pull Client Socket: Connection Failed" << std::endl;
 
-    }
+    // }
     // Callback for world update events
     this->updateConnection = event::Events::ConnectWorldUpdateBegin(
-        std::bind(&TetherPullPlugin::OnUpdate, this, std::placeholders::_1));
+        std::bind(&TetherPullPlugin::OnUpdate, this));
+
+
+
 
 
 
 }
 
 
-void TetherPullPlugin::OnUpdate(const common::UpdateInfo &_info)
+void TetherPullPlugin::OnUpdate()
 {
 
-    // Check to see if flag as been triggered and that the drone has not made contact with the platform yet
-    // If flag is triggered, update the control system output
-    // otherwise set the force output to 0
 
-    // Check if contact between drone and railsim has occured
-    msgs::Contacts contacts;
-    contacts = this->sensor->Contacts();
+    // Check setpoint from the socket
+    //this->valread = read(this->sock, this->buffer, 1024);
+    // Buffer is the setpoint, convert string to double
+    //this->setpoint = atof(buffer);
+    this->setpoint = 10; // meters per second
 
-    for (unsigned int i = 0; i < contacts.contact_size(); ++i)
-    {
-        if (contacts.contact(i).collision1() == this->drone_coll_name)
-        {
-            this->contacted = true;
-            break;
-        }
-        else
-        {
-            this->contacted = false;
-        }
-        
-    }
+    //gzdbg << "Setpoint is: " << setpoint << std::endl;
 
-    // Check socket for incoming data
-    valread = read(sock, buffer, 1024);
-    std::string message = buffer;
-    gzdbg << "Tether System Recieved Message: " << message << std::endl;
-
-    if (buffer == "flag")
-    {
-        enable_control = true;
-    }
+    // Get vehicle horizontal velocity
+    ignition::math::Vector3d vel = this->model->WorldLinearVel();
+    
+    // Apply ff_gain to the input
+    double output = this->setpoint * this->ff_gain;
+    // Apply state feedback
+    output = output - (this->state_fdbk_gain * vel.Z());
+    gzdbg << "Force being applied: " << output << "Vel: " << vel.Z() << std::endl;
 
 
-    // Force Pull Output
-    if (this->enable_control == true && this->contacted == false)
-    {
 
-    }
+    // Apply zero force to the drone
+    gazebo::physics::LinkPtr link = this->model->GetChildLink(this->drone_base_link_name);
+    link->AddForce(ignition::math::Vector3d(0,0,output)); // newtons
+
+
+    
 
 }
