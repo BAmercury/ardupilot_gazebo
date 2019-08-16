@@ -32,30 +32,33 @@ void TetherPullPlugin::Load(physics::ModelPtr _model, sdf::ElementPtr _sdf)
     // Get the world pointer
     this->world_ptr = this->model->GetWorld();
 
+    this->link = this->model->GetChildLink(this->drone_base_link_name);
 
-    // // Setup socket TCP client connection
-    if ((sock = socket(AF_INET, SOCK_STREAM, 0)) < 0)
-    {
-        gzerr << "Tether Pull Client socket failed to create" << std::endl;
 
-    }
 
-    server_addr.sin_family = AF_INET;
-    server_addr.sin_port = htons(this->server_port);
+    // // // Setup socket TCP client connection
+    // if ((sock = socket(AF_INET, SOCK_STREAM, 0)) < 0)
+    // {
+    //     gzerr << "Tether Pull Client socket failed to create" << std::endl;
 
-    // Convert the IPv4 address from text to binary
-    if (inet_pton(AF_INET, this->server_ip, &server_addr.sin_addr) <= 0)
-    {
-        gzerr << "Tether Pull Client Socket: Invalid Address Given" << std::endl;
+    // }
 
-    }
+    // server_addr.sin_family = AF_INET;
+    // server_addr.sin_port = htons(this->server_port);
 
-    // Connect the client to the socket now
-    if (connect(sock, (struct sockaddr *)&server_addr, sizeof(server_addr)) < 0 )
-    {
-        gzerr << "Tether Pull Client Socket: Connection Failed" << std::endl;
+    // // Convert the IPv4 address from text to binary
+    // if (inet_pton(AF_INET, this->server_ip, &server_addr.sin_addr) <= 0)
+    // {
+    //     gzerr << "Tether Pull Client Socket: Invalid Address Given" << std::endl;
 
-    }
+    // }
+
+    // // Connect the client to the socket now
+    // if (connect(sock, (struct sockaddr *)&server_addr, sizeof(server_addr)) < 0 )
+    // {
+    //     gzerr << "Tether Pull Client Socket: Connection Failed" << std::endl;
+
+    // }
     // Callback for world update events
     this->updateConnection = event::Events::ConnectWorldUpdateBegin(
         std::bind(&TetherPullPlugin::OnUpdate, this));
@@ -78,7 +81,7 @@ void TetherPullPlugin::OnUpdate()
     //std::string s(buffer, sizeof(buffer));
     //this->setpoint = std::stod(s);
     //int temp = this->setpoint;
-    this->setpoint = -2;
+    this->setpoint = 5;
     //int base = 1;
     //while(temp)
     //{
@@ -104,8 +107,7 @@ void TetherPullPlugin::OnUpdate()
 
 
     // Apply zero force to the drone
-    gazebo::physics::LinkPtr link = this->model->GetChildLink(this->drone_base_link_name);
-    link->AddForce(ignition::math::Vector3d(0,0,this->output_force)); // newtons
+    this->link->AddForce(ignition::math::Vector3d(0,0,this->output_force)); // newtons
 
 
     

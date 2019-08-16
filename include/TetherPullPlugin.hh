@@ -55,6 +55,7 @@ namespace gazebo
         //private: const double ff_gain = 14.6;
         private: const double ff_gain = 20.0;
         private: const double state_fdbk_gain = 19.5;
+        private: physics::LinkPtr link;
         //private: volatile double* setpoint_ptr = &setpoint; // pointer to the setpoint variable
 
 
