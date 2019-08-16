@@ -84,9 +84,9 @@ namespace gazebo
         private: event::ConnectionPtr updateConnection;
 
         // Sine Wave Parameters:
-        private: const double amplitude = 15.0;
-        private: const double max_velocity = 2.0; // ft/s
-        private: const double frequency_w = 0.133;  // maxVel/Amplitude
+        private: const double amplitude = 8.0;
+        private: const double max_velocity = 5.0; // ft/s
+        private: const double frequency_w = max_velocity/amplitude;  // maxVel/Amplitude
 
         // Contact Sensor:
         private: sensors::ContactSensorPtr sensor;
