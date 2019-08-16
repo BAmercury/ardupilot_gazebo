@@ -26,12 +26,12 @@
           <bounce>
             <restitution_coefficient>0</restitution_coefficient>
             <!-- Threshold for Bounce Capture velocity (Velocity below this value will yield COR of 0 -->
-            <threshold>200000</threshold>
+            <!-- threshold>200000</threshold -->
           </bounce>
           <friction>
             <ode>
-              <mu>0.5</mu>
-              <mu2>0.5</mu2>
+              <mu>1</mu>
+              <mu2>1</mu2>
               <!-- fdir1>1 0 0</fdir1-->
             </ode>
           </friction>

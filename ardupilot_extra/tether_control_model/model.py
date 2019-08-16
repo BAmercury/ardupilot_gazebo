@@ -2,8 +2,8 @@ import control
 import numpy as np
 from matplotlib import pyplot as plt
 
-m = 1.5 # Kg, 3DR Iris Drone
-k = 0.1 # Air resistance coefficient estimate
+m = 2 # Kg, 3DR Iris Drone
+k = 0.5 # Air resistance coefficient estimate
 g = 9.8 # M/s^2
 A = -k/m
 B = 1/m
@@ -24,7 +24,7 @@ plt.plot(T, yout)
 plt.title("Open Loop Response")
 
 # State feedback with feedforward gain for tracking
-G = 7.4 # places poles at -5
+G = 19.5 # places poles at -5
 #G = 7.8
 #G = 1
 # Calculate Scaling Factor
@@ -36,13 +36,13 @@ n_u = N[1]
 Nbar = n_u + G*n_x
 FFG = Nbar.item(1)
 print(FFG)
-r = 10 # M/s
+r = -10 # M/s
 u = r
 u = FFG*r
 # Add distrubance from gravity/other process variation
 
 w = g*m
-u = u + w
+u = u
 
 sys_fdbk = control.StateSpace(A-(B*G), B, C, D)
 control.pzmap(sys_fdbk)

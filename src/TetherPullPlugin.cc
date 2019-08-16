@@ -73,33 +73,33 @@ void TetherPullPlugin::OnUpdate()
 
 
     // Check setpoint from the socket
-    this->valread = read(this->sock, this->buffer, 4);
+    //this->valread = read(this->sock, this->buffer, 4);
     // Buffer is the setpoint, convert string to double
-    std::string s(buffer, sizeof(buffer));
-    this->setpoint = std::stod(s);
-    int temp = this->setpoint;
-    this->setpoint = 0;
-    int base = 1;
-    while(temp)
-    {
-        int last_digit = temp % 10;
-        temp = temp / 10;
-        this->setpoint += last_digit * base;
-        base = base * 2;
-    }
+    //std::string s(buffer, sizeof(buffer));
+    //this->setpoint = std::stod(s);
+    //int temp = this->setpoint;
+    this->setpoint = -2;
+    //int base = 1;
+    //while(temp)
+    //{
+    //    int last_digit = temp % 10;
+    //    temp = temp / 10;
+    //    this->setpoint += last_digit * base;
+    //    base = base * 2;
+    //}
     //gzdbg << "String: " << s << "Setpoint: " << this->setpoint << std::endl;
 
 
     //gzdbg << "Setpoint is: " << setpoint << std::endl;
 
     // Get vehicle horizontal velocity
-    ignition::math::Vector3d vel = this->model->WorldLinearVel();
+    ignition::math::Vector3d vel = this->model->RelativeLinearVel();
     
     // Apply ff_gain to the input
-    this->output_force = this->setpoint * this->ff_gain;
+    this->output_force = (this->setpoint) * this->ff_gain;
     // Apply state feedback
     this->output_force = this->output_force - (this->state_fdbk_gain * vel.Z());
-    gzdbg << "Setpoint: " << this->setpoint << "Actual: " << vel.Z() << std::endl;
+    gzdbg << "Setpoint: " << this->setpoint << " Actual: " << vel.Z() << " Force Being applied: " << this->output_force << std::endl;
 
 
 

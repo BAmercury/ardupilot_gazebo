@@ -36,7 +36,7 @@ namespace gazebo
         //private: const std::string sensor_name = "contact_sensor";
         //private: const std::string drone_coll_name = "iris::iris_demo::iris::base_link::base_link_collision";
         //private: bool contacted = false;
-        //private: bool enable_control = false;
+        private: bool enable_control = false;
         private: std::string drone_base_link_name = "iris_demo::iris::base_link";
 
 
@@ -52,9 +52,10 @@ namespace gazebo
         // Tether Control system
         private: double output_force = 0; // Newtons
         private: volatile double setpoint = 0; // M/s
-        private: const double ff_gain = 12.5;
-        private: const double state_fdbk_gain = 7.4;
-        //private: volatile double* setpoint_ptr = &setpoint; // pointer to the setpoitn variable
+        //private: const double ff_gain = 14.6;
+        private: const double ff_gain = 20.0;
+        private: const double state_fdbk_gain = 19.5;
+        //private: volatile double* setpoint_ptr = &setpoint; // pointer to the setpoint variable
 
 
     };

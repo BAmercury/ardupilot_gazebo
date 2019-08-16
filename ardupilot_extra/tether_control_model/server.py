@@ -16,9 +16,10 @@ sock.listen(1)
 conn, addr = sock.accept()
 counter = 0
 step = 50
-setpoint = 20
+setpoint = 2
 data = str(setpoint)
 while True:
+    #data = input("Give me a setpoint: ")
     print(data.encode('utf-8'))
     conn.sendall(data.encode('utf-8'))
     #counter = counter + 1
