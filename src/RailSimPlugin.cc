@@ -51,10 +51,10 @@ namespace gazebo
                 if (contacts.contact(i).collision1() == this->drone_coll_name)
                 {
                     gzdbg << "Collision has been detected"<< std::endl;
-                    this->model->SetLinearVel(ignition::math::Vector3d(0,0,0));
-                    this->world_ptr->SetPaused(true);
-                    contacted = true;
-                    break;
+                    //this->model->SetLinearVel(ignition::math::Vector3d(0,0,0));
+                    //this->world_ptr->SetPaused(true);
+                    //contacted = true;
+                    //break;
 
                 }
                 else if (contacted == false)
