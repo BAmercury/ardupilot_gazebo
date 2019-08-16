@@ -41,34 +41,44 @@ namespace gazebo
         // Called by the world update start event
         public: void OnUpdate(const common::UpdateInfo &_info)
         {
+	
+	    if (_info.simTime.Double() < 50) // if less than 50 seconds into the simulation
+	    {
+	    	// Apply no velocity
+		this->model->SetLinearVel(ignition::math::Vector3d(0,0,0));
+		gzdbg << "Waiting for Ardupilot to calibrate" << std::endl;
+	    }
+	    else
+	    {
+	    	// Apply Linear Velocity to the model
+	        // Velocity = -aw * sin(wt)physics::WorldPtr _parent, sd
+	        double desired_vel = (-amplitude * frequency_w) * sin( (frequency_w) * _info.simTime.Double());
+
+                // Should oscillate between 0.6096:-0.6096 m/s ? 
+                desired_vel = desired_vel * 0.2;
+                //gzdbg << "Cart Scaled Speed: " << desired_vel << std::endl;
+                this->model->SetLinearVel(ignition::math::Vector3d(0, desired_vel, 0));	    
+	    }
 
             // Check if drone has landed on the platform
-            msgs::Contacts contacts;
-            contacts = this->sensor->Contacts();
-            for (unsigned int i = 0; i < contacts.contact_size(); ++i)
-            {
+            //msgs::Contacts contacts;
+            //contacts = this->sensor->Contacts();
+            //for (unsigned int i = 0; i < contacts.contact_size(); ++i)
+            //{
                 // If contact is made between platform and drone, pause the simulation
-                if (contacts.contact(i).collision1() == this->drone_coll_name)
-                {
-                    gzdbg << "Collision has been detected"<< std::endl;
+                //if (contacts.contact(i).collision1() == this->drone_coll_name)
+                //{
+                //    gzdbg << "Collision has been detected"<< std::endl;
                     //this->model->SetLinearVel(ignition::math::Vector3d(0,0,0));
                     //this->world_ptr->SetPaused(true);
                     //contacted = true;
                     //break;
 
-                }
-                else if (contacted == false)
-                {
-                    // Apply Linear Velocity to the model
-                    // Velocity = -aw * sin(wt)physics::WorldPtr _parent, sd
-                    double desired_vel = (-amplitude * frequency_w) * sin( (frequency_w) * _info.simTime.Double());
-
-                    // Should oscillate between 0.6096:-0.6096 m/s ? 
-                    desired_vel = desired_vel * 0.2;
-                    //gzdbg << "Cart Scaled Speed: " << desired_vel << std::endl;
-                    this->model->SetLinearVel(ignition::math::Vector3d(0, desired_vel, 0));
-
-                }
+                //}
+                //else if (contacted == false)
+                //{
+                    
+                //}
 
 
             }
