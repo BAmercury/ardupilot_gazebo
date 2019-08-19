@@ -45,8 +45,8 @@ namespace gazebo
 	    if (_info.simTime.Double() < 50) // if less than 50 seconds into the simulation
 	    {
 	    	// Apply no velocity
-		this->model->SetLinearVel(ignition::math::Vector3d(0,0,0));
-		gzdbg << "Waiting for Ardupilot to calibrate" << std::endl;
+		    this->model->SetLinearVel(ignition::math::Vector3d(0,0,0));
+		//gzdbg << "Waiting for Ardupilot to calibrate" << std::endl;
 	    }
 	    else
 	    {
