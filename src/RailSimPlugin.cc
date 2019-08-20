@@ -64,7 +64,6 @@ void RailSim::OnUpdate(const common::UpdateInfo &_info)
             this->world_ptr->SetPaused(true);
             contacted = true;
             break;
-
         }
         else if (contacted == false)
         {
@@ -79,10 +78,8 @@ void RailSim::OnUpdate(const common::UpdateInfo &_info)
 
         }
 
-
     }
 }
-
 
 
 
