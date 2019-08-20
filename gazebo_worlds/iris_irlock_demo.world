@@ -134,7 +134,7 @@ LOITER> mode LAND
         </axis>
       </joint>
 
-      <plugin name="TetherPullPlugin" filename="libTetherPullPlugin.so"/>
+      <!-- plugin name="TetherPullPlugin" filename="libTetherPullPlugin.so"/ -->
     </model>
 
     <model name="irlock_beacon_01">

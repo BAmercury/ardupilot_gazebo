@@ -24,19 +24,18 @@ void RailSim::Load(physics::ModelPtr _parent, sdf::ElementPtr _sdf)
     this->model = _parent;
 
     // Create a sensor
-    sensors::SensorManager *manager = sensors::SensorManager::Instance();
-    this->sensor =  std::dynamic_pointer_cast<sensors::ContactSensor>(manager->GetSensor(this->sensor_name));
-    this->sensor->SetActive(true);
+    //sensors::SensorManager *manager = sensors::SensorManager::Instance();
+    //this->sensor =  std::dynamic_pointer_cast<sensors::ContactSensor>(manager->GetSensor(this->sensor_name));
+    //his->sensor->SetActive(true);
 
     // Get World Pointer
     this->world_ptr = this->model->GetWorld();
 
     // Go through SDF parameters to setup motion profile
-    if (_sdf->HasElement("motion_type"))
-    {
-        sdf::ElementPtr motion_type = _sdf->GetElement("motion_type");
-        
-    }
+    //if (_sdf->HasElement("motion_type"))
+    //{
+    //   sdf::ElementPtr motion_type = _sdf->GetElement("motion_type");  
+    //}
 
 
     /*
@@ -51,34 +50,26 @@ void RailSim::Load(physics::ModelPtr _parent, sdf::ElementPtr _sdf)
 void RailSim::OnUpdate(const common::UpdateInfo &_info)
 {
 
-    // Check if drone has landed on the platform
-    msgs::Contacts contacts;
-    contacts = this->sensor->Contacts();
-    for (unsigned int i = 0; i < contacts.contact_size(); ++i)
+
+    // Wait 50 seconds for Ardupilot to start up
+    if (_info.simTime.Double() < 50)
     {
-        // If contact is made between platform and drone, pause the simulation
-        if (contacts.contact(i).collision1() == this->drone_coll_name)
-        {
-            gzdbg << "Collision has been detected"<< std::endl;
-            this->model->SetLinearVel(ignition::math::Vector3d(0,0,0));
-            this->world_ptr->SetPaused(true);
-            contacted = true;
-            break;
-        }
-        else if (contacted == false)
-        {
-            // Apply Linear Velocity to the model
-            // Velocity = -aw * sin(wt)physics::WorldPtr _parent, sd
-            double desired_vel = (-amplitude * frequency_w) * sin( (frequency_w) * _info.simTime.Double());
+        // Apply no Velocity
+        this->model->SetLinearVel(ignition::math::Vector3d(0,0,0));
+    }
+    else
+    {
+        // Apply linear velocity to model
+        // Velocity = -aw * sin(wt)
+        double desired_vel = (-amplitude * frequency_w) * sin( (frequency_w) * _info.simTime.Double());
 
-            // Should oscillate between 0.6096:-0.6096 m/s ? 
-            desired_vel = desired_vel * 0.2;
-            //gzdbg << "Cart Scaled Speed: " << desired_vel << std::endl;
-            this->model->SetLinearVel(ignition::math::Vector3d(0, desired_vel, 0));
-
-        }
+        // Should oscillate between 0.6096:-0.6096 m/s ? 
+        desired_vel = desired_vel * 0.2;
+        //gzdbg << "Cart Scaled Speed: " << desired_vel << std::endl;
+        this->model->SetLinearVel(ignition::math::Vector3d(0, desired_vel, 0));
 
     }
+    
 }
 
 
