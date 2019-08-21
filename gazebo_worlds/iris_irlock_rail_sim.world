@@ -39,7 +39,7 @@
     </include>
     <!-- Import Drone Model -->
     <model name="iris">
-      <pose>1 -1 0.006 0 0 0</pose>
+      <pose>1 -1 0.004 0 0 0</pose>
       <include>
         <uri>model://iris_with_standoffs_demo</uri>
       </include>

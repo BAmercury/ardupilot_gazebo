@@ -64,7 +64,7 @@ set (plugins_single_header
         ArduCopterIRLockPlugin
         RailSimPlugin
         WindPlugin
-        TetherPullPlugin
+        #TetherPullPlugin
         )
 add_library(WindPlugin SHARED src/WindPlugin.cc)
 target_link_libraries(WindPlugin ${GAZEBO_LIBRARIES})
@@ -90,7 +90,7 @@ install(TARGETS RailSimPlugin DESTINATION ${GAZEBO_PLUGIN_PATH})
 
 
 # Tether Pull Plugin
-add_library(TetherPullPlugin SHARED src/TetherPullPlugin.cc)
-target_link_libraries(TetherPullPlugin ${GAZEBO_LIBRARIES})
-install(TARGETS TetherPullPlugin DESTINATION ${GAZEBO_PLUGIN_PATH})
+#add_library(TetherPullPlugin SHARED src/TetherPullPlugin.cc)
+#target_link_libraries(TetherPullPlugin ${GAZEBO_LIBRARIES})
+#install(TARGETS TetherPullPlugin DESTINATION ${GAZEBO_PLUGIN_PATH})
 
