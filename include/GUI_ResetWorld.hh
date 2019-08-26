@@ -30,7 +30,7 @@ namespace gazebo
         private: transport::NodePtr node;
 
         // Publisher of factory messages
-        private: transport::PublisherPtr factoryPub;
+        private: transport::PublisherPtr flagPub;
 
         // Pointer for the world
         private: physics::WorldPtr _world;
