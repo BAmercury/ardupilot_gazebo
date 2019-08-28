@@ -19,8 +19,6 @@ if ("${DISTRO_VER}" VERSION_EQUAL "16.04")
         set(BOOST_NO_SYSTEM_PATHS ON)
 elseif("$DISTRO_VER}" VERSION_EQUAL "18.04")
         message(STATUS "Ubuntu biotic, using system installation path for BOOST libraries")
-else()
-        message(FATAL_ERROR "You need either Ubuntu 16.04 or 18.04 to use these plugins")
 endif()
 
 

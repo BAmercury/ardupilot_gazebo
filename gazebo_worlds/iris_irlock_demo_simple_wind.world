@@ -1,19 +1,7 @@
 <?xml version="1.0" ?>
 
 <!--
-
-# arm the motors
-STABILIZE> arm throttle
-
-# switch to LOITER mode
-STABILIZE> mode LOITER
-
-# take off using rc command
-LOITER> rc 3 1700
-
-# wait until the irlock beacon is within the view then switch to land mode
-# to begin precision landing
-LOITER> mode LAND
+  Applies wind to the body of the drone in a static direction with a fixed velocity
 
 -->
 
