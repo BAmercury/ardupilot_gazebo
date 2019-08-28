@@ -2,6 +2,14 @@
 
 <sdf version="1.6">
   <world name="default">
+
+   <gui>
+      <camera name="user_camera">
+        <pose>0 5 1 0 0.2 -1.5707</pose>
+      </camera>
+      <plugin name="keyboard" filename="libKeyboardGUIPlugin.so"/>
+    </gui>
+
     <physics type="ode">
       <ode>
         <solver>

@@ -5,7 +5,10 @@
       <camera name="user_camera">
         <pose>-3.012870 0.455695 15.817830 -0.000002 1.393796 0.013203</pose>
       </camera>
+      <plugin name="GUIResetWorld" filename="libgui_resetworld.so"/>
     </gui>
+
+    <plugin name="listen" filename="libResetWorld.so"/>
     <!-- Physics ODE Solver Configuration -->
     <physics type="ode">
       <ode>
