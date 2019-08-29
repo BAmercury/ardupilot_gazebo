@@ -119,10 +119,18 @@
 
     <model name="rail_system">
       <pose>1.0 -1.0 0.005 0 0 0</pose>
+
       <include>
         <uri>model://rail_system</uri>
       </include>
-      <plugin name="RailSim" filename="libRailSimPlugin.so"/>
+      <plugin name="RailSim" filename="libRailSimPlugin.so">
+        <motion_profile>
+          <type>1</type> <!--1: Velocity Sine Wave, 2: Profile 1-->
+          <amplitude>8.0</amplitude>
+          <max_velocity>0.6</max_velocity> <!-- M/S -->
+        </motion_profile>
+      </plugin>
+
     </model>
 
   </world>
