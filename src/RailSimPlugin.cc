@@ -8,6 +8,7 @@
 #include <stdio.h>
 #include <math.h>
 #include "include/RailSimPlugin.hh"
+#include "Profile.hh"
 
 using namespace gazebo;
 
@@ -110,6 +111,45 @@ void RailSim::OnUpdate(const common::UpdateInfo &_info)
             //gzdbg << "Cart Desired Speed: " << desired_vel << std::endl;
             //gzdbg << "Cart Relative Speed: " << this->model->RelativeLinearVel() << std::endl;
             //gzdbg << "Cart World Speed: " << this->model->WorldLinearVel() << std::endl;
+
+        }
+        else if (motion_type == 2)
+        {
+            // Read from Profile file and set position
+            
+            // Setup a counter to iterate throught the array. Update rate will be set by World Update Rate
+            if (this->setup_bool == false)
+            {
+                // Get size of the array
+                this->size = *(&Profile + 1) - Profile;
+                this->index = 0;
+                setup_bool = true;
+            }
+
+            this->model->SetWorldPose(ignition::math::Pose3d(0, Profile[this->index], 0, 0, 0, 0));
+            // Check to see if we are at the end of the profile
+            if (this->index == this->size)
+            {
+                this->back_bool = true;
+            }
+            else if( this->index == 0)
+            {
+                this->back_bool = false;
+            }
+
+
+            if (this->back_bool)
+            {   
+                gzdbg << "Going Backwards in Array" << std::endl;
+                // Go backwards
+                this->index = this->index - 1;
+            }
+            else
+            {
+                gzdbg << "Going Forwards in Array" << std::endl;
+                this->index = this->index + 1;
+            }
+
 
         }
 
