@@ -33,10 +33,10 @@ namespace gazebo
         // Default values for Velocity Sine Motion profile
         // Can be updated via SDF
         private: double amplitude = 8.0;
-        private: double max_velocity = 1.524.0; // m/s
+        private: double max_velocity = 1.524; // m/s
         private: double frequency_w = max_velocity / amplitude;  // maxVel/Amplitude
-        // Variable to specify the motion profile for the rail sim
-        private: int motion_type;
+        private: int direction = 2; // In Gazebo Coordinates, 1:x, 2:y, 3:z
+        private: int motion_type;  // Variable to specify the motion profile for the rail sim
 
         // World Pointer
         private: physics::WorldPtr world_ptr;
