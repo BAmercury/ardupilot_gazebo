@@ -125,7 +125,7 @@
       </include>
       <plugin name="RailSim" filename="libRailSimPlugin.so">
         <motion_profile>
-          <type>1</type> <!--1: Velocity Sine Wave, 2: Profile 1-->
+          <type>2</type> <!--1: Velocity Sine Wave, 2: Profile 1-->
           <amplitude>8.0</amplitude>
           <max_velocity>0.6</max_velocity> <!-- M/S -->
           <direction>2</direction> <!--In Gazebo Coordinates: 1=X, 2=Y, 3=Z -->

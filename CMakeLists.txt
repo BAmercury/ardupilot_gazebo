@@ -62,6 +62,7 @@ set (plugins_single_header
         ArduCopterIRLockPlugin
         RailSimPlugin
         WindPlugin
+        Profile
         #TetherPullPlugin
         )
 add_library(WindPlugin SHARED src/WindPlugin.cc)
