@@ -30,16 +30,18 @@ namespace gazebo
         private: event::ConnectionPtr updateConnection;
 
         // Sine Wave Parameters:
-        private: const double amplitude = 8.0;
-        private: const double max_velocity = 5.0; // ft/s
-        private: const double frequency_w = max_velocity / amplitude;  // maxVel/Amplitude
-
+        // Default values for Velocity Sine Motion profile
+        // Can be updated via SDF
+        private: double amplitude = 8.0;
+        private: double max_velocity = 1.524.0; // m/s
+        private: double frequency_w = max_velocity / amplitude;  // maxVel/Amplitude
+        // Variable to specify the motion profile for the rail sim
+        private: int motion_type;
 
         // World Pointer
         private: physics::WorldPtr world_ptr;
 
-        // Variable to specify the motion profile for the rail sim
-        private: std::string desired_motion;
+
     };
 }
 
