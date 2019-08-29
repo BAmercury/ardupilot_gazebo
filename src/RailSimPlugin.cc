@@ -79,10 +79,20 @@ void RailSim::OnUpdate(const common::UpdateInfo &_info)
     {
         // Apply no Velocity
         this->model->SetLinearVel(ignition::math::Vector3d(0,0,0));
+
+        // If we are reading from some type of static motion profile, reset all the control variables
+        if (this->motion_type == 2)
+        {
+            // Reset all control variables
+            this->index = 0;
+            this->size = 0;
+            this->back_bool = false;
+            this->setup_bool = false;
+        }
     }
     else
     {
-        if (motion_type == 1) // Velocity Sine Wave
+        if (this->motion_type == 1) // Velocity Sine Wave
         {
             // Apply linear velocity to model
             // Velocity = -aw * sin(wt)
@@ -113,7 +123,7 @@ void RailSim::OnUpdate(const common::UpdateInfo &_info)
             //gzdbg << "Cart World Speed: " << this->model->WorldLinearVel() << std::endl;
 
         }
-        else if (motion_type == 2)
+        else if (this->motion_type == 2)
         {
             // Read from Profile file and set position
             
