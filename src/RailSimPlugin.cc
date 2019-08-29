@@ -48,10 +48,11 @@ void RailSim::Load(physics::ModelPtr _parent, sdf::ElementPtr _sdf)
                 this->amplitude = motion_sdf->Get<double>("amplitude");
                 this->max_velocity = motion_sdf->Get<double>("max_velocity");
                 this->frequency_w = max_velocity / amplitude;
+                this->direction = motion_sdf->Get<int>("direction");
             }
         }
-        gzdbg << "Amplitude: " << amplitude << std::endl;
-        gzdbg << "Max Velocity: " << max_velocity << std::endl;
+        //gzdbg << "Amplitude: " << amplitude << std::endl;
+        //gzdbg << "Max Velocity: " << max_velocity << std::endl;
        
        
 
@@ -85,10 +86,30 @@ void RailSim::OnUpdate(const common::UpdateInfo &_info)
             // Apply linear velocity to model
             // Velocity = -aw * sin(wt)
             double desired_vel = (-amplitude * frequency_w) * sin( (frequency_w) * _info.simTime.Double());
-            this->model->SetLinearVel(ignition::math::Vector3d(0, desired_vel, 0));
-            gzdbg << "Cart Desired Speed: " << desired_vel << std::endl;
-            gzdbg << "Cart Relative Speed: " << this->model->RelativeLinearVel() << std::endl;
-            gzdbg << "Cart World Speed: " << this->model->WorldLinearVel() << std::endl;
+            
+            // Apply in the desired direction
+            if (this->direction == 1)
+            {
+                this->model->SetLinearVel(ignition::math::Vector3d(desired_vel, 0, 0));
+            }
+            else if(this->direction == 2)
+            {
+                this->model->SetLinearVel(ignition::math::Vector3d(0, desired_vel, 0));
+            }
+            else if (this->direction == 3)
+            {
+                this->model->SetLinearVel(ignition::math::Vector3d(0, 0, desired_vel));
+            }
+            else // Default is in Y Direction
+            {
+                this->model->SetLinearVel(ignition::math::Vector3d(0, desired_vel, 0));
+            }
+            
+            
+            
+            //gzdbg << "Cart Desired Speed: " << desired_vel << std::endl;
+            //gzdbg << "Cart Relative Speed: " << this->model->RelativeLinearVel() << std::endl;
+            //gzdbg << "Cart World Speed: " << this->model->WorldLinearVel() << std::endl;
 
         }
 
