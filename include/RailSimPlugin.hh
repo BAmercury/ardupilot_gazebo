@@ -42,8 +42,25 @@ namespace gazebo
         private: int size = 0; // Used to iterate through the static motion profile header
         private: bool back_bool = false; // To tell system to travel backwards
 
+        // Motion Profile 2/3 variables
+        private: double desired_position = 0;
+        private: ignition::math::Vector3d vel;
+        private: ignition::math::Pose3d pos;
+        private: double vely;
+        private: double posy;
+        private: double force;
+
+        // Motion Profile 3 State Feedback Control
+        // Calculated using model.m found in the ardupilot_extra folder
+        private: double feed_forward_gain = 250.0;
+        private: double gain_k1 = 250.0; // poles at -5, -1
+        private: double gain_k2 = 299.0;
+
+
         // World Pointer
         private: physics::WorldPtr world_ptr;
+
+        private: physics::LinkPtr link;
 
 
     };
