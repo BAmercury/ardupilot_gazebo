@@ -23,7 +23,7 @@ void RailSim::Load(physics::ModelPtr _parent, sdf::ElementPtr _sdf)
 {
     // Store pointers for the model
     this->model = _parent;
-
+    this->link = this->model->GetChildLink("rail_system::rail_system::link");
 
     // Contact sensor (Currently not used)
     // Create a sensor
@@ -150,16 +150,68 @@ void RailSim::OnUpdate(const common::UpdateInfo &_info)
 
             if (this->back_bool)
             {   
-                gzdbg << "Going Backwards in Array" << std::endl;
+                //gzdbg << "Going Backwards in Array" << std::endl;
                 // Go backwards
                 this->index = this->index - 1;
             }
             else
             {
-                gzdbg << "Going Forwards in Array" << std::endl;
+                //gzdbg << "Going Forwards in Array" << std::endl;
                 this->index = this->index + 1;
             }
+        }
+        else if (this->motion_type == 3)
+        {
+            // Read from Profile file and set position
+            
+            // Setup a counter to iterate throught the array. Update rate will be set by World Update Rate
+            if (this->setup_bool == false)
+            {
+                // Get size of the array
+                this->size = *(&Profile + 1) - Profile;
+                this->index = 0;
+                setup_bool = true;
+            }
 
+            //this->model->SetWorldPose(ignition::math::Pose3d(0, Profile[this->index], 0, 0, 0, 0));
+            this->desired_position = Profile[this->index];
+            //double desired_position = 4;
+            //double desired_position = 10; // meters
+            // Calculate force required to move to desired position
+            this->vel = this->model->WorldLinearVel();
+            this->vely = this->vel.Y();
+            this->pos = this->model->WorldPose();
+            this->posy = this->pos.Pos().Y();
+
+            this->force = this->feed_forward_gain*desired_position - this->gain_k1*posy - this->gain_k2*vely; 
+            //double force = 2250*desired_position - 2250*posy - 699*vely; // poles at -9, -5
+            this->link->SetForce(ignition::math::Vector3d(0, force, 0));
+
+            // Check to see if we are at the end of the profile
+            if (this->index == this->size)
+            {
+                this->back_bool = true;
+            }
+            else if( this->index == 0)
+            {
+                this->back_bool = false;
+            }
+
+
+            if (this->back_bool)
+            {   
+                //gzdbg << "Going Backwards in Array" << std::endl;
+                // Go backwards
+                this->index = this->index - 1;
+            }
+            else
+            {
+                //gzdbg << "Going Forwards in Array" << std::endl;
+                this->index = this->index + 1;
+            }
+            //pos = this->model->WorldPose();
+            //posy = pos.Pos().Y();
+            //gzdbg << "Desired/Actual: " << desired_position << ", " << posy << std::endl;
 
         }
 
