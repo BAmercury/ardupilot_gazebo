@@ -50,6 +50,12 @@ namespace gazebo
         private: double posy;
         private: double force;
 
+        // Motion Profile 2 Update Timer
+        private: double start_time;
+        private: double current_time;
+        private: const double period = 0.05; // In Seconds
+        
+
         // Motion Profile 3 State Feedback Control
         // Calculated using model.m found in the ardupilot_extra folder
         private: double feed_forward_gain = 250.0;
