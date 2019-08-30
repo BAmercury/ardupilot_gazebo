@@ -84,9 +84,9 @@ void RailSim::OnUpdate(const common::UpdateInfo &_info)
         if (this->motion_type == 2)
         {
             // Reset all control variables
-            this->index = 0;
-            this->size = 0;
-            this->back_bool = false;
+            //this->index = 0;
+            //this->size = 0;
+            //this->back_bool = false;
             this->setup_bool = false;
         }
     }
@@ -133,31 +133,43 @@ void RailSim::OnUpdate(const common::UpdateInfo &_info)
                 // Get size of the array
                 this->size = *(&Profile + 1) - Profile;
                 this->index = 0;
+                this->back_bool = false;
+                this->current_time = 0.0;
+                // Get the start time
+                this->start_time = _info.simTime.Double();
                 setup_bool = true;
             }
 
-            this->model->SetWorldPose(ignition::math::Pose3d(0, Profile[this->index], 0, 0, 0, 0));
-            // Check to see if we are at the end of the profile
-            if (this->index == this->size)
-            {
-                this->back_bool = true;
-            }
-            else if( this->index == 0)
-            {
-                this->back_bool = false;
-            }
+            // Get current time
+            this->current_time = _info.simTime.Double(); // seconds
 
-
-            if (this->back_bool)
-            {   
-                //gzdbg << "Going Backwards in Array" << std::endl;
-                // Go backwards
-                this->index = this->index - 1;
-            }
-            else
+            // Update every period (in seconds)
+            if (this->current_time - this->start_time >= this->period)
             {
-                //gzdbg << "Going Forwards in Array" << std::endl;
-                this->index = this->index + 1;
+                this->model->SetWorldPose(ignition::math::Pose3d(0, Profile[this->index], 0, 0, 0, 0));
+                // Check to see if we are at the end of the profile
+                if (this->index == this->size)
+                {
+                    this->back_bool = true;
+                }
+                else if( this->index == 0)
+                {
+                    this->back_bool = false;
+                }
+                if (this->back_bool)
+                {   
+                    //gzdbg << "Going Backwards in Array" << std::endl;
+                    // Go backwards
+                    this->index = this->index - 1;
+                }
+                else
+                {
+                    //gzdbg << "Going Forwards in Array" << std::endl;
+                    this->index = this->index + 1;
+                }
+
+                this->start_time = this->current_time;
+                    
             }
         }
         else if (this->motion_type == 3)
@@ -170,6 +182,7 @@ void RailSim::OnUpdate(const common::UpdateInfo &_info)
                 // Get size of the array
                 this->size = *(&Profile + 1) - Profile;
                 this->index = 0;
+                this->back_bool = false;
                 setup_bool = true;
             }
 
