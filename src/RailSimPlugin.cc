@@ -59,7 +59,7 @@ namespace gazebo
             {
                 // Apply Linear Velocity to the model
                 // Velocity = -aw * sin(wt)physics::WorldPtr _parent, sd
-                double desired_vel = (-amplitude * frequency_w) * sin( (frequency_w) * _info.simTime.Double());
+                double desired_vel = (-this->amplitude * this->frequency_w) * sin( (this->frequency_w) * _info.simTime.Double());
 
                     //gzdbg << "Cart Scaled Speed: " << desired_vel << std::endl;
                     this->model->SetLinearVel(ignition::math::Vector3d(0, desired_vel, 0));	    
