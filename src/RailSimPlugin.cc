@@ -16,18 +16,30 @@ namespace gazebo
             Loads model and optionally sdf of the model
             Also adds subscriber for World update Events
         */
-        public: void Load(physics::ModelPtr _parent, sdf::ElementPtr /*_sdf*/)
+        public: void Load(physics::ModelPtr _parent, sdf::ElementPtr _sdf)
         {
             // Store pointers for the model
             this->model = _parent;
 
             // Create a sensor
-            sensors::SensorManager *manager = sensors::SensorManager::Instance();
-            this->sensor =  std::dynamic_pointer_cast<sensors::ContactSensor>(manager->GetSensor(this->sensor_name));
-            this->sensor->SetActive(true);
+            //sensors::SensorManager *manager = sensors::SensorManager::Instance();
+            //this->sensor =  std::dynamic_pointer_cast<sensors::ContactSensor>(manager->GetSensor(this->sensor_name));
+            //this->sensor->SetActive(true);
 
             // Get World Pointer
             this->world_ptr = this->model->GetWorld();
+
+            // Go through the SDF parameters and setup the motion profile
+            if (_sdf->HasElement("motion_profile"))
+            {
+                sdf::ElementPtr motion_sdf = _sdf->GetElement("motion_profile");
+                if (motion_sdf->HasElement("type"))
+                {
+                    this->amplitude = motion_sdf->Get<double>("amplitude");
+                    this->max_velocity = motion_sdf->Get<double>("max_velocity");
+                    this->frequency_w = this->max_velocity / this->amplitude;
+                }
+            }
 
 
             /*
@@ -54,8 +66,6 @@ namespace gazebo
 	        // Velocity = -aw * sin(wt)physics::WorldPtr _parent, sd
 	        double desired_vel = (-amplitude * frequency_w) * sin( (frequency_w) * _info.simTime.Double());
 
-                // Should oscillate between 0.6096:-0.6096 m/s ? 
-                desired_vel = desired_vel * 0.2;
                 //gzdbg << "Cart Scaled Speed: " << desired_vel << std::endl;
                 this->model->SetLinearVel(ignition::math::Vector3d(0, desired_vel, 0));	    
 	    }
@@ -93,6 +103,9 @@ namespace gazebo
         // Pointer for the update even updateConnection
         private: event::ConnectionPtr updateConnection;
 
+
+        // motion type Parameters
+
         // Sine Wave Parameters:
         private: const double amplitude = 8.0;
         private: const double max_velocity = 5.0; // ft/s
@@ -103,6 +116,8 @@ namespace gazebo
         private: const std::string sensor_name = "contact_sensor";
         private: const std::string drone_coll_name = "iris::iris_demo::iris::base_link::base_link_collision";
         private: bool contacted = false;
+
+
 
         // World Pointer
         private: physics::WorldPtr world_ptr;

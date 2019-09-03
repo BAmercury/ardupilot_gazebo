@@ -130,7 +130,14 @@
       <include>
         <uri>model://rail_system</uri>
       </include>
-      <plugin name="RailSim" filename="libRailSimPlugin.so"/>
+      <plugin name="RailSim" filename="libRailSimPlugin.so">
+          <motion_profile>
+            <type>1</type>
+            <!-- Used for Velocity Sine Wave Profile, if type is not 1 then this will simply be ignored -->
+            <amplitude>8.0</amplitude>
+            <max_velocity>0.6</max_velocity> <!-- M/S -->
+        </motion_profile>
+        </plugin>
     </model>
 
   </world>
