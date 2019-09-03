@@ -7,7 +7,7 @@ D = 0
 sys = ss(A, B, C, D);
 
 % Find gains to place poles
-K = place(A, B, [-9 -5])
+K = place(A, B, [-1 -5])
 % Calculate Feedforward
 s = size(A, 1);
 Z = [zeros([1,s]) 1];
