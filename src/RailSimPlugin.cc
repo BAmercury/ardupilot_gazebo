@@ -107,9 +107,9 @@ namespace gazebo
         // motion type Parameters
 
         // Sine Wave Parameters:
-        private: const double amplitude = 8.0;
-        private: const double max_velocity = 5.0; // ft/s
-        private: const double frequency_w = max_velocity/amplitude;  // maxVel/Amplitude
+        private: double amplitude = 8.0;
+        private: double max_velocity = 5.0; // ft/s
+        private: double frequency_w = max_velocity/amplitude;  // maxVel/Amplitude
 
         // Contact Sensor:
         private: sensors::ContactSensorPtr sensor;
