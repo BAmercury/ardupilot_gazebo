@@ -21,11 +21,6 @@ namespace gazebo
             // Store pointers for the model
             this->model = _parent;
 
-            // Create a sensor
-            //sensors::SensorManager *manager = sensors::SensorManager::Instance();
-            //this->sensor =  std::dynamic_pointer_cast<sensors::ContactSensor>(manager->GetSensor(this->sensor_name));
-            //this->sensor->SetActive(true);
-
             // Get World Pointer
             this->world_ptr = this->model->GetWorld();
 
@@ -54,44 +49,23 @@ namespace gazebo
         public: void OnUpdate(const common::UpdateInfo &_info)
         {
 	
-	    if (_info.simTime.Double() < 50) // if less than 50 seconds into the simulation
-	    {
-	    	// Apply no velocity
-		    this->model->SetLinearVel(ignition::math::Vector3d(0,0,0));
-		//gzdbg << "Waiting for Ardupilot to calibrate" << std::endl;
-	    }
-	    else
-	    {
-	    	// Apply Linear Velocity to the model
-	        // Velocity = -aw * sin(wt)physics::WorldPtr _parent, sd
-	        double desired_vel = (-amplitude * frequency_w) * sin( (frequency_w) * _info.simTime.Double());
+            if (_info.simTime.Double() < 50) // if less than 50 seconds into the simulation
+            {
+                // Apply no velocity
+                this->model->SetLinearVel(ignition::math::Vector3d(0,0,0));
+            //gzdbg << "Waiting for Ardupilot to calibrate" << std::endl;
+            }
+            else
+            {
+                // Apply Linear Velocity to the model
+                // Velocity = -aw * sin(wt)physics::WorldPtr _parent, sd
+                double desired_vel = (-amplitude * frequency_w) * sin( (frequency_w) * _info.simTime.Double());
 
-                //gzdbg << "Cart Scaled Speed: " << desired_vel << std::endl;
-                this->model->SetLinearVel(ignition::math::Vector3d(0, desired_vel, 0));	    
-	    }
-
-            // Check if drone has landed on the platform
-            //msgs::Contacts contacts;
-            //contacts = this->sensor->Contacts();
-            //for (unsigned int i = 0; i < contacts.contact_size(); ++i)
-            //{
-                // If contact is made between platform and drone, pause the simulation
-                //if (contacts.contact(i).collision1() == this->drone_coll_name)
-                //{
-                //    gzdbg << "Collision has been detected"<< std::endl;
-                    //this->model->SetLinearVel(ignition::math::Vector3d(0,0,0));
-                    //this->world_ptr->SetPaused(true);
-                    //contacted = true;
-                    //break;
-
-                //}
-                //else if (contacted == false)
-                //{
-                    
-                //}
+                    //gzdbg << "Cart Scaled Speed: " << desired_vel << std::endl;
+                    this->model->SetLinearVel(ignition::math::Vector3d(0, desired_vel, 0));	    
+            }
 
 
-            //}
         }
 
 
@@ -110,13 +84,6 @@ namespace gazebo
         private: double amplitude = 8.0;
         private: double max_velocity = 5.0; // ft/s
         private: double frequency_w = max_velocity/amplitude;  // maxVel/Amplitude
-
-        // Contact Sensor:
-        private: sensors::ContactSensorPtr sensor;
-        private: const std::string sensor_name = "contact_sensor";
-        private: const std::string drone_coll_name = "iris::iris_demo::iris::base_link::base_link_collision";
-        private: bool contacted = false;
-
 
 
         // World Pointer
