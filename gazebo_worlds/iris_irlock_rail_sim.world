@@ -5,10 +5,12 @@
       <camera name="user_camera">
         <pose>-3.012870 0.455695 15.817830 -0.000002 1.393796 0.013203</pose>
       </camera>
-      <plugin name="GUIResetWorld" filename="libgui_resetworld.so"/>
+      <!-- plugin name="GUIResetWorld" filename="libgui_resetworld.so"/ -->
     </gui>
 
-    <plugin name="listen" filename="libResetWorld.so"/>
+    <!-- plugin name="listen" filename="libResetWorld.so"/ -->
+
+
     <!-- Physics ODE Solver Configuration -->
     <physics type="ode">
       <ode>
@@ -133,11 +135,11 @@
             It can follow the same motion profile header data as option 2 but it has slower response as its meant to simulate a more realistic response. Recommended to use this mode to simulate less agile/aggressive trajectories (Ramps, steps, etc.) as well as to simulate a rail sim that moves a bit more realistically
           -->
 
-          <type>2</type>
+          <type>1</type>
           
           <!-- Used for Velocity Sine Wave Profile, if type is not 1 then this will simply be ignored -->
-          <amplitude>8.0</amplitude>
-          <max_velocity>0.6</max_velocity> <!-- M/S -->
+          <amplitude>2.0</amplitude>
+          <max_velocity>2</max_velocity> <!-- M/S -->
           <direction>2</direction> <!--In Gazebo Coordinates: 1=X, 2=Y, 3=Z -->
         </motion_profile>
       </plugin>
