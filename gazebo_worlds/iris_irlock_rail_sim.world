@@ -22,6 +22,7 @@
         <constraints>
           <cfm>0.0</cfm>
           <erp>0.9</erp>
+          <!-- Set contact max correcting vel to 0 and objects wont bounce off each other -->
           <contact_max_correcting_vel>0.1</contact_max_correcting_vel>
           <contact_surface_layer>0.0</contact_surface_layer>
         </constraints>
