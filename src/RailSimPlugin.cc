@@ -43,12 +43,12 @@ void RailSim::Load(physics::ModelPtr _parent, sdf::ElementPtr _sdf)
        {
             this->motion_type = motion_sdf->Get<int>("type");
             gzdbg << "Motion Type: " << motion_type << std::endl;
-            if (motion_type == 1) // Velocity Sine Wave
+            if (this->motion_type == 1) // Velocity Sine Wave
             {
                 // Get the rest of the parameters
                 this->amplitude = motion_sdf->Get<double>("amplitude");
                 this->max_velocity = motion_sdf->Get<double>("max_velocity");
-                this->frequency_w = max_velocity / amplitude;
+                this->frequency_w = this->max_velocity / this->amplitude;
                 this->direction = motion_sdf->Get<int>("direction");
             }
         }
@@ -96,7 +96,7 @@ void RailSim::OnUpdate(const common::UpdateInfo &_info)
         {
             // Apply linear velocity to model
             // Velocity = -aw * sin(wt)
-            double desired_vel = (-amplitude * frequency_w) * sin( (frequency_w) * _info.simTime.Double());
+            double desired_vel = (-this->amplitude * this->frequency_w) * sin( (this->frequency_w) * _info.simTime.Double());
             
             // Apply in the desired direction
             if (this->direction == 1)
