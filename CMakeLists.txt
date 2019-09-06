@@ -41,6 +41,7 @@ set (plugins_single_header
         ArduCopterIRLockPlugin
         RailSimPlugin
         GimbalSmall2dPlugin
+        Profile
 	# WindPlugin
         )
 
