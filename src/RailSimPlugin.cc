@@ -191,9 +191,9 @@ void RailSim::OnUpdate(const common::UpdateInfo &_info)
             //double desired_position = 4;
             //double desired_position = 10; // meters
             // Calculate force required to move to desired position
-            this->vel = this->model->WorldLinearVel();
+            this->vel = this->model->GetWorldLinearVel().Ign();
             this->vely = this->vel.Y();
-            this->pos = this->model->WorldPose();
+            this->pos = this->model->GetWorldPose().Ign();
             this->posy = this->pos.Pos().Y();
 
             this->force = this->feed_forward_gain*desired_position - this->gain_k1*posy - this->gain_k2*vely; 
