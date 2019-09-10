@@ -68,9 +68,9 @@ namespace gazebo
         private: double target2_pos = 0.0;
         private: double target1_hold = 0.0; // Seconds
         private: double target2_hold = 0.0; // Seconds;
-        private: int loop_control = 0;
         private: bool hold_control = false;
         private: bool target1_complete = false;
+        private: ignition::math::Pose3d origin_pose;
 
 
         // World Pointer
