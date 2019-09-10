@@ -37,7 +37,7 @@ namespace gazebo
         private: double frequency_w = max_velocity / amplitude;  // maxVel/Amplitude
         private: int direction = 2; // In Gazebo Coordinates, 1:x, 2:y, 3:z
         private: int motion_type;  // Variable to specify the motion profile for the rail sim
-        private: bool setup_bool = false; // Used to configure reading from static motion profile header files
+        
         private: int index = 0; // Used to iterate through the static motion profile header
         private: int size = 0; // Used to iterate through the static motion profile header
         private: bool back_bool = false; // To tell system to travel backwards
@@ -50,17 +50,26 @@ namespace gazebo
         private: double posy;
         private: double force;
 
-        // Motion Profile 2 Update Timer
+        // Motion Profile 2 and 4 Update Timer
         private: double start_time;
         private: double current_time;
         private: const double period = 0.05; // In Seconds
-        
+        private: bool setup_bool = false; // Used to configure reading from static motion profile header files
 
         // Motion Profile 3 State Feedback Control
         // Calculated using model.m found in the ardupilot_extra folder
         private: double feed_forward_gain = 250.0;
         private: double gain_k1 = 250.0; // poles at -5, -1
         private: double gain_k2 = 299.0;
+
+
+        // Motion Profile 4 Step input Parameters
+        private: double target1_pos = 0.0;
+        private: double target2_pos = 0.0;
+        private: double target1_hold = 0.0; // Seconds
+        private: double target2_hold = 0.0; // Seconds;
+        private: int loop_control = 0;
+        private: bool hold_control = false;
 
 
         // World Pointer
