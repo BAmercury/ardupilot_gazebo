@@ -70,6 +70,7 @@ namespace gazebo
         private: double target2_hold = 0.0; // Seconds;
         private: int loop_control = 0;
         private: bool hold_control = false;
+        private: bool target1_complete = false;
 
 
         // World Pointer
