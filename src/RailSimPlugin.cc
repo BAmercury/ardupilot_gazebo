@@ -58,16 +58,11 @@ void RailSim::Load(physics::ModelPtr _parent, sdf::ElementPtr _sdf)
                 this->target1_hold = motion_sdf->Get<double>("Target1Hold");
                 this->target2_pos = motion_sdf->Get<double>("Target2");
                 this->target2_hold = motion_sdf->Get<double>("Target2Hold");
-                this->loop_control = motion_sdf->Get<double>("Loop");
+                this->origin_pose = motion_sdf->Get<ignition::math::Pose3d>("pose");
+
 
             }
         }
-        //gzdbg << "Amplitude: " << amplitude << std::endl;
-        //gzdbg << "Max Velocity: " << max_velocity << std::endl;
-       
-       
-
-
     }
 
 
@@ -94,10 +89,7 @@ void RailSim::OnUpdate(const common::UpdateInfo &_info)
         // Also if we are using motion type 4, reset the timer values
         if (this->motion_type == 2 || this->motion_type == 4)
         {
-            // Reset all control variables
-            //this->index = 0;
-            //this->size = 0;
-            //this->back_bool = false;
+            // Reset the control variables
             this->setup_bool = false;
         }
     }
@@ -247,6 +239,8 @@ void RailSim::OnUpdate(const common::UpdateInfo &_info)
                 this->current_time = 0.0;
                 // Get the start time
                 this->start_time = _info.simTime.Double();
+                this->target1_complete = false;
+                this->hold_control = false;
                 this->setup_bool = true;
             }
 
@@ -304,7 +298,9 @@ void RailSim::OnUpdate(const common::UpdateInfo &_info)
                 }
                 else
                 {
-                    /* code */ // move to origin maybe? If the target 2 position was not origin this might be useful
+                     // Move back to origin and hold
+                    this->model->SetWorldPose(this->origin_pose);
+                    // If user hits reset button then the whole state machine starts from beginning
                 }
                 
             }

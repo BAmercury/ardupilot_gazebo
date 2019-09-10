@@ -5,10 +5,10 @@
       <camera name="user_camera">
         <pose>-3.012870 0.455695 15.817830 -0.000002 1.393796 0.013203</pose>
       </camera>
-      <!-- plugin name="GUIResetWorld" filename="libgui_resetworld.so"/ -->
+      <plugin name="GUIResetWorld" filename="libgui_resetworld.so"/>
     </gui>
 
-    <!-- plugin name="listen" filename="libResetWorld.so"/ -->
+    <plugin name="listen" filename="libResetWorld.so"/>
 
 
     <!-- Physics ODE Solver Configuration -->
@@ -127,7 +127,10 @@
         <uri>model://rail_system</uri>
       </include>
       <plugin name="RailSim" filename="libRailSimPlugin.so">
+        
         <motion_profile>
+          <!-- This will be the final location of the rail cart -->
+          <pose>1.0 -1.0 0.005 0 0 0</pose>
           <!--
             1: Velocity Sine Wave, 2: Profile 1, 3: Simulated Dynamics Pose Controller
             Motion profile type 2 directly moves the beacon according to the chosen profile header data. Depending on how the data is formatted, the rail sim behaves very snappy and moves extremely quickly to reach the desired waypoints
@@ -140,7 +143,6 @@
               Target1Hold: Time in seconds to hold at the first target position
               Target2: Distance from target1 to some desired location (Usually origin) in meters
               Target2Hold: Time in seconds to hold at the second target position
-              Loop: Loop this motion profile over and over or stop movement altogether. 1 for on, 0 for off
           -->
 
           <type>4</type>
@@ -152,10 +154,9 @@
 
           <!-- Used for motion profile 4. If the type is not 4 then this will simply be ignored -->
           <Target1>5</Target1>
-          <Target1Hold>10</Target1Hold>
-          <Target2>0</Target2>
+          <Target1Hold>5</Target1Hold>
+          <Target2>-5</Target2>
           <Target2Hold>5</Target2Hold>
-          <Loop>1</Loop>
 
         </motion_profile>
       </plugin>
