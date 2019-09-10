@@ -51,6 +51,16 @@ void RailSim::Load(physics::ModelPtr _parent, sdf::ElementPtr _sdf)
                 this->frequency_w = this->max_velocity / this->amplitude;
                 this->direction = motion_sdf->Get<int>("direction");
             }
+            else if (this->motion_type == 4) // Step Input
+            {
+                // Get the rest of the parameters
+                this->target1_pos = motion_sdf->Get<double>("Target1");
+                this->target1_hold = motion_sdf->Get<double>("Target1Hold");
+                this->target2_pos = motion_sdf->Get<double>("Target2");
+                this->target2_hold = motion_sdf->Get<double>("Target2Hold");
+                this->loop_control = motion_sdf->Get<double>("Loop");
+
+            }
         }
         //gzdbg << "Amplitude: " << amplitude << std::endl;
         //gzdbg << "Max Velocity: " << max_velocity << std::endl;
@@ -81,7 +91,8 @@ void RailSim::OnUpdate(const common::UpdateInfo &_info)
         this->model->SetLinearVel(ignition::math::Vector3d(0,0,0));
 
         // If we are reading from some type of static motion profile, reset all the control variables
-        if (this->motion_type == 2)
+        // Also if we are using motion type 4, reset the timer values
+        if (this->motion_type == 2 || this->motion_type == 4)
         {
             // Reset all control variables
             //this->index = 0;
@@ -137,7 +148,7 @@ void RailSim::OnUpdate(const common::UpdateInfo &_info)
                 this->current_time = 0.0;
                 // Get the start time
                 this->start_time = _info.simTime.Double();
-                setup_bool = true;
+                this->setup_bool = true;
             }
 
             // Get current time
@@ -225,6 +236,48 @@ void RailSim::OnUpdate(const common::UpdateInfo &_info)
             //pos = this->model->WorldPose();
             //posy = pos.Pos().Y();
             //gzdbg << "Desired/Actual: " << desired_position << ", " << posy << std::endl;
+
+        }
+        else if (this->motion_type == 4)
+        {
+
+            // Initialize the timer values
+            if (this->setup_bool == false)
+            {
+                this->current_time = 0.0;
+                // Get the start time
+                this->start_time = _info.simTime.Double();
+                this->setup_bool = true;
+            }
+
+            // Get current time
+            this->current_time = _info.simTime.Double(); // seconds
+
+            // Wait for target1_hold amount before moving (stay at the default spawn position)
+            // Or if we are already at target1 go back and hold
+            if (this->current_time - this->start_time <= this->target1_hold)
+            {
+                if (this->hold_control == false)
+                {
+                    // Wait for target1_hold seconds
+                }
+                else
+                {
+                    // Stay at the target1_hold position
+                    this->model->SetWorldPose(ignition::math::Pose3d(0, this->target1_pos, 0, 0, 0, 0));
+                }
+            }
+            // Then move to target one position
+            else
+            {
+                this->model->SetWorldPose(ignition::math::Pose3d(0, this->target1_pos, 0, 0, 0, 0));
+                // We will want to hold this for target1_hold amount so reset timer
+                // and after target1_hold time has passed move back to origin
+                this->start_time = _info.simTime.Double();
+                this->hold_control = true;
+            }
+
+
 
         }
 

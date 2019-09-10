@@ -134,14 +134,29 @@
 
             Motion profile 3 is a state feedback controller that takes desired position inputs as a reference and controls the rail sim by exerting a force.
             It can follow the same motion profile header data as option 2 but it has slower response as its meant to simulate a more realistic response. Recommended to use this mode to simulate less agile/aggressive trajectories (Ramps, steps, etc.) as well as to simulate a rail sim that moves a bit more realistically
+          
+            Motion Profile 4 is a Step input. The parameters are described as followed:
+              Target1: Distance from origin to first target in meters
+              Target1Hold: Time in seconds to hold at the first target position
+              Target2: Distance from target1 to some desired location (Usually origin) in meters
+              Target2Hold: Time in seconds to hold at the second target position
+              Loop: Loop this motion profile over and over or stop movement altogether. 1 for on, 0 for off
           -->
 
-          <type>1</type>
+          <type>4</type>
           
           <!-- Used for Velocity Sine Wave Profile, if type is not 1 then this will simply be ignored -->
           <amplitude>2.0</amplitude>
           <max_velocity>2</max_velocity> <!-- M/S -->
           <direction>2</direction> <!--In Gazebo Coordinates: 1=X, 2=Y, 3=Z -->
+
+          <!-- Used for motion profile 4. If the type is not 4 then this will simply be ignored -->
+          <Target1>10</Target1>
+          <Target1Hold>5</Target1Hold>
+          <Target2>0</Target2>
+          <Target2Hold>5</Target2Hold>
+          <Loop>1</Loop>
+
         </motion_profile>
       </plugin>
 
