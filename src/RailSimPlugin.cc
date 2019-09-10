@@ -186,7 +186,7 @@ void RailSim::OnUpdate(const common::UpdateInfo &_info)
                 this->size = *(&Profile + 1) - Profile;
                 this->index = 0;
                 this->back_bool = false;
-                setup_bool = true;
+                this->setup_bool = true;
             }
 
             //this->model->SetWorldPose(ignition::math::Pose3d(0, Profile[this->index], 0, 0, 0, 0));
