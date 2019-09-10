@@ -151,8 +151,8 @@
           <direction>2</direction> <!--In Gazebo Coordinates: 1=X, 2=Y, 3=Z -->
 
           <!-- Used for motion profile 4. If the type is not 4 then this will simply be ignored -->
-          <Target1>10</Target1>
-          <Target1Hold>5</Target1Hold>
+          <Target1>5</Target1>
+          <Target1Hold>10</Target1Hold>
           <Target2>0</Target2>
           <Target2Hold>5</Target2Hold>
           <Loop>1</Loop>

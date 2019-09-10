@@ -253,29 +253,64 @@ void RailSim::OnUpdate(const common::UpdateInfo &_info)
             // Get current time
             this->current_time = _info.simTime.Double(); // seconds
 
-            // Wait for target1_hold amount before moving (stay at the default spawn position)
-            // Or if we are already at target1 go back and hold
-            if (this->current_time - this->start_time <= this->target1_hold)
+
+            // If target1 move was not target1_complete
+            if (this->target1_complete == false)
             {
-                if (this->hold_control == false)
+                // Wait for target1_hold amount before moving (stay at the default spawn position)
+                // Or if we are already at target1 go back and hold
+                if (this->current_time - this->start_time <= this->target1_hold)
                 {
-                    // Wait for target1_hold seconds
+                    if (this->hold_control == false)
+                    {
+                        // Wait for target1_hold seconds
+                    }
+                    else
+                    {
+                        // Stay at the target1_hold position
+                        this->model->SetWorldPose(ignition::math::Pose3d(0, this->target1_pos, 0, 0, 0, 0));
+                    }
+                }
+                // Then move to target one position
+                else
+                {
+                    if (this->hold_control == false)
+                    {
+                        this->model->SetWorldPose(ignition::math::Pose3d(0, this->target1_pos, 0, 0, 0, 0));
+                        // We will want to hold this for target1_hold amount so reset timer
+                        // and after target1_hold time has passed move back to origin
+                        this->start_time = _info.simTime.Double();
+                        this->hold_control = true;
+                    }
+                    // If we are done holding at target 1 then start for target 2
+                    else if(this->hold_control == true)
+                    {
+                        this->target1_complete = true;
+                        // Now move onto target2_pos, reset the timer
+                        this->start_time = _info.simTime.Double();
+                    }
+
+                }
+
+            }
+            // Move target 2
+            else
+            {
+                // move to target2_pos and hold for target2_hold amount
+                if (this->current_time - this->start_time <= this->target2_hold)
+                {
+                        // Stay at the target1_hold position
+                        this->model->SetWorldPose(ignition::math::Pose3d(0, this->target2_pos, 0, 0, 0, 0));
                 }
                 else
                 {
-                    // Stay at the target1_hold position
-                    this->model->SetWorldPose(ignition::math::Pose3d(0, this->target1_pos, 0, 0, 0, 0));
+                    /* code */ // move to origin maybe? If the target 2 position was not origin this might be useful
                 }
+                
             }
-            // Then move to target one position
-            else
-            {
-                this->model->SetWorldPose(ignition::math::Pose3d(0, this->target1_pos, 0, 0, 0, 0));
-                // We will want to hold this for target1_hold amount so reset timer
-                // and after target1_hold time has passed move back to origin
-                this->start_time = _info.simTime.Double();
-                this->hold_control = true;
-            }
+            
+
+
 
 
 
