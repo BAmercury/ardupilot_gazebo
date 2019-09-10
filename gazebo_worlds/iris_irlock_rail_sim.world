@@ -128,19 +128,34 @@
       </include>
       <plugin name="RailSim" filename="libRailSimPlugin.so">
         <motion_profile>
+          <!-- This will be the final location of the rail cart -->
+          <pose>1.0 -1.0 0.005 0 0 0</pose>
           <!--
             1: Velocity Sine Wave, 2: Profile 1, 3: Simulated Dynamics Pose Controller
             Motion profile type 2 directly moves the beacon according to the chosen profile header data. Depending on how the data is formatted, the rail sim behaves very snappy and moves extremely quickly to reach the desired waypoints
             Motion profile 3 is a state feedback controller that takes desired position inputs as a reference and controls the rail sim by exerting a force.
             It can follow the same motion profile header data as option 2 but it has slower response as its meant to simulate a more realistic response. Recommended to use this mode to simulate less agile/aggressive trajectories (Ramps, steps, etc.) as well as to simulate a rail sim that moves a bit more realistically
+          
+            Motion Profile 4 is a Step input. The parameters are described as followed:
+              Target1: Distance from origin to first target in meters
+              Target1Hold: Time in seconds to hold at the first target position
+              Target2: Distance from target1 to some desired location (Usually origin) in meters
+              Target2Hold: Time in seconds to hold at the second target position
           -->
 
-          <type>1</type>
+          <type>4</type>
           
           <!-- Used for Velocity Sine Wave Profile, if type is not 1 then this will simply be ignored -->
           <amplitude>2.0</amplitude>
           <max_velocity>2</max_velocity> <!-- M/S -->
           <direction>2</direction> <!--In Gazebo Coordinates: 1=X, 2=Y, 3=Z -->
+
+          <!-- Used for motion profile 4. If the type is not 4 then this will simply be ignored -->
+          <Target1>5</Target1>
+          <Target1Hold>5</Target1Hold>
+          <Target2>-5</Target2>
+          <Target2Hold>5</Target2Hold>
+
         </motion_profile>
       </plugin>
 
