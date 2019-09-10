@@ -51,6 +51,15 @@ void RailSim::Load(physics::ModelPtr _parent, sdf::ElementPtr _sdf)
                 this->frequency_w = this->max_velocity / this->amplitude;
                 this->direction = motion_sdf->Get<int>("direction");
             }
+            else if (this->motion_type == 4) // Step Input
+            {
+                // Get the rest of the parameters
+                this->target1_pos = motion_sdf->Get<double>("Target1");
+                this->target1_hold = motion_sdf->Get<double>("Target1Hold");
+                this->target2_pos = motion_sdf->Get<double>("Target2");
+                this->target2_hold = motion_sdf->Get<double>("Target2Hold");
+                this->origin_pose = motion_sdf->Get<ignition::math::Pose3d>("pose");
+            }
         }
         //gzdbg << "Amplitude: " << amplitude << std::endl;
         //gzdbg << "Max Velocity: " << max_velocity << std::endl;
@@ -83,10 +92,7 @@ void RailSim::OnUpdate(const common::UpdateInfo &_info)
         // If we are reading from some type of static motion profile, reset all the control variables
         if (this->motion_type == 2)
         {
-            // Reset all control variables
-            //this->index = 0;
-            //this->size = 0;
-            //this->back_bool = false;
+            // Reset the control variables
             this->setup_bool = false;
         }
     }
@@ -137,7 +143,7 @@ void RailSim::OnUpdate(const common::UpdateInfo &_info)
                 this->current_time = 0.0;
                 // Get the start time
                 this->start_time = _info.simTime.Double();
-                setup_bool = true;
+                this->setup_bool = true;
             }
 
             // Get current time
@@ -183,7 +189,7 @@ void RailSim::OnUpdate(const common::UpdateInfo &_info)
                 this->size = *(&Profile + 1) - Profile;
                 this->index = 0;
                 this->back_bool = false;
-                setup_bool = true;
+                this->setup_bool = true;
             }
 
             //this->model->SetWorldPose(ignition::math::Pose3d(0, Profile[this->index], 0, 0, 0, 0));
@@ -226,6 +232,81 @@ void RailSim::OnUpdate(const common::UpdateInfo &_info)
             //posy = pos.Pos().Y();
             //gzdbg << "Desired/Actual: " << desired_position << ", " << posy << std::endl;
 
+        }
+        else if (this->motion_type == 4)
+        {
+
+            // Initialize the timer values
+            if (this->setup_bool == false)
+            {
+                this->current_time = 0.0;
+                // Get the start time
+                this->start_time = _info.simTime.Double();
+                this->target1_complete = false;
+                this->hold_control = false;
+                this->setup_bool = true;
+            }
+
+            // Get current time
+            this->current_time = _info.simTime.Double(); // seconds
+
+
+            // If target1 move was not target1_complete
+            if (this->target1_complete == false)
+            {
+                // Wait for target1_hold amount before moving (stay at the default spawn position)
+                // Or if we are already at target1 go back and hold
+                if (this->current_time - this->start_time <= this->target1_hold)
+                {
+                    if (this->hold_control == false)
+                    {
+                        // Wait for target1_hold seconds
+                    }
+                    else
+                    {
+                        // Stay at the target1_hold position
+                        this->model->SetWorldPose(ignition::math::Pose3d(0, this->target1_pos, 0, 0, 0, 0));
+                    }
+                }
+                // Then move to target one position
+                else
+                {
+                    if (this->hold_control == false)
+                    {
+                        this->model->SetWorldPose(ignition::math::Pose3d(0, this->target1_pos, 0, 0, 0, 0));
+                        // We will want to hold this for target1_hold amount so reset timer
+                        // and after target1_hold time has passed move back to origin
+                        this->start_time = _info.simTime.Double();
+                        this->hold_control = true;
+                    }
+                    // If we are done holding at target 1 then start for target 2
+                    else if(this->hold_control == true)
+                    {
+                        this->target1_complete = true;
+                        // Now move onto target2_pos, reset the timer
+                        this->start_time = _info.simTime.Double();
+                    }
+
+                }
+
+            }
+            // Move target 2
+            else
+            {
+                // move to target2_pos and hold for target2_hold amount
+                if (this->current_time - this->start_time <= this->target2_hold)
+                {
+                        // Stay at the target1_hold position
+                        this->model->SetWorldPose(ignition::math::Pose3d(0, this->target2_pos, 0, 0, 0, 0));
+                }
+                else
+                {
+                     // Move back to origin and hold
+                    this->model->SetWorldPose(this->origin_pose);
+                    // If user hits reset button then the whole state machine starts from beginning
+                }
+                
+            }
         }
 
 

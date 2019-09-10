@@ -48,17 +48,27 @@ namespace gazebo
         private: double posy;
         private: double force;
 
-        // Motion Profile 2 Update Timer
+        // Motion Profile 2 and 4 Update Timer
         private: double start_time;
         private: double current_time;
         private: const double period = 0.05; // In Seconds
-        
+        private: bool setup_bool = false; // Used to configure reading from static motion profile header files
 
         // Motion Profile 3 State Feedback Control
         // Calculated using model.m found in the ardupilot_extra folder
         private: double feed_forward_gain = 250.0;
         private: double gain_k1 = 250.0; // poles at -5, -1
         private: double gain_k2 = 299.0;
+
+
+        // Motion Profile 4 Step input Parameters
+        private: double target1_pos = 0.0;
+        private: double target2_pos = 0.0;
+        private: double target1_hold = 0.0; // Seconds
+        private: double target2_hold = 0.0; // Seconds;
+        private: bool hold_control = false;
+        private: bool target1_complete = false;
+        private: ignition::math::Pose3d origin_pose;
 
 
         // World Pointer
