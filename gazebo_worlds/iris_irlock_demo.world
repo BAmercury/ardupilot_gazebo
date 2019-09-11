@@ -26,13 +26,6 @@ LOITER> mode LAND
       </camera>
     </gui>
 
-    <!-- Wind -->
-    <wind>
-      <!-- X (North) Y (West) Z (Up) in m/s -->
-      <linear_velocity>10 0 0</linear_velocity>
-    </wind>
-
-
     <!-- Physics ODE Solver Configuration -->
     <physics type="ode">
       <ode>
@@ -66,6 +59,7 @@ LOITER> mode LAND
     </include>
     <!-- Import Drone Model -->
     <model name="iris">
+      <pose>0 0 0.004 0 0 0</pose>
       <include>
         <uri>model://iris_with_standoffs_demo</uri>
       </include>
@@ -141,18 +135,18 @@ LOITER> mode LAND
     </model>
 
     <model name="irlock_beacon_01">
-      <pose>1.0 -1.0 0.005 0 0 0</pose>
+      <pose>0 0 0.005 0 0 0</pose>
       <link name="link">
          <inertial>
           <pose>0 0 0 0 0 0</pose>
           <mass>3.0</mass>
           <inertia>
-            <ixx>0.019</ixx>
-            <ixy>0</ixy>
-            <ixz>0</ixz>
-            <iyy>0.01</iyy>
-            <iyz>0</iyz>
-            <izz>0.01</izz>
+            <ixx>1</ixx>
+            <ixy>1</ixy>
+            <ixz>1</ixz>
+            <iyy>1</iyy>
+            <iyz>1</iyz>
+            <izz>1</izz>
           </inertia>
         </inertial>
         <collision name="collision">

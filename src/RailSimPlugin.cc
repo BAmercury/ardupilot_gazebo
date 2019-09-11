@@ -245,6 +245,7 @@ void RailSim::OnUpdate(const common::UpdateInfo &_info)
                 this->target1_complete = false;
                 this->hold_control = false;
                 this->setup_bool = true;
+                this->final_motion = false;
             }
 
             // Get current time
@@ -299,11 +300,13 @@ void RailSim::OnUpdate(const common::UpdateInfo &_info)
                         // Stay at the target1_hold position
                         this->model->SetWorldPose(ignition::math::Pose3d(0, this->target2_pos, 0, 0, 0, 0));
                 }
+                // Move back to origin and hold
                 else
                 {
-                     // Move back to origin and hold
-                    this->model->SetWorldPose(this->origin_pose);
-                    // If user hits reset button then the whole state machine starts from beginning
+                        this->model->SetWorldPose(this->origin_pose);
+                        // If user hits reset button then the whole state machine starts from beginning
+                        this->final_motion = true; // Added this so the plugin doesn't keep spamming the rail sim with this command
+
                 }
                 
             }

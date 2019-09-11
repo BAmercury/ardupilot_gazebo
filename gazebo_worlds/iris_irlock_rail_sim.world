@@ -45,7 +45,7 @@
     </include>
     <!-- Import Drone Model -->
     <model name="iris">
-      <pose>1 -1 0.004 0 0 0</pose>
+      <pose>0 0 0.004 0 0 0</pose>
       <include>
         <uri>model://iris_with_standoffs_demo</uri>
       </include>
@@ -121,7 +121,7 @@
     </model>
 
     <model name="rail_system">
-      <pose>1.0 -1.0 0.005 0 0 0</pose>
+      <pose>0.0 0.0 0.005 0 0 0</pose>
 
       <include>
         <uri>model://rail_system</uri>
@@ -129,7 +129,7 @@
       <plugin name="RailSim" filename="libRailSimPlugin.so">
         <motion_profile>
           <!-- This will be the final location of the rail cart -->
-          <pose>1.0 -1.0 0.005 0 0 0</pose>
+          <pose>0.0 0.0 0.005 0 0 0</pose>
           <!--
             1: Velocity Sine Wave, 2: Profile 1, 3: Simulated Dynamics Pose Controller
             Motion profile type 2 directly moves the beacon according to the chosen profile header data. Depending on how the data is formatted, the rail sim behaves very snappy and moves extremely quickly to reach the desired waypoints
