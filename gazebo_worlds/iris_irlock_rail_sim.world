@@ -157,6 +157,7 @@
           <Target1Hold>10</Target1Hold>
           <Target2>0</Target2>
           <Target2Hold>10</Target2Hold>
+          <loop>1</loop>
 
         </motion_profile>
       </plugin>

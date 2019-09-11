@@ -72,6 +72,7 @@ namespace gazebo
         private: bool target1_complete = false;
         private: ignition::math::Pose3d origin_pose;
         private: bool final_motion = false; // To turn off controller at the end of the cycle
+        private: int loop_control = 0; // To turn on or off looping via SDF
 
 
         // World Pointer

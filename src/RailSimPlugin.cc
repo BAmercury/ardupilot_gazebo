@@ -59,6 +59,7 @@ void RailSim::Load(physics::ModelPtr _parent, sdf::ElementPtr _sdf)
                 this->target2_pos = motion_sdf->Get<double>("Target2");
                 this->target2_hold = motion_sdf->Get<double>("Target2Hold");
                 this->origin_pose = motion_sdf->Get<ignition::math::Pose3d>("pose");
+                this->loop_control = motion_sdf->Get<int>("loop");
 
 
             }
@@ -141,6 +142,7 @@ void RailSim::OnUpdate(const common::UpdateInfo &_info)
                 // Get the start time
                 this->start_time = _info.simTime.Double();
                 this->setup_bool = true;
+
             }
 
             // Get current time
@@ -256,9 +258,10 @@ void RailSim::OnUpdate(const common::UpdateInfo &_info)
                 // Or if we are already at target1 go back and hold
                 if (this->current_time - this->start_time <= this->target1_hold)
                 {
-                    if (this->hold_control == false)
+                    if (this->hold_control == false && this->loop_control == 0)
                     {
                         // Wait for target1_hold seconds
+                        // This will wait at origin location if loop control is on then have this bounce to target 1
                     }
                     else
                     {
@@ -300,12 +303,23 @@ void RailSim::OnUpdate(const common::UpdateInfo &_info)
                 else
                 {
                      // Move back to origin and hold
-                     if (this->final_motion == false)
+                     if (this->final_motion == false && this->loop_control == 0)
                      {
                         this->model->SetWorldPose(this->origin_pose);
                         // If user hits reset button then the whole state machine starts from beginning
                         this->final_motion = true; // Added this so the plugin doesn't keep spamming the rail sim with this command
                      }
+                     else
+                     {
+                        // Loop control is 1 so user wants to have this motion profile start again
+                        // Restart the variables
+                        this->current_time = 0.0;
+                        // Get the start time
+                        this->start_time = _info.simTime.Double();
+                        this->target1_complete = false;
+                        this->hold_control = false;
+                     }
+                     
 
                 }
                 
