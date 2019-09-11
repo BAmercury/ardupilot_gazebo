@@ -154,9 +154,9 @@
 
           <!-- Used for motion profile 4. If the type is not 4 then this will simply be ignored -->
           <Target1>2</Target1>
-          <Target1Hold>10</Target1Hold>
-          <Target2>0</Target2>
-          <Target2Hold>10</Target2Hold>
+          <Target1Hold>2</Target1Hold>
+          <Target2>-2</Target2>
+          <Target2Hold>2</Target2Hold>
           <loop>1</loop>
 
         </motion_profile>
