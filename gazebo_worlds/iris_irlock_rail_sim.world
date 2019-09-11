@@ -155,6 +155,7 @@
           <Target1Hold>5</Target1Hold>
           <Target2>-5</Target2>
           <Target2Hold>5</Target2Hold>
+          <loop>1</loop>
 
         </motion_profile>
       </plugin>
