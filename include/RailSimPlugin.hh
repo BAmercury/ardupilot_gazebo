@@ -65,14 +65,9 @@ namespace gazebo
 
         // Motion Profile 4 Step input Parameters
         private: double target1_pos = 0.0;
-        private: double target2_pos = 0.0;
         private: double target1_hold = 0.0; // Seconds
-        private: double target2_hold = 0.0; // Seconds;
         private: bool hold_control = false;
-        private: bool target1_complete = false;
         private: ignition::math::Pose3d origin_pose;
-        private: bool final_motion = false; // To turn off controller at the end of the cycle
-        private: int loop_control = 0; // To turn on or off looping via SDF
 
 
         // World Pointer

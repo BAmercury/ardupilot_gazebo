@@ -56,8 +56,6 @@ void RailSim::Load(physics::ModelPtr _parent, sdf::ElementPtr _sdf)
                 // Get the rest of the parameters
                 this->target1_pos = motion_sdf->Get<double>("Target1");
                 this->target1_hold = motion_sdf->Get<double>("Target1Hold");
-                this->target2_pos = motion_sdf->Get<double>("Target2");
-                this->target2_hold = motion_sdf->Get<double>("Target2Hold");
                 this->origin_pose = motion_sdf->Get<ignition::math::Pose3d>("pose");
                 this->loop_control = motion_sdf->Get<int>("loop");
 
@@ -241,96 +239,35 @@ void RailSim::OnUpdate(const common::UpdateInfo &_info)
                 this->current_time = 0.0;
                 // Get the start time
                 this->start_time = _info.simTime.Double();
-                this->target1_complete = false;
                 this->hold_control = false;
                 this->setup_bool = true;
-                this->final_motion = false;
             }
 
             // Get current time
             this->current_time = _info.simTime.Double(); // seconds
-
-
-            // If target1 move was not target1_complete
-            if (this->target1_complete == false)
+            
+            // Wait for target1_hold amount (in seconds) before moving
+            // This will have the rail sim either wait at origin or wait at target1 depending on control logic variables set
+            if (this->current_time - this->start_time >= this->target1_hold)
             {
-                // Wait for target1_hold amount before moving (stay at the default spawn position)
-                // Or if we are already at target1 go back and hold
-                if (this->current_time - this->start_time <= this->target1_hold)
+                // if hold_control is true we want to be moving the target to the target 1
+                if (this->hold_control == false)
                 {
-                    if (this->hold_control == false)
-                    {
-                        // Wait for target1_hold seconds
-                        // This will wait at origin location if loop control is on then have this bounce to target 1
-                    }
-                    else
-                    {
-                        // Stay at the target1_hold position
-                        this->model->SetWorldPose(ignition::math::Pose3d(0, this->target1_pos, 0, 0, 0, 0));
-                    }
-
-                }
-                // Then move to target one position
-                else
-                {
-                    if (this->hold_control == false)
-                    {
-                        this->model->SetWorldPose(ignition::math::Pose3d(0, this->target1_pos, 0, 0, 0, 0));
-                        // We will want to hold this for target1_hold amount so reset timer
-                        // and after target1_hold time has passed move back to origin
-                        this->hold_control = true;
-                    }
-                    // If we are done holding at target 1 then start for target 2
-                    else if(this->hold_control == true)
-                    {
-                        this->target1_complete = true;
-                        // Now move onto target2_pos, reset the timer
-                    }
-
-                    // Save the current time
-                    this->start_time = this->current_time;
-
-                }
-
-            }
-            // Move target 2
-            else
-            {
-                // move to target2_pos and hold for target2_hold amount
-                if (this->current_time - this->start_time <= this->target2_hold && this->final_motion == false)
-                {
-                        // Stay at the target1_hold position
-                        this->model->SetWorldPose(ignition::math::Pose3d(0, this->target2_pos, 0, 0, 0, 0));
+                    // Target1 Position
+                    this->model->SetWorldPose(ignition::math::Pose3d(0, this->target1_pos, 0, 0, 0, 0));
+                    gzdbg << "T1" << std::endl; 
+                    this->hold_control = true;                   
                 }
                 else
                 {
-                    // Move back to origin and hold
-                    if (this->final_motion == false && this->loop_control == 0)
-                    {
-                        this->model->SetWorldPose(this->origin_pose);
-                        // If user hits reset button then the whole state machine starts from beginning
-                        this->final_motion = true; // Added this so the plugin doesn't keep spamming the rail sim with this command
-                    }
-                    else
-                    {
-                        // Loop control is 1 so user wants to have this motion profile start again
-                        // Restart the variables
-                        this->current_time = 0.0;
-                        this->target1_complete = false;
-                        this->hold_control = false;
-                        this->start_time = this->current_time;
-                    }
-                   
-                     
-
+                    this->model->SetWorldPose(this->origin_pose);
+                    this->hold_control = false;
+                    gzdbg << "O" << std::endl;  
                 }
-                
+                // Restart the timer
+                this->start_time = this->current_time;
             }
             
-
-
-
-
 
         }
 
