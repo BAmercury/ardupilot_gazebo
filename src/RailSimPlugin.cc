@@ -260,17 +260,17 @@ void RailSim::OnUpdate(const common::UpdateInfo &_info)
                 // Or if we are already at target1 go back and hold
                 if (this->current_time - this->start_time <= this->target1_hold)
                 {
-                    if (this->hold_control == false && this->loop_control == 0)
+                    if (this->hold_control == false)
                     {
                         // Wait for target1_hold seconds
                         // This will wait at origin location if loop control is on then have this bounce to target 1
-
                     }
                     else
                     {
                         // Stay at the target1_hold position
                         this->model->SetWorldPose(ignition::math::Pose3d(0, this->target1_pos, 0, 0, 0, 0));
                     }
+
                 }
                 // Then move to target one position
                 else
@@ -280,7 +280,6 @@ void RailSim::OnUpdate(const common::UpdateInfo &_info)
                         this->model->SetWorldPose(ignition::math::Pose3d(0, this->target1_pos, 0, 0, 0, 0));
                         // We will want to hold this for target1_hold amount so reset timer
                         // and after target1_hold time has passed move back to origin
-                        this->start_time = _info.simTime.Double();
                         this->hold_control = true;
                     }
                     // If we are done holding at target 1 then start for target 2
@@ -288,8 +287,10 @@ void RailSim::OnUpdate(const common::UpdateInfo &_info)
                     {
                         this->target1_complete = true;
                         // Now move onto target2_pos, reset the timer
-                        this->start_time = _info.simTime.Double();
                     }
+
+                    // Save the current time
+                    this->start_time = this->current_time;
 
                 }
 
@@ -298,14 +299,14 @@ void RailSim::OnUpdate(const common::UpdateInfo &_info)
             else
             {
                 // move to target2_pos and hold for target2_hold amount
-                if (this->current_time - this->start_time <= this->target2_hold)
+                if (this->current_time - this->start_time <= this->target2_hold && this->final_motion == false)
                 {
                         // Stay at the target1_hold position
                         this->model->SetWorldPose(ignition::math::Pose3d(0, this->target2_pos, 0, 0, 0, 0));
                 }
-                // Move back to origin and hold
                 else
                 {
+                    // Move back to origin and hold
                     if (this->final_motion == false && this->loop_control == 0)
                     {
                         this->model->SetWorldPose(this->origin_pose);
@@ -317,13 +318,12 @@ void RailSim::OnUpdate(const common::UpdateInfo &_info)
                         // Loop control is 1 so user wants to have this motion profile start again
                         // Restart the variables
                         this->current_time = 0.0;
-                        // Get the start time
-                        this->start_time = _info.simTime.Double();
                         this->target1_complete = false;
-                        this->hold_control = false;                       
+                        this->hold_control = false;
+                        this->start_time = this->current_time;
                     }
-                    
-                       
+                   
+                     
 
                 }
                 
