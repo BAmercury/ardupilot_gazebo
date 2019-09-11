@@ -71,6 +71,7 @@ namespace gazebo
         private: bool hold_control = false;
         private: bool target1_complete = false;
         private: ignition::math::Pose3d origin_pose;
+        private: bool final_motion = false; // To turn off controller at the end of the cycle
 
 
         // World Pointer

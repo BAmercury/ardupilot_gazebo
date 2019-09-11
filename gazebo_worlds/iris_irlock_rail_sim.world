@@ -45,7 +45,7 @@
     </include>
     <!-- Import Drone Model -->
     <model name="iris">
-      <pose>1 -1 0.004 0 0 0</pose>
+      <pose>0 0 0.004 0 0 0</pose>
       <include>
         <uri>model://iris_with_standoffs_demo</uri>
       </include>
@@ -121,7 +121,7 @@
     </model>
 
     <model name="rail_system">
-      <pose>1.0 -1.0 0.005 0 0 0</pose>
+      <pose>0.0 0.0 0.005 0 0 0</pose>
 
       <include>
         <uri>model://rail_system</uri>
@@ -130,7 +130,7 @@
         
         <motion_profile>
           <!-- This will be the final location of the rail cart -->
-          <pose>1.0 -1.0 0.005 0 0 0</pose>
+          <pose>0 0 0 0 0 0</pose>
           <!--
             1: Velocity Sine Wave, 2: Profile 1, 3: Simulated Dynamics Pose Controller
             Motion profile type 2 directly moves the beacon according to the chosen profile header data. Depending on how the data is formatted, the rail sim behaves very snappy and moves extremely quickly to reach the desired waypoints
@@ -153,10 +153,10 @@
           <direction>2</direction> <!--In Gazebo Coordinates: 1=X, 2=Y, 3=Z -->
 
           <!-- Used for motion profile 4. If the type is not 4 then this will simply be ignored -->
-          <Target1>5</Target1>
-          <Target1Hold>5</Target1Hold>
-          <Target2>-5</Target2>
-          <Target2Hold>5</Target2Hold>
+          <Target1>2</Target1>
+          <Target1Hold>10</Target1Hold>
+          <Target2>0</Target2>
+          <Target2Hold>10</Target2Hold>
 
         </motion_profile>
       </plugin>
