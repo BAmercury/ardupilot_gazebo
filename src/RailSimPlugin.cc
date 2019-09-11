@@ -306,7 +306,7 @@ void RailSim::OnUpdate(const common::UpdateInfo &_info)
                 // Move back to origin and hold
                 else
                 {
-                    if (this->final_motion == false && this->loop_control = 0)
+                    if (this->final_motion == false && this->loop_control == 0)
                     {
                         this->model->SetWorldPose(this->origin_pose);
                         // If user hits reset button then the whole state machine starts from beginning
