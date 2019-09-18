@@ -59,7 +59,7 @@ source /usr/share/gazebo/setup.sh
 
 export GAZEBO_MODEL_PATH=~/Documents/ardupilot_gazebo/gazebo_models
 
-export GAZEBO_RESOURCE_PATH=~/ardupilot_gazebo/gazebo_worlds:${GAZEBO_RESOURCE_PATH}
+export GAZEBO_RESOURCE_PATH=~/Documents/ardupilot_gazebo/gazebo_worlds:${GAZEBO_RESOURCE_PATH}
 
 export PATH=$PATH:$HOME/ardupilot/Tools/autotest
 export PATH=/usr/lib/ccache:$PATH
