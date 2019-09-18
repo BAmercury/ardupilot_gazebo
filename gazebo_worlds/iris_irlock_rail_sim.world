@@ -128,8 +128,6 @@
       </include>
       <plugin name="RailSim" filename="libRailSimPlugin.so">
         <motion_profile>
-          <!-- This will be the final location of the rail cart -->
-          <pose>0.0 0.0 0.005 0 0 0</pose>
           <!--
             1: Velocity Sine Wave, 2: Profile 1, 3: Simulated Dynamics Pose Controller
             Motion profile type 2 directly moves the beacon according to the chosen profile header data. Depending on how the data is formatted, the rail sim behaves very snappy and moves extremely quickly to reach the desired waypoints
@@ -139,8 +137,6 @@
             Motion Profile 4 is a Step input. The parameters are described as followed:
               Target1: Distance from origin to first target in meters
               Target1Hold: Time in seconds to hold at the first target position
-              Target2: Distance from target1 to some desired location (Usually origin) in meters
-              Target2Hold: Time in seconds to hold at the second target position
           -->
 
           <type>4</type>
@@ -151,11 +147,9 @@
           <direction>2</direction> <!--In Gazebo Coordinates: 1=X, 2=Y, 3=Z -->
 
           <!-- Used for motion profile 4. If the type is not 4 then this will simply be ignored -->
-          <Target1>5</Target1>
-          <Target1Hold>5</Target1Hold>
-          <Target2>-5</Target2>
-          <Target2Hold>5</Target2Hold>
-          <loop>1</loop>
+          <Target1>2</Target1>
+          <Target1Hold>2</Target1Hold>
+          <pose>0 0 0 0 0 0</pose>  <!-- This will be the final location of the rail cart -->
 
         </motion_profile>
       </plugin>
