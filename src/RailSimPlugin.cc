@@ -49,7 +49,8 @@ void RailSim::Load(physics::ModelPtr _parent, sdf::ElementPtr _sdf)
                 this->amplitude = motion_sdf->Get<double>("amplitude");
                 this->max_velocity = motion_sdf->Get<double>("max_velocity");
                 this->frequency_w = this->max_velocity / this->amplitude;
-                this->direction = motion_sdf->Get<int>("direction");
+                this->forward_direction = motion_sdf->Get<int>("forward_direction");
+                this->forward_velocity = motion_sdf->Get<double>("forward_velocity");
             }
             else if (this->motion_type == 4) // Step Input
             {
@@ -99,30 +100,17 @@ void RailSim::OnUpdate(const common::UpdateInfo &_info)
             // Velocity = -aw * sin(wt)
             double desired_vel = (-this->amplitude * this->frequency_w) * sin( (this->frequency_w) * _info.simTime.Double());
             
-            // Apply in the desired direction
-            if (this->direction == 1)
+            // Check to see if added 2D movement is enabled
+            if (this->forward_direction != 0)
             {
-                this->model->SetLinearVel(ignition::math::Vector3d(desired_vel, 0, 0));
+                // Apply the sine wave in the Y direction, apply added forward velocity in the X direction
+                this->model->SetLinearVel(ignition::math::Vector3d(this->forward_velocity, desired_vel, 0));
             }
-            else if(this->direction == 2)
+            else
             {
+                // Apply sine wave in Y direction
                 this->model->SetLinearVel(ignition::math::Vector3d(0, desired_vel, 0));
             }
-            else if (this->direction == 3)
-            {
-                this->model->SetLinearVel(ignition::math::Vector3d(0, 0, desired_vel));
-            }
-            else // Default is in Y Direction
-            {
-                this->model->SetLinearVel(ignition::math::Vector3d(0, desired_vel, 0));
-            }
-            
-            
-            
-            //gzdbg << "Cart Desired Speed: " << desired_vel << std::endl;
-            //gzdbg << "Cart Relative Speed: " << this->model->RelativeLinearVel() << std::endl;
-            //gzdbg << "Cart World Speed: " << this->model->WorldLinearVel() << std::endl;
-
         }
         else if (this->motion_type == 2)
         {

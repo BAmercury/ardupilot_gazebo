@@ -21,6 +21,7 @@ namespace gazebo
         public: virtual void Load(physics::ModelPtr _parent, sdf::ElementPtr _sdf);
         public: void OnUpdate(const common::UpdateInfo &_info);
 
+
         // Private Membersphysics::WorldPtr _parent, sd
 
         // Pointer to the model
@@ -29,14 +30,18 @@ namespace gazebo
         // Pointer for the update even updateConnection
         private: event::ConnectionPtr updateConnection;
 
-        // Sine Wave Parameters:
+
+        private: int motion_type;  // Variable to specify the motion profile for the rail sim
+
+        // Motion Profile 1: Sine Wave Parameters:
         // Default values for Velocity Sine Motion profile
         // Can be updated via SDF
         private: double amplitude = 8.0;
         private: double max_velocity = 1.524; // m/s
         private: double frequency_w = max_velocity / amplitude;  // maxVel/Amplitude
-        private: int direction = 2; // In Gazebo Coordinates, 1:x, 2:y, 3:z
-        private: int motion_type;  // Variable to specify the motion profile for the rail sim
+        private: int forward_direction = 0; // 0: No Added movement, 1=X, 2=Y, 3=Z
+        private: double forward_velocity = 0; // m/s, for added movement 
+
         
         private: int index = 0; // Used to iterate through the static motion profile header
         private: int size = 0; // Used to iterate through the static motion profile header
