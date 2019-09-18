@@ -108,7 +108,7 @@ Tools/autotest/
 ````
 Then run the following:
 ````
-sudo python sim_vehicle.py -v ArduCopter -f gazebo-iris --console
+python sim_vehicle.py -v ArduCopter -f gazebo-iris --console
 ````
 
 Wait a few minutes and let the drone get a 3D fix before
