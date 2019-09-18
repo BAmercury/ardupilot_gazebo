@@ -32,6 +32,7 @@ namespace gazebo
 
 
         private: int motion_type;  // Variable to specify the motion profile for the rail sim
+        private: double delay_time = 50; // In Seconds, Variable to specify the amount of time for Gazebo to wait on Ardupilot SITL
 
         // Motion Profile 1: Sine Wave Parameters:
         // Default values for Velocity Sine Motion profile

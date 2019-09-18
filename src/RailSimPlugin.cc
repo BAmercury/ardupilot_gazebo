@@ -42,6 +42,8 @@ void RailSim::Load(physics::ModelPtr _parent, sdf::ElementPtr _sdf)
        if (motion_sdf->HasElement("type"))
        {
             this->motion_type = motion_sdf->Get<int>("type");
+            // Get the delay time for Gazebo to wait
+            this->delay_time = motion_sdf->Get<double>("delay_time");
             gzdbg << "Motion Type: " << motion_type << std::endl;
             if (this->motion_type == 1) // Velocity Sine Wave
             {
@@ -79,7 +81,7 @@ void RailSim::OnUpdate(const common::UpdateInfo &_info)
 
 
     // Wait 50 seconds for Ardupilot to start up
-    if (_info.simTime.Double() < 50)
+    if (_info.simTime.Double() < this->delay_time)
     {
         // Apply no Velocity
         this->model->SetLinearVel(ignition::math::Vector3d(0,0,0));
