@@ -3,12 +3,25 @@
   <world name="default">
     <gui>
       <camera name="user_camera">
-        <pose>-3.012870 0.455695 15.817830 -0.000002 1.393796 0.013203</pose>
+
+        <!-- If you want a stationary camera, uncomment this line -->
+        <!-- pose>-3.012870 0.455695 15.817830 -0.000002 1.393796 0.013203</pose -->
+        
+        <!-- If you want a moving camera, uncomment the following track_visual tag block -->
+        <track_visual>
+          <name>rail_system</name>
+          <static>true</static>
+          <use_model_frame>true</use_model_frame>
+          <xyz>-3 0 20</xyz>
+          <inherit_yaw>false</inherit_yaw>
+        </track_visual>
+
+
       </camera>
-      <plugin name="GUIResetWorld" filename="libgui_resetworld.so"/>
+      <!-- plugin name="GUIResetWorld" filename="libgui_resetworld.so"/ -->
     </gui>
 
-    <plugin name="listen" filename="libResetWorld.so"/>
+    <!-- plugin name="listen" filename="libResetWorld.so"/ -->
 
 
     <!-- Physics ODE Solver Configuration -->
@@ -145,7 +158,7 @@
           <type>1</type>
           
           <!-- Used for Velocity Sine Wave Profile, if type is not 1 then this will simply be ignored -->
-          <amplitude>1.0</amplitude>
+          <amplitude>2.0</amplitude>
           <max_velocity>2</max_velocity> <!-- M/S -->
           <!-- Optional for motion profile 1: Add forward movement -->
           <forward_direction>1</forward_direction> <!-- 0=No added movement, 1=Enable added movement-->
