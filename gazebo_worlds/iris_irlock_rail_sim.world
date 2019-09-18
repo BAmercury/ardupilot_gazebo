@@ -142,13 +142,14 @@
               Target1Hold: Time in seconds to hold at the first target position
           -->
 
-          <type>4</type>
+          <type>1</type>
           
           <!-- Used for Velocity Sine Wave Profile, if type is not 1 then this will simply be ignored -->
-          <amplitude>2.0</amplitude>
+          <amplitude>1.0</amplitude>
           <max_velocity>2</max_velocity> <!-- M/S -->
-          <direction>2</direction> <!--In Gazebo Coordinates: 1=X, 2=Y, 3=Z -->
-
+          <!-- Optional for motion profile 1: Add forward movement -->
+          <forward_direction>1</forward_direction> <!-- 0=No added movement, 1=Enable added movement-->
+          <forward_velocity>2</forward_velocity> <!-- M/S -->
           <!-- Used for motion profile 4. If the type is not 4 then this will simply be ignored -->
           <Target1>2</Target1>
           <Target1Hold>2</Target1Hold>
