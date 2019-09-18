@@ -57,7 +57,6 @@ void RailSim::Load(physics::ModelPtr _parent, sdf::ElementPtr _sdf)
                 this->target1_pos = motion_sdf->Get<double>("Target1");
                 this->target1_hold = motion_sdf->Get<double>("Target1Hold");
                 this->origin_pose = motion_sdf->Get<ignition::math::Pose3d>("pose");
-                this->loop_control = motion_sdf->Get<int>("loop");
 
 
             }
@@ -225,9 +224,6 @@ void RailSim::OnUpdate(const common::UpdateInfo &_info)
                 //gzdbg << "Going Forwards in Array" << std::endl;
                 this->index = this->index + 1;
             }
-            //pos = this->model->WorldPose();
-            //posy = pos.Pos().Y();
-            //gzdbg << "Desired/Actual: " << desired_position << ", " << posy << std::endl;
 
         }
         else if (this->motion_type == 4)
@@ -255,14 +251,12 @@ void RailSim::OnUpdate(const common::UpdateInfo &_info)
                 {
                     // Target1 Position
                     this->model->SetWorldPose(ignition::math::Pose3d(0, this->target1_pos, 0, 0, 0, 0));
-                    gzdbg << "T1" << std::endl; 
                     this->hold_control = true;                   
                 }
                 else
                 {
                     this->model->SetWorldPose(this->origin_pose);
                     this->hold_control = false;
-                    gzdbg << "O" << std::endl;  
                 }
                 // Restart the timer
                 this->start_time = this->current_time;
