@@ -3,7 +3,20 @@
   <world name="default">
     <gui>
       <camera name="user_camera">
-        <pose>-3.012870 0.455695 15.817830 -0.000002 1.393796 0.013203</pose>
+
+        <!-- If you want a stationary camera, uncomment this line -->
+        <!-- pose>-3.012870 0.455695 15.817830 -0.000002 1.393796 0.013203</pose -->
+        
+        <!-- If you want a moving camera, uncomment the following track_visual tag block -->
+        <track_visual>
+          <name>rail_system</name>
+          <static>true</static>
+          <use_model_frame>true</use_model_frame>
+          <xyz>-3 0 20</xyz>
+          <inherit_yaw>false</inherit_yaw>
+        </track_visual>
+
+
       </camera>
       <!-- plugin name="GUIResetWorld" filename="libgui_resetworld.so"/ -->
     </gui>
@@ -129,27 +142,50 @@
       <plugin name="RailSim" filename="libRailSimPlugin.so">
         <motion_profile>
           <!--
-            1: Velocity Sine Wave, 2: Profile 1, 3: Simulated Dynamics Pose Controller
-            Motion profile type 2 directly moves the beacon according to the chosen profile header data. Depending on how the data is formatted, the rail sim behaves very snappy and moves extremely quickly to reach the desired waypoints
-            Motion profile 3 is a state feedback controller that takes desired position inputs as a reference and controls the rail sim by exerting a force.
-            It can follow the same motion profile header data as option 2 but it has slower response as its meant to simulate a more realistic response. Recommended to use this mode to simulate less agile/aggressive trajectories (Ramps, steps, etc.) as well as to simulate a rail sim that moves a bit more realistically
-          
-            Motion Profile 4 is a Step input. The parameters are described as followed:
-              Target1: Distance from origin to first target in meters
-              Target1Hold: Time in seconds to hold at the first target position
+
+            Motion Profiles:
+            1: Velocity Sine Wave 
+            2: Profile 1 From Boat 
+            3: Simulated Dynamics Pose Controller
+            4: Step Input Ping Pong
+            Motion Profile 1 is a standard sine wave along the Y axis, 
+            with the option of having the rail sim translate along the X axis at a desired velocity
+            
+            Motion Profile 2 loads in a set of desired waypoints from a header file
+            
+            Motion profile 3 is experimental and is a a state feedback controller that takes desired position inputs as a reference and
+            controls the rail sim platform by exerting a force. It has the ability to follow the same motion profile
+            header data as motion profile 2 but has slower, realistic response. Recommended to use this on less aggressive motion trajectories
+            
+            Motion Profile 4 is a step input that ping pongs between the set origin and a user defined position
+            
+            To Setup:
+            1. Set the type tag to the integer correlating to the motion profile you desire
+            2. Make sure you scroll to the top of this file and check to see if your GUI Camera settings are setup correctly
+            3. Adjust the delay time depending on how long you want Gazebo to wait as you setup Ardupilot and get the drone flying off the platform
+            4. Adjust the specfic motion profile settings that correlate to the type tag
+
           -->
 
-          <type>4</type>
+          <type>1</type>
+          <delay_time>60</delay_time> <!-- In seconds, Amount of time for Gazebo to wait before moving platform. -->
           
-          <!-- Used for Velocity Sine Wave Profile, if type is not 1 then this will simply be ignored -->
-          <amplitude>2.0</amplitude>
-          <max_velocity>2</max_velocity> <!-- M/S -->
-          <direction>2</direction> <!--In Gazebo Coordinates: 1=X, 2=Y, 3=Z -->
-
-          <!-- Used for motion profile 4. If the type is not 4 then this will simply be ignored -->
-          <Target1>2</Target1>
-          <Target1Hold>2</Target1Hold>
-          <pose>0 0 0 0 0 0</pose>  <!-- This will be the final location of the rail cart -->
+          <!-- Motion Profile 1: Velocity Sine Wave Profile
+               If the type tag is not 1, the following will be ignored 
+          -->
+          <amplitude>2.0</amplitude> <!-- Meters, from center to edge -->
+          <max_velocity>2</max_velocity> <!-- meters per second -->
+          <!-- Optional for motion profile 1: Add forward movement -->
+          <forward_direction>0</forward_direction> <!-- 0=No added movement, 1=Enable added movement-->
+          <forward_velocity>2</forward_velocity> <!-- M/S -->
+          
+          <!-- Motion Profile 4: Step input Ping Pong 
+               If the type is not set to 4, then this will be simply ignored
+          -->
+          <Target1>2</Target1> <!-- Distance from origin to first target in meters -->
+          <Target1Hold>2</Target1Hold> <!-- Set the amount of time to hold at the target -->
+          <!-- This will be the final location of the rail cart after it visited the target -->
+          <pose>0 0 0 0 0 0</pose>
 
         </motion_profile>
       </plugin>

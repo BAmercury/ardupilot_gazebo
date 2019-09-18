@@ -35,6 +35,7 @@ namespace gazebo
         private: double frequency_w = max_velocity / amplitude;  // maxVel/Amplitude
         private: int direction = 2; // In Gazebo Coordinates, 1:x, 2:y, 3:z
         private: int motion_type;  // Variable to specify the motion profile for the rail sim
+        private: double delay_time = 50; // In Seconds, Variable to specify the amount of time for Gazebo to wait on Ardupilot SITL
         private: int index = 0; // Used to iterate through the static motion profile header
         private: int size = 0; // Used to iterate through the static motion profile header
         private: bool back_bool = false; // To tell system to travel backwards
