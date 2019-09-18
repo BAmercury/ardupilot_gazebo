@@ -35,7 +35,7 @@ Follow instructions here:
 ````
 git clone https://github.com/BAmercury/ardupilot_gazebo
 cd ardupilot_gazebo
-git checkout gazebo7-ver
+git checkout gazebo7_ver
 mkdir build
 cd build
 cmake ..
