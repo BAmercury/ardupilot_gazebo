@@ -51,6 +51,9 @@ void RailSim::Load(physics::ModelPtr _parent, sdf::ElementPtr _sdf)
                 this->amplitude = motion_sdf->Get<double>("amplitude");
                 this->max_velocity = motion_sdf->Get<double>("max_velocity");
                 this->frequency_w = this->max_velocity / this->amplitude;
+                this->direction = motion_sdf->Get<ignition::math::Vector2d>("direction");
+                // Take direction and turn it into 3D Vector
+                this->direction_3d = ignition::math::Vector3d(this->direction.X(), this->direction.Y(), 0);
                 this->forward_direction = motion_sdf->Get<int>("forward_direction");
                 this->forward_velocity = motion_sdf->Get<double>("forward_velocity");
             }
@@ -102,16 +105,22 @@ void RailSim::OnUpdate(const common::UpdateInfo &_info)
             // Velocity = -aw * sin(wt)
             double desired_vel = (-this->amplitude * this->frequency_w) * sin( (this->frequency_w) * _info.simTime.Double());
             
-            // Check to see if added 2D movement is enabled
+            // Check to see if user wanted to add in forward velocity
             if (this->forward_direction != 0)
             {
-                // Apply the sine wave in the Y direction, apply added forward velocity in the X direction
-                this->model->SetLinearVel(ignition::math::Vector3d(this->forward_velocity, desired_vel, 0));
+                // Rotate the sine vector to a vector ortho to it (-1.5708 Radians)
+                ignition::math::Vector3d fwd_vec =this->matrix_rot * this->direction_3d;
+                // Now multiply both of these vectors by their velocities and add them together
+                ignition::math::Vector3d sine_vec = this->direction_3d * desired_vel;
+                fwd_vec = fwd_vec * this->forward_velocity;
+                ignition::math::Vector3d output_vec = sine_vec + fwd_vec;
+                this->model->SetLinearVel(output_vec);       
+
             }
             else
             {
-                // Apply sine wave in Y direction
-                this->model->SetLinearVel(ignition::math::Vector3d(0, desired_vel, 0));
+                // Just apply the sine velocity in the desired direction
+                this->model->SetLinearVel(this->direction_3d * desired_vel);
             }
         }
         else if (this->motion_type == 2)

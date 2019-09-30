@@ -173,15 +173,16 @@
           -->
         
           <type>1</type>
-          <delay_time>60</delay_time> <!-- In seconds, Amount of time for Gazebo to wait before moving platform. -->
+          <delay_time>10</delay_time> <!-- In seconds, Amount of time for Gazebo to wait before moving platform. -->
           
           <!-- Motion Profile 1: Velocity Sine Wave Profile
                If the type tag is not 1, the following will be ignored 
           -->
           <amplitude>2.0</amplitude> <!-- Meters, from center to edge -->
           <max_velocity>2</max_velocity> <!-- meters per second -->
+          <direction>0 1</direction>
           <!-- Optional for motion profile 1: Add forward movement -->
-          <forward_direction>0</forward_direction> <!-- 0=No added movement, 1=Enable added movement-->
+          <forward_direction>1</forward_direction> <!-- 0=No added movement, 1=Enable added movement-->
           <forward_velocity>2</forward_velocity> <!-- M/S -->
           
           <!-- Motion Profile 4: Step input Ping Pong 
