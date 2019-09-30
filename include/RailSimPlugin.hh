@@ -39,10 +39,16 @@ namespace gazebo
         // Can be updated via SDF
         private: double amplitude = 8.0;
         private: double max_velocity = 1.524; // m/s
+        private: ignition::math::Vector2d direction; // Direction to apply sine wave velocity
+        private: ignition::math::Vector3d direction_3d;
         private: double frequency_w = max_velocity / amplitude;  // maxVel/Amplitude
         private: int forward_direction = 0; // 0: No Added movement, 1=X, 2=Y, 3=Z
         private: double forward_velocity = 0; // m/s, for added movement 
-
+        private: ignition::math::Matrix3d matrix_rot = ignition::math::Matrix3d(
+            0, 1, 0,
+            -1, 0, 0,
+            0, 0, 0
+        );
         
         private: int index = 0; // Used to iterate through the static motion profile header
         private: int size = 0; // Used to iterate through the static motion profile header
