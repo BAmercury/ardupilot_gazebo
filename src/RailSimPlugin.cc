@@ -92,23 +92,26 @@ void RailSim::OnUpdate(const common::UpdateInfo &_info)
 
         // If we are reading from some type of static motion profile, reset all the control variables
         // Also if we are using motion type 4, reset the timer values
-        if (this->motion_type == 2 || this->motion_type == 4)
+        if (this->motion_type == 2 || this->motion_type == 4 || this->motion_type == 1)
         {
             // Reset the control variables
             this->setup_bool = false;
-        }
-        else if (this->motion_type == 1)
-        {
-            // Set this initial position to have the Sine wave start with 0 in the middle
-            ignition::math::Vector2d initial_pose = this->direction * (- this->amplitude);
-            ignition::math::Pose3d initial_pose_set = ignition::math::Pose3d(initial_pose.X(), initial_pose.Y(), 0, 0, 0, 0);
-            this->model->SetWorldPose(initial_pose_set);
         }
     }
     else
     {
         if (this->motion_type == 1) // Velocity Sine Wave
         {
+
+            if (this->setup_bool == false)
+            {
+                // Set this initial position to have the Sine wave start with 0 in the middle
+                ignition::math::Vector2d initial_pose = this->direction * (- this->amplitude);
+                ignition::math::Pose3d initial_pose_set = ignition::math::Pose3d(initial_pose.X(), initial_pose.Y(), 0, 0, 0, 0);
+                this->model->SetWorldPose(initial_pose_set);
+                this->setup_bool = true;
+
+            }
             // Apply linear velocity to model
             // Velocity = -aw * sin(wt)
 
