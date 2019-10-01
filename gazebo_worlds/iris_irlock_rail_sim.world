@@ -152,8 +152,8 @@
             3: Simulated Dynamics Pose Controller
             4: Step Input Ping Pong
 
-            Motion Profile 1 is a standard sine wave along the Y axis, 
-            with the option of having the rail sim translate along the X axis at a desired velocity
+            Motion Profile 1 is a standard sine wave along a user defined axis, 
+            with the option of having the rail sim translate along the axis ortho with a desired velocity
 
             Motion Profile 2 loads in a set of desired waypoints from a header file
 
@@ -173,17 +173,17 @@
           -->
         
           <type>1</type>
-          <delay_time>10</delay_time> <!-- In seconds, Amount of time for Gazebo to wait before moving platform. -->
+          <delay_time>60</delay_time> <!-- In seconds, Amount of time for Gazebo to wait before moving platform. -->
           
           <!-- Motion Profile 1: Velocity Sine Wave Profile
                If the type tag is not 1, the following will be ignored 
           -->
           <amplitude>2.0</amplitude> <!-- Meters, from center to edge -->
           <max_velocity>2</max_velocity> <!-- meters per second -->
-          <direction>0 1</direction>
+          <direction>0 1</direction> <!-- Unit Vector for X and Y -->
           <!-- Optional for motion profile 1: Add forward movement -->
-          <forward_direction>1</forward_direction> <!-- 0=No added movement, 1=Enable added movement-->
-          <forward_velocity>2</forward_velocity> <!-- M/S -->
+          <forward_direction>0</forward_direction> <!-- 0=No added movement, 1=Enable added movement-->
+          <forward_velocity>0</forward_velocity> <!-- M/S -->
           
           <!-- Motion Profile 4: Step input Ping Pong 
                If the type is not set to 4, then this will be simply ignored
