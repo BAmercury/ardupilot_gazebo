@@ -103,19 +103,10 @@ void RailSim::OnUpdate(const common::UpdateInfo &_info)
         if (this->motion_type == 1) // Velocity Sine Wave
         {
 
-            if (this->setup_bool == false)
-            {
-                // Set this initial position to have the Sine wave start with 0 in the middle
-                ignition::math::Vector2d initial_pose = this->direction * (- this->amplitude);
-                ignition::math::Pose3d initial_pose_set = ignition::math::Pose3d(initial_pose.X(), initial_pose.Y(), 0, 0, 0, 0);
-                this->model->SetWorldPose(initial_pose_set);
-                this->setup_bool = true;
-
-            }
             // Apply linear velocity to model
             // Velocity = -aw * sin(wt)
 
-            double desired_vel = ((-this->amplitude * this->frequency_w)) * sin( (this->frequency_w * _info.simTime.Double() ));
+            double desired_vel = ((-this->amplitude * this->frequency_w)) * sin(this->frequency_w * (_info.simTime.Double() - this->delay_time)  );
             
             // Check to see if user wanted to add in forward velocity
             if (this->forward_direction != 0)
@@ -134,6 +125,7 @@ void RailSim::OnUpdate(const common::UpdateInfo &_info)
                 // Just apply the sine velocity in the desired direction
                 this->model->SetLinearVel((this->direction_3d * desired_vel));
             }
+
         }
         else if (this->motion_type == 2)
         {
