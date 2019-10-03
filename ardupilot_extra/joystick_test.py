@@ -25,7 +25,10 @@ def getJoystickUpdates(event):
 # Returns list of button commands (Mode changes, Macros, etc.)
 def getButtonUpdates(event):
     button_input = []
-    
+    return button_input
+
+
+
 
 # Init joystick
 pygame.init()
@@ -49,7 +52,7 @@ print("Waiting for vehicle to initialize...")
 while not vehicle.is_armable:
     time.sleep(1)
 
-
+# Will make these button or macro togglable
 vehicle.mode = VehicleMode("LOITER")
 vehicle.armed = True
 
