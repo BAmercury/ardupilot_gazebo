@@ -149,7 +149,7 @@
 
             1: Velocity Sine Wave 
             2: Profile 1 From Boat 
-            3: Simulated Dynamics Pose Controller
+            3: Simulated Dynamics Pose Controller (Experimental, do not use)
             4: Step Input Ping Pong
 
             Motion Profile 1 is a standard sine wave along a user defined axis, 

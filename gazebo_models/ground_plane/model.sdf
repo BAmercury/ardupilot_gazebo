@@ -13,6 +13,7 @@
         <surface>
           <friction>
             <ode>
+              <!-- Original values were mu=100, mu2 = 50 -->
               <mu>1</mu>
               <mu2>1</mu2>
             </ode>
