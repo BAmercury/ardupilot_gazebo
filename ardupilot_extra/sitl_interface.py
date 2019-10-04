@@ -37,7 +37,14 @@ def getButtonUpdates():
         btn_inputs.append(map2pwm(btn_toggle_states[button_index]))
     return btn_inputs
 
-# Arm vehicle
+# Vehicle Macro 1:
+def macro1():
+    # Take off in loiter and reach a desired alt, then leave throttle on idle
+    vehicle.mode = VehicleMode("LOITER")
+    desired_alt = 10 # meters
+    while (vehicle.location.global_relative_frame.alt <= desired_alt):
+        vehicle.channels.overrides[3] = 1800
+    vehicle.channels.overrides[3] = 1500 # Idle throttle
 
 
 
@@ -74,7 +81,7 @@ print("Vehicle is ready")
 
 # Main loop
 pilot_joy_enable = True
-joystick_inputs = [1000, 1000, 1000, 1000]
+joystick_inputs = [1500, 1500, 1500, 1500]
 btn_inputs = [1000, 1000, 1000, 1000, 1000, 1000, 1000, 1000, 1000, 1000, 1000, 1000]
 try:
     while True:
@@ -90,6 +97,7 @@ try:
                 if btn_inputs[0] == 1900:
                     vehicle.mode = VehicleMode("LOITER")
                 if btn_inputs[1] == 1900:
+                    print joystick_inputs[3]
                     vehicle.armed = True
                     print("Waiting for arming")
                     while not vehicle.armed:
@@ -98,6 +106,12 @@ try:
                 else:
                     vehicle.armed = False
                     print("disarmed")
+                # Macro 1:
+                if btn_inputs[5] == 1900:
+                    print("Performing macro 1")
+                    macro1()
+                    print("Macro 1 complete")
+                    
 
         #print "Attitude: %s" % vehicle.attitude
         #print "Global Location (relative altitude): %s" % vehicle.location.global_relative_frame.alt
