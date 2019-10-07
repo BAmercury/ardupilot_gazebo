@@ -79,7 +79,8 @@ print("Waiting for vehicle to initialize...")
 while not vehicle.is_armable:
     time.sleep(1)
 print("Vehicle is ready")
-# Will make these button or macro togglable
+
+#Will make these button or macro togglable
 # vehicle.mode = VehicleMode("LOITER")
 # vehicle.armed = True
 
@@ -89,7 +90,7 @@ print("Vehicle is ready")
 
 
 # Main loop
-pilot_joy_enable = True
+pilot_joy_enable = False
 joystick_inputs = [1500, 1500, 1500, 1500]
 btn_inputs = [1000, 1000, 1000, 1000, 1000, 1000, 1000, 1000, 1000, 1000, 1000, 1000]
 try:
@@ -100,44 +101,46 @@ try:
             # Updates joystick values and sends them for every time joystick is moved from origin
             if event.type == pygame.JOYAXISMOTION:
                 joystick_inputs = getJoystickUpdates()
-                # Send Joystick Inputs if enabled
-                if pilot_joy_enable:
-                    vehicle.channels.overrides = {'1': joystick_inputs[0], '2': joystick_inputs[1], '3': joystick_inputs[3], '4': joystick_inputs[2]}
 
             if event.type == pygame.JOYBUTTONDOWN:
                 btn_inputs = getButtonUpdates()
                 # We only need to send out message when the button changes state, not stream continuously
                 if btn_inputs[0] == 1900:
                     vehicle.mode = VehicleMode("LOITER")
+                    btn_inputs[0] = 1500
                 
                 if btn_inputs[2] == 1900:
                     # Turn on Precision
                     print("Precision ON")
                     vehicle.channels.overrides[8] = 1900
-                else:
+                elif btn_inputs[2] == 1500:
                     print("Precision OFF")
                     vehicle.channels.overrides[8] = 1500
                 
                 if btn_inputs[1] == 1900:
-                    print joystick_inputs[3]
+                  
                     vehicle.armed = True
                     print("Waiting for arming")
                     while not vehicle.armed:
                         time.sleep(1)
                     print("armed")
+                    pilot_joy_enable = True
                 else:
                     vehicle.armed = False
                     print("disarmed")
+                    pilot_joy_enable = False
                 # Macro 1:
                 if btn_inputs[5] == 1900:
                     print("Performing macro 1")
                     macro1()
                     print("Macro 1 complete")
-                    
+                    btn_inputs[5] = 1500
+
                 # Mode BRAKE
                 if btn_inputs[6] == 1900:
                     print("Mode BRAKE, swiching into Loiter")
                     vehicle.mode = VehicleMode("BRAKE")
+                    btn_inputs[6] = 1500
                 
 
 
@@ -145,7 +148,9 @@ try:
                 #print "Attitude: %s" % vehicle.attitude
                 #print "Global Location (relative altitude): %s" % vehicle.location.global_relative_frame.alt
 
-
+        # Send Joystick Inputs if enabled
+        if pilot_joy_enable:
+            vehicle.channels.overrides = {'1': joystick_inputs[0], '2': joystick_inputs[1], '3': joystick_inputs[3], '4': joystick_inputs[2]}
         time.sleep(0.005) # 20 Hz Radio Update Rate
 except KeyboardInterrupt:
     pygame.quit()
