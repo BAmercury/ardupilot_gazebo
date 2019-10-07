@@ -20,7 +20,7 @@ try:
     while True:
         input_list = []
         for event in pygame.event.get():
-            if event.type == pygame.JOYAXISMOTION:
+            if event.type == pygame.JOYBUTTONDOWN:
                 for button_index in range(j_interface.get_numbuttons()):
                     input_list.append(j_interface.get_button(button_index))
                 print(input_list)

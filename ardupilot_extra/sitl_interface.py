@@ -4,12 +4,43 @@ import time
 
 # Simple program to get Joystick imputs and send out RC commands via MAVLink
 
+# Declare Variables
+pilot_joy_enable = False
+joystick_inputs = [1500, 1500, 1500, 1500]
+btn_inputs = [1000, 1000, 1000, 1000, 1000, 1000, 1000, 1000, 1000, 1000, 1000, 1000]
+# Declare list of booleans for the Precision, Custom Mode, and Arm toggles
+toggle_prec = 0
+toggle_custom_mode = 0
+toggle_arm = 0
+
 # Function to map joystick input to PWM
 # PWM range is 1900 to 1100 and joystick range is 1 to -1
 def map2pwm(x):
     return int( (x - -1) * (1900 - 1100) / (1 - -1) + 1100)
 
+"""
+    Vehicle Macro 1:
+    This macro gives collective throttle to the drone to raise it up to a user defined altitude
+    Then returns vehicle to an idle throttle. 
+    Macro is a blocking function so user cannot input commands while this macro is running
+"""
 
+def macro1():
+    # Take off in loiter and reach a desired alt, then leave throttle on idle
+
+    # First check to see if the vehicle is actuallly armed:
+    if vehicle.armed == True:
+
+        vehicle.mode = VehicleMode("LOITER")
+        desired_alt = 10 # meters
+        print("Taking off to desired altitude: %s" % desired_alt)
+        while (vehicle.location.global_relative_frame.alt <= desired_alt):
+            print("Vehicle Altitude: %s" % vehicle.location.global_relative_frame.alt)
+            vehicle.channels.overrides[3] = 1800
+        vehicle.channels.overrides[3] = 1500 # Idle throttle
+        print("Macro 1 Complete")
+    else:
+        print("Please Arm the vehicle and try again")
 
 # Returns a list of joystick commands (Throttle, Yaw, Roll, Pitch) from user
 # mapped to PWM values
@@ -21,41 +52,54 @@ def getJoystickUpdates():
     joy_input.append(map2pwm(-j_interface.get_axis(3))) # Throttle (Needs inverted), RC 3
     return joy_input
 
-# Declare list of booleans for the buttons
-btn_toggle_states = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+# Evaluates states of buttons on controller and outputs corresponding commands
+def ButtonUpdates():
+    global pilot_joy_enable, toggle_custom_mode, toggle_arm, toggle_prec
 
-# Returns list of button commands (Mode changes, Macros, etc.)
-# Buttons need to be toggable
-def getButtonUpdates():
-    global btn_toggle_states
-    btn_inputs = []
-    for button_index in range(j_interface.get_numbuttons()):
-        # If the button is pushed, flip the corresponding bool
-        if (j_interface.get_button(button_index) == 1):
-            btn_toggle_states[button_index] ^= 1
-        # Depending on the state of the button, map to pwm and then save to the list
-        btn_inputs.append(map2pwm(btn_toggle_states[button_index]))
-    return btn_inputs
+    #  Button 0 is Prec On/OFF
+    if (j_interface.get_button(0) == 1):
+        toggle_prec ^= 1 # Flip Prec on or off
+        # Depending on the updated state of the button, deploy the action
+        if (toggle_prec):
+            print "Precision ON"
+            vehicle.channels.overrides[8] = 2000
+        else:
+            print "Precision OFF"
+            vehicle.channels.overrides[8] = 1000
+    # Button 1 is Arm On/off
+    if (j_interface.get_button(1) == 1):
+        toggle_arm ^= 1
+        # Depending on the updated state of the button, deploy the action
+        if (toggle_arm):
+            vehicle.armed = True
+            print("Waiting for arming")
+            while not vehicle.armed:
+                time.sleep(1)
+            print("armed")
+            # Enable Joystick input for pilot
+            pilot_joy_enable = True
+        else:
+            vehicle.armed = False
+            print("Disarmed")
+    # Button 2 for LOITER Mode
+    if (j_interface.get_button(2) == 1):
+        print("Mode LOITER")
+        vehicle.mode = VehicleMode("LOITER")
+    # Button 5 for LAND mode
+    if (j_interface.get_button(3) == 1):
+        print("Mode LAND")
+        vehicle.mode = VehicleMode("LAND")
+    # Button 5 for Macro 1
+    if (j_interface.get_button(4) == 1):
+        print("Performing Macro 1")
+        macro1()
+
+
 
 
 """
-    Vehicle Macro 1:
-    This macro gives collective throttle to the drone to raise it up to a user defined altitude
-    Then returns vehicle to an idle throttle. 
-    Macro is a blocking function so user cannot input commands while this macro is running
+    Main Code starts here
 """
-
-def macro1():
-    # Take off in loiter and reach a desired alt, then leave throttle on idle
-    vehicle.mode = VehicleMode("LOITER")
-    desired_alt = 10 # meters
-    print("Taking off to desired altitude: %s" % desired_alt)
-    while (vehicle.location.global_relative_frame.alt <= desired_alt):
-        print("Vehicle Altitude: %s" % vehicle.location.global_relative_frame.alt)
-        vehicle.channels.overrides[3] = 1800
-    vehicle.channels.overrides[3] = 1500 # Idle throttle
-
-
 
 # Init joystick
 pygame.init()
@@ -71,28 +115,25 @@ except pygame.error:
     exit()
 
 
-# Connect to the UDP endpoint
-vehicle = connect('127.0.0.1:14550', wait_ready=True)
-print("Mode: %s" % vehicle.mode.name)
+# Connect to the Ardupilot SITL UDP Endpoint and wait till the Vehicle is done intializing
+# Connection time out will cause program to exit. user will have to restart the program
+try:
+    # Connect to the UDP endpoint
+    vehicle = connect('127.0.0.1:14550', wait_ready=True)
+    print("Mode: %s" % vehicle.mode.name)
 
-print("Waiting for vehicle to initialize...")
-while not vehicle.is_armable:
-    time.sleep(1)
-print("Vehicle is ready")
-
-#Will make these button or macro togglable
-# vehicle.mode = VehicleMode("LOITER")
-# vehicle.armed = True
-
-# print("Waiting for arming")
-# while not vehicle.armed:
-#     time.sleep(1)
+    print("Waiting for vehicle to initialize...")
+    while not vehicle.is_armable:
+        time.sleep(1)
+    print("Vehicle is ready")
+except Exception:
+    print("Error has occurred. Please try restarting the program")
+    pygame.quit()
+    exit()
 
 
 # Main loop
-pilot_joy_enable = False
-joystick_inputs = [1500, 1500, 1500, 1500]
-btn_inputs = [1000, 1000, 1000, 1000, 1000, 1000, 1000, 1000, 1000, 1000, 1000, 1000]
+
 try:
     while True:
         
@@ -103,44 +144,8 @@ try:
                 joystick_inputs = getJoystickUpdates()
 
             if event.type == pygame.JOYBUTTONDOWN:
-                btn_inputs = getButtonUpdates()
-                # We only need to send out message when the button changes state, not stream continuously
-                if btn_inputs[0] == 1900:
-                    vehicle.mode = VehicleMode("LOITER")
-                    btn_inputs[0] = 1500
-                
-                if btn_inputs[2] == 1900:
-                    # Turn on Precision
-                    print("Precision ON")
-                    vehicle.channels.overrides[8] = 1900
-                elif btn_inputs[2] == 1500:
-                    print("Precision OFF")
-                    vehicle.channels.overrides[8] = 1500
-                
-                if btn_inputs[1] == 1900:
-                  
-                    vehicle.armed = True
-                    print("Waiting for arming")
-                    while not vehicle.armed:
-                        time.sleep(1)
-                    print("armed")
-                    pilot_joy_enable = True
-                else:
-                    vehicle.armed = False
-                    print("disarmed")
-                    pilot_joy_enable = False
-                # Macro 1:
-                if btn_inputs[5] == 1900:
-                    print("Performing macro 1")
-                    macro1()
-                    print("Macro 1 complete")
-                    btn_inputs[5] = 1500
+                ButtonUpdates()
 
-                # Mode BRAKE
-                if btn_inputs[6] == 1900:
-                    print("Mode BRAKE, swiching into Loiter")
-                    vehicle.mode = VehicleMode("BRAKE")
-                    btn_inputs[6] = 1500
                 
 
 
@@ -155,3 +160,4 @@ try:
 except KeyboardInterrupt:
     pygame.quit()
     vehicle.close()
+    print(Exception)
