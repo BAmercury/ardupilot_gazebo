@@ -37,12 +37,21 @@ def getButtonUpdates():
         btn_inputs.append(map2pwm(btn_toggle_states[button_index]))
     return btn_inputs
 
-# Vehicle Macro 1:
+
+"""
+    Vehicle Macro 1:
+    This macro gives collective throttle to the drone to raise it up to a user defined altitude
+    Then returns vehicle to an idle throttle. 
+    Macro is a blocking function so user cannot input commands while this macro is running
+"""
+
 def macro1():
     # Take off in loiter and reach a desired alt, then leave throttle on idle
     vehicle.mode = VehicleMode("LOITER")
     desired_alt = 10 # meters
+    print("Taking off to desired altitude: %s" % desired_alt)
     while (vehicle.location.global_relative_frame.alt <= desired_alt):
+        print("Vehicle Altitude: %s" % vehicle.location.global_relative_frame.alt)
         vehicle.channels.overrides[3] = 1800
     vehicle.channels.overrides[3] = 1500 # Idle throttle
 
@@ -87,15 +96,28 @@ try:
     while True:
         
         # Check to see if any Gamepad events happened
-
         for event in pygame.event.get():
+            # Updates joystick values and sends them for every time joystick is moved from origin
             if event.type == pygame.JOYAXISMOTION:
                 joystick_inputs = getJoystickUpdates()
+                # Send Joystick Inputs if enabled
+                if pilot_joy_enable:
+                    vehicle.channels.overrides = {'1': joystick_inputs[0], '2': joystick_inputs[1], '3': joystick_inputs[3], '4': joystick_inputs[2]}
+
             if event.type == pygame.JOYBUTTONDOWN:
                 btn_inputs = getButtonUpdates()
                 # We only need to send out message when the button changes state, not stream continuously
                 if btn_inputs[0] == 1900:
                     vehicle.mode = VehicleMode("LOITER")
+                
+                if btn_inputs[2] == 1900:
+                    # Turn on Precision
+                    print("Precision ON")
+                    vehicle.channels.overrides[8] = 1900
+                else:
+                    print("Precision OFF")
+                    vehicle.channels.overrides[8] = 1500
+                
                 if btn_inputs[1] == 1900:
                     print joystick_inputs[3]
                     vehicle.armed = True
@@ -112,12 +134,16 @@ try:
                     macro1()
                     print("Macro 1 complete")
                     
+                # Mode BRAKE
+                if btn_inputs[6] == 1900:
+                    print("Mode BRAKE, swiching into Loiter")
+                    vehicle.mode = VehicleMode("BRAKE")
+                
 
-        #print "Attitude: %s" % vehicle.attitude
-        #print "Global Location (relative altitude): %s" % vehicle.location.global_relative_frame.alt
-        # Send Joystick Inputs if enabled
-        if pilot_joy_enable:
-            vehicle.channels.overrides = {'1': joystick_inputs[0], '2': joystick_inputs[1], '3': joystick_inputs[3], '4': joystick_inputs[2]}
+
+                    
+                #print "Attitude: %s" % vehicle.attitude
+                #print "Global Location (relative altitude): %s" % vehicle.location.global_relative_frame.alt
 
 
         time.sleep(0.005) # 20 Hz Radio Update Rate
