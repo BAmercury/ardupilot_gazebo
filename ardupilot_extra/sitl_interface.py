@@ -61,11 +61,14 @@ def ButtonUpdates():
         toggle_prec ^= 1 # Flip Prec on or off
         # Depending on the updated state of the button, deploy the action
         if (toggle_prec):
-            print "Precision ON"
             vehicle.channels.overrides[8] = 2000
+            time.sleep(0.5)
+            print "Precision ON"
         else:
-            print "Precision OFF"
+            
             vehicle.channels.overrides[8] = 1000
+            time.sleep(0.5)
+            print "Precision OFF"
     # Button 1 is Arm On/off
     if (j_interface.get_button(1) == 1):
         toggle_arm ^= 1
@@ -145,11 +148,6 @@ try:
 
             if event.type == pygame.JOYBUTTONDOWN:
                 ButtonUpdates()
-
-                
-
-
-                    
                 #print "Attitude: %s" % vehicle.attitude
                 #print "Global Location (relative altitude): %s" % vehicle.location.global_relative_frame.alt
 
@@ -160,4 +158,3 @@ try:
 except KeyboardInterrupt:
     pygame.quit()
     vehicle.close()
-    print(Exception)
