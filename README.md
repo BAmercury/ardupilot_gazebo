@@ -1,5 +1,7 @@
 # Ardupilot Gazebo Plugin & Models
 
+![Precision Landing Demo](images/drone.png)
+
 ## Requirements :
 
 Ubuntu Xenial (16.04 LTS) or Ubuntu Biotic (18.04)
