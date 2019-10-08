@@ -2,6 +2,11 @@
 
 ![Precision Landing Demo](images/drone.png)
 
+## Overview : 
+
+This is a fork of the work done by @SwiftGust and @khancyr for Ardupilot SITL integration with Gazebo
+Used in attempt to research model based control design techniques for precision tracking and landing on moving targets
+
 ## Requirements :
 
 Ubuntu Xenial (16.04 LTS) or Ubuntu Biotic (18.04)
