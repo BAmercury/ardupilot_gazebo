@@ -1,10 +1,12 @@
-from dronekit import connect, VehicleMode
+from dronekit import connect, VehicleMode, APIException
 import pygame
 import time
 import json
+import sys
+
 
 # Simple program to get Joystick imputs and send out RC commands via MAVLink
-
+APIException = 0
 # Declare Variables
 pilot_joy_enable = False
 joystick_inputs = [1500, 1500, 1500, 1500]
@@ -88,16 +90,20 @@ def ButtonUpdates(mapping):
             print("Disarmed")
     # LOITER Mode
     if (j_interface.get_button(int(mapping['Loiter'])) == 1):
-        print("Mode LOITER")
+        print("Mode: LOITER")
         vehicle.mode = VehicleMode("LOITER")
     # LAND mode
     if (j_interface.get_button(int(mapping['Land'])) == 1):
-        print("Mode LAND")
+        print("Mode: LAND")
         vehicle.mode = VehicleMode("LAND")
     # Macro 1
     if (j_interface.get_button(int(mapping['Macro1'])) == 1):
         print("Performing Macro 1")
         macro1()
+    # Custom Mode 1 (Mode 31)
+    if (j_interface.get_button(int(mapping['CustomMode1'])) == 1):
+        print("Mode: 31")
+        vehicle.mode = 31
 
 
 
@@ -138,15 +144,17 @@ else:
 
 # Connect to the Ardupilot SITL UDP Endpoint and wait till the Vehicle is done intializing
 # Connection time out will cause program to exit. user will have to restart the program
+sys.tracebacklimit = 0 # Supresses traceback output
 try:
     # Connect to the UDP endpoint
-    vehicle = connect(str(config_map['UDP']), wait_ready=True)
-    print("Mode: %s" % vehicle.mode.name)
-
+    vehicle = connect(str(config_map['UDP']), wait_ready=False)
+    vehicle.mode = VehicleMode("LOITER") # Change the mode to LOITER at startup
+    #print("Mode: %s" % vehicle.mode.name)
     print("Waiting for vehicle to initialize...")
     while not vehicle.is_armable:
         time.sleep(1)
     print("Vehicle is ready")
+
 except Exception:
     print("Error has occurred. Please try restarting the program")
     pygame.quit()
@@ -173,6 +181,7 @@ try:
         if pilot_joy_enable:
             vehicle.channels.overrides = {'1': joystick_inputs[0], '2': joystick_inputs[1], '3': joystick_inputs[3], '4': joystick_inputs[2]}
         time.sleep(float(config_map['UpdateRate'])) # Radio Update Rate
+
 except KeyboardInterrupt:
     pygame.quit()
     vehicle.close()
