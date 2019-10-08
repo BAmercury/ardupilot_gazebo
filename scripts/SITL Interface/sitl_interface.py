@@ -21,6 +21,10 @@ toggle_arm = 0
 def map2pwm(x):
     return int( (x - -1) * (1900 - 1100) / (1 - -1) + 1100)
 
+def macro2():
+    print("Running Macro 2")
+    start_time = time.time()
+
 """
     Vehicle Macro 1:
     This macro gives collective throttle to the drone to raise it up to a user defined altitude
