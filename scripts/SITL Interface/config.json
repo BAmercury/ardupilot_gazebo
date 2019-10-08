@@ -1,0 +1,15 @@
+{
+    "Prec" : "0",
+    "Arm" : "1",
+    "Loiter" : "2",
+    "Land" : "3",
+    "Macro1" : "4",
+    "Macro2" : "6",
+    "Roll" : "0",
+    "Pitch" : "1",
+    "Yaw" : "2",
+    "Throttle" : "3",
+    "UDP" : "127.0.0.1:14550",
+    "UpdateRate" : "0.005"
+}
+
