@@ -6,10 +6,11 @@
     "Macro1" : "4",
     "Macro2" : "6",
     "CustomMode1" : "7",
-    "Roll" : "0",
-    "Pitch" : "1",
-    "Yaw" : "2",
-    "Throttle" : "3",
+    "AltHold" : "8",
+    "Roll" : "2",
+    "Pitch" : "3",
+    "Yaw" : "0",
+    "Throttle" : "1",
     "UDP" : "127.0.0.1:14550",
     "UpdateRate" : "0.005"
 }

@@ -108,6 +108,10 @@ def ButtonUpdates(mapping):
     if (j_interface.get_button(int(mapping['CustomMode1'])) == 1):
         print("Mode: 31")
         vehicle.mode = 31
+        # Custom Mode 1 (Mode 31)
+    if (j_interface.get_button(int(mapping['AltHold'])) == 1):
+        print("Mode: AltHold")
+        vehicle.mode = VehicleMode("ALT_HOLD")
 
 
 
