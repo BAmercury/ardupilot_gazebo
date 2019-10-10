@@ -6,7 +6,7 @@ import sys
 
 
 # Simple program to get Joystick imputs and send out RC commands via MAVLink
-APIException = 0
+
 # Declare Variables
 pilot_joy_enable = False
 joystick_inputs = [1500, 1500, 1500, 1500]
@@ -23,7 +23,8 @@ def map2pwm(x):
 
 def macro2():
     print("Running Macro 2")
-    start_time = time.time()
+    #start_time = time.time()
+    print("Marco 2 completed")
 
 """
     Vehicle Macro 1:
