@@ -8,6 +8,11 @@
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <arpa/inet.h>
+#include <netinet/tcp.h>
+#include "gazebo/common/Assert.hh"
+#include "gazebo/common/Events.hh"
+#include "gazebo/physics/physics.hh"
+#include <math.h>
 using raw_type = void;
 
 namespace gazebo
@@ -29,15 +34,21 @@ namespace gazebo
             float size_y;
         };
 
-        public: std::string irlock_addr = "127.0.0.1";
-        public: uint16_t irlock_port = 9005;
-
-
+        // UDP Client
+        private: int sock_fd = 0;
+        private: struct sockaddr_in servaddr;
+        private: uint16_t server_port = 9005;
 
         private: physics::WorldPtr world;
         private: event::ConnectionPtr updateConnection;
         private: physics::ModelPtr model_drone;
         private: physics::ModelPtr model_target;
+        private: std::string model_target_name;
+        private: int update_rate = 20; // Hz
+        private: double start_time;
+        private: double current_time;
+        private: double period = 1/update_rate;
+        private: bool setup_bool = false; // Bool to declare timer varibales at first loop interation
 
     };
 

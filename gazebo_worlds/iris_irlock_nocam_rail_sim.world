@@ -1,0 +1,137 @@
+<?xml version="1.0" ?>
+<sdf version="1.6">
+  <world name="default">
+    <gui>
+      <camera name="user_camera">
+
+        <!-- If you want a stationary camera, uncomment this line -->
+        <pose>-3.012870 0.455695 15.817830 -0.000002 1.393796 0.013203</pose>
+        
+        <!-- If you want a moving camera, uncomment the following track_visual tag block -->
+        <!-- <track_visual>
+          <name>rail_system</name>
+          <static>true</static>
+          <use_model_frame>true</use_model_frame>
+          <xyz>-3 0 20</xyz>
+          <inherit_yaw>false</inherit_yaw>
+        </track_visual> -->
+
+
+      </camera>
+      <!-- plugin name="GUIResetWorld" filename="libgui_resetworld.so"/ -->
+    </gui>
+
+    <!-- plugin name="listen" filename="libResetWorld.so"/ -->
+    <plugin name="AnglePub" filename="libAnglePlugin.so">
+      <target>rail_system</target>
+      <update_rate>20</update_rate> <!-- Hz -->
+    </plugin>
+
+    <!-- Physics ODE Solver Configuration -->
+    <physics type="ode">
+      <ode>
+        <solver>
+          <type>quick</type>
+          <iters>100</iters>
+          <sor>1.0</sor>
+        </solver>
+        <constraints>
+          <cfm>0.0</cfm>
+          <erp>0.9</erp>
+          <!-- Set contact max correcting vel to 0 and objects wont bounce off each other -->
+          <contact_max_correcting_vel>0.1</contact_max_correcting_vel>
+          <contact_surface_layer>0.0</contact_surface_layer>
+        </constraints>
+      </ode>
+      <!-- Gazebo Unstable Flight issue: 
+          https://discuss.ardupilot.org/t/arducopter-3-6-sitl-with-gazebo-unstable-flight/34451/12
+          Set update params accordingly to attempt to fix 
+      -->
+      <real_time_update_rate>1000</real_time_update_rate>
+      <!-- real_time_update_rate>-1</real_time_update_rate-->
+      <max_step_size>0.001</max_step_size>
+    </physics>
+
+    <include>
+      <uri>model://sun</uri>
+    </include>
+
+    <include>
+      <uri>model://ground_plane</uri>
+    </include>
+    <!-- Import Drone Model -->
+    <model name="iris">
+      <pose>0 0 0.004 0 0 0</pose>
+      <include>
+        <uri>model://iris_with_standoffs_demo</uri>
+      </include>
+
+    </model>
+
+    <model name="rail_system">
+      <pose>0.0 0.0 0.005 0 0 0</pose>
+
+      <include>
+        <uri>model://rail_system</uri>
+      </include>
+      <plugin name="RailSim" filename="libRailSimPlugin.so">
+        
+        <motion_profile>
+
+          <!--
+
+            Motion Profiles:
+
+            1: Velocity Sine Wave 
+            2: Profile 1 From Boat 
+            3: Simulated Dynamics Pose Controller (Experimental, do not use)
+            4: Step Input Ping Pong
+
+            Motion Profile 1 is a standard sine wave along a user defined axis, 
+            with the option of having the rail sim translate along the axis ortho with a desired velocity
+
+            Motion Profile 2 loads in a set of desired waypoints from a header file
+
+            Motion profile 3 is experimental and is a a state feedback controller that takes desired position inputs as a reference and
+            controls the rail sim platform by exerting a force. It has the ability to follow the same motion profile
+            header data as motion profile 2 but has slower, realistic response. Recommended to use this on less aggressive motion trajectories
+
+            Motion Profile 4 is a step input that ping pongs between the set origin and a user defined position
+
+
+            To Setup:
+            1. Set the type tag to the integer correlating to the motion profile you desire
+            2. Make sure you scroll to the top of this file and check to see if your GUI Camera settings are setup correctly
+            3. Adjust the delay time depending on how long you want Gazebo to wait as you setup Ardupilot and get the drone flying off the platform
+            4. Adjust the specfic motion profile settings that correlate to the type tag
+
+          -->
+        
+          <type>1</type>
+          <delay_time>50</delay_time> <!-- In seconds, Amount of time for Gazebo to wait before moving platform. -->
+          
+          <!-- Motion Profile 1: Velocity Sine Wave Profile
+               If the type tag is not 1, the following will be ignored 
+          -->
+          <amplitude>2.0</amplitude> <!-- Meters, from center to edge -->
+          <max_velocity>0</max_velocity> <!-- meters per second -->
+          <direction>0 1</direction> <!-- Unit Vector for X and Y -->
+          <!-- Optional for motion profile 1: Add forward movement -->
+          <forward_direction>0</forward_direction> <!-- 0=No added movement, 1=Enable added movement-->
+          <forward_velocity>0</forward_velocity> <!-- M/S -->
+          
+          <!-- Motion Profile 4: Step input Ping Pong 
+               If the type is not set to 4, then this will be simply ignored
+          -->
+          <Target1>2</Target1> <!-- Distance from origin to first target in meters -->
+          <Target1Hold>2</Target1Hold> <!-- Set the amount of time to hold at the target -->
+          <!-- This will be the final location of the rail cart after it visited the target -->
+          <pose>0 0 0 0 0 0</pose>
+
+        </motion_profile>
+      </plugin>
+
+    </model>
+
+  </world>
+</sdf>

@@ -63,6 +63,7 @@ set (plugins_single_header
         RailSimPlugin
         WindPlugin
         Profile
+        AnglePlugin
         #TetherPullPlugin
         )
 add_library(WindPlugin SHARED src/WindPlugin.cc)
@@ -93,3 +94,7 @@ install(TARGETS RailSimPlugin DESTINATION ${GAZEBO_PLUGIN_PATH})
 #target_link_libraries(TetherPullPlugin ${GAZEBO_LIBRARIES})
 #install(TARGETS TetherPullPlugin DESTINATION ${GAZEBO_PLUGIN_PATH})
 
+# Angle Plugin
+add_library(AnglePlugin SHARED src/AnglePlugin.cc)
+target_link_libraries(AnglePlugin ${GAZEBO_LIBRARIES})
+install(TARGETS AnglePlugin DESTINATION ${GAZEBO_PLUGIN_PATH})
