@@ -66,28 +66,28 @@ void AnglePlugin::OnUpdate(const common::UpdateInfo &_info)
         ignition::math::Pose3d target_pose = this->model_target->WorldPose();
 
         // Find relative distance
-        double x_rel = target_pose.Pos().X() - drone_pose.Pos().X();
-        double y_rel = target_pose.Pos().Y() - drone_pose.Pos().Y();
+        float x_rel = target_pose.Pos().X() - drone_pose.Pos().X();
+        float y_rel = target_pose.Pos().Y() - drone_pose.Pos().Y();
         // Get Height
-        double height = drone_pose.Pos().Z(); 
-
+        float height = drone_pose.Pos().Z(); 
+        //int height = 1;
 
         // Get angles
-        double angle_x = atan2(x_rel, height); // In Radians
-        double angle_y = atan2(y_rel, height);
+        float angle_x = atan2(x_rel, height); // In Radians
+        float angle_y = atan2(y_rel, height);
 
         // Publish Data
         DataPacket packet;
         packet.num_targets = static_cast<uint16_t>(1);
-        packet.timestamp = static_cast<uint64_t>(_info.simTime.Double() * 1000.0);
-        packet.pos_x = -angle_y;
-        packet.pos_y = -angle_x;
+        packet.timestamp = static_cast<uint64_t>(this->current_time * 1.0e3);
+        packet.pos_x = -(angle_y);
+        packet.pos_y = -(angle_x);
         packet.size_x = static_cast<float>(1);
         packet.size_y = static_cast<float>(1);
 
         sendto(this->sock_fd, 
         reinterpret_cast<raw_type *>(&packet),
-        sizeof(packet), MSG_CONFIRM,
+        sizeof(packet), 0,
         (struct sockaddr *)&this->servaddr, sizeof(this->servaddr) 
         );
         gzdbg << "Angle X: " << angle_x << std::endl;
