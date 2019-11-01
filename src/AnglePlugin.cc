@@ -69,19 +69,51 @@ void AnglePlugin::OnUpdate(const common::UpdateInfo &_info)
         float x_rel = target_pose.Pos().X() - drone_pose.Pos().X();
         float y_rel = target_pose.Pos().Y() - drone_pose.Pos().Y();
         // Get Height
-        float height = drone_pose.Pos().Z(); 
-        //int height = 1;
+        float height = drone_pose.Pos().Z();
+        ignition::math::Vector3f rel_pos = ignition::math::Vector3f(
+            x_rel, y_rel, height
+        );
 
+        // Construct rotation matrix (From Gazebo World frame to Vehicle body frame)
+        ignition::math::Vector3d drone_angle = drone_pose.Rot().Euler(); // Roll, Pitch, yaw
+
+        float sin_roll_align = sinf(drone_angle.X());
+        float cos_roll_align = cosf(drone_angle.X());
+        float sin_pitch_align = sinf(drone_angle.Y());
+        float cos_pitch_align = cosf(drone_angle.Y());
+        float sin_yaw_align = sinf(drone_angle.Z());
+        float cos_yaw_align = cosf(drone_angle.Z());
+
+        ignition::math::Matrix3f Rx = ignition::math::Matrix3f(
+            1, 0, 0,
+            0, cos_roll_align, -sin_roll_align,
+            0, sin_roll_align, cos_roll_align
+        );
+        ignition::math::Matrix3f Ry = ignition::math::Matrix3f(
+            cos_pitch_align, 0, sin_pitch_align,
+            0, 1, 0,
+            -sin_pitch_align, 0, cos_pitch_align
+        );
+        ignition::math::Matrix3f Rz = ignition::math::Matrix3f(
+            cos_yaw_align, -sin_yaw_align, 0,
+            sin_yaw_align, cos_yaw_align, 0,
+            0, 0, 1
+        );
+        ignition::math::Matrix3f rot = Rx * Ry * Rz;
+        ignition::math::Vector3f corrected_pos = rot * rel_pos;
+        // Normalize the vector
+        corrected_pos = corrected_pos.Normalize();
+        // Gazebo has NWU (FLU) and Ardupilot has (NED, FRD)
         // Get angles
-        float angle_x = atan2(x_rel, height); // In Radians
-        float angle_y = atan2(y_rel, height);
+        //float angle_x = atan2(corrected_pos.X(), height); // In Radians
+        //float angle_y = atan2(y_rel, height);
 
         // Publish Data
         DataPacket packet;
         packet.num_targets = static_cast<uint16_t>(1);
         packet.timestamp = static_cast<uint64_t>(this->current_time * 1.0e3);
-        packet.pos_x = -(angle_y);
-        packet.pos_y = -(angle_x);
+        packet.pos_x = 0;
+        packet.pos_y = 0;
         packet.size_x = static_cast<float>(1);
         packet.size_y = static_cast<float>(1);
 
@@ -90,8 +122,8 @@ void AnglePlugin::OnUpdate(const common::UpdateInfo &_info)
         sizeof(packet), 0,
         (struct sockaddr *)&this->servaddr, sizeof(this->servaddr) 
         );
-        gzdbg << "Angle X: " << angle_x << std::endl;
-        gzdbg << "Angle Y: " << angle_y << std::endl;
+        //gzdbg << "Angle X: " << angle_x << std::endl;
+        //gzdbg << "Angle Y: " << angle_y << std::endl;
 
 
         // Save start time

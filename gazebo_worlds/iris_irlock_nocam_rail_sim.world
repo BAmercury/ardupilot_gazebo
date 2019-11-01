@@ -24,7 +24,7 @@
     <!-- plugin name="listen" filename="libResetWorld.so"/ -->
     <plugin name="AnglePub" filename="libAnglePlugin.so">
       <target>rail_system</target>
-      <update_rate>10</update_rate> <!-- Hz -->
+      <update_rate>50</update_rate> <!-- Hz -->
     </plugin>
 
     <!-- Physics ODE Solver Configuration -->
