@@ -105,17 +105,17 @@ void AnglePlugin::OnUpdate(const common::UpdateInfo &_info)
         corrected_pos = corrected_pos.Normalize();
         // Gazebo has NWU (FLU) and Ardupilot has (NED, FRD)
         // Get angles
-        //float angle_x = atan2(corrected_pos.X(), height); // In Radians
-        //float angle_y = atan2(y_rel, height);
+        float angle_x = atan2(corrected_pos.X(), -corrected_pos.Z()); // In Radians
+        float angle_y = atan2(corrected_pos.Y(), -corrected_pos.Z());
 
         // Publish Data
         DataPacket packet;
        
         packet.timestamp = static_cast<uint64_t>
-            ((this->current_time - this->start_time) * 1.0e3);
+            ((this->current_time) * 1.0e3);
         packet.num_targets = static_cast<uint16_t>(1);
-        packet.pos_x = corrected_pos.X();
-        packet.pos_y = corrected_pos.Y();
+        packet.pos_x = angle_y;
+        packet.pos_y = angle_x;
         packet.size_x = static_cast<float>(1);
         packet.size_y = static_cast<float>(1);
 
@@ -124,8 +124,8 @@ void AnglePlugin::OnUpdate(const common::UpdateInfo &_info)
         sizeof(packet), 0,
         (struct sockaddr *)&this->servaddr, sizeof(this->servaddr) 
         );
-        gzdbg << "Angle X: " << corrected_pos.X() << std::endl;
-        gzdbg << "Angle Y: " << corrected_pos.Y() << std::endl;
+        //gzdbg << "Angle X: " << corrected_pos.X() << std::endl;
+        //gzdbg << "Angle Y: " << corrected_pos.Y() << std::endl;
 
 
         // Save start time

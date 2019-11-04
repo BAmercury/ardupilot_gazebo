@@ -1,12 +1,36 @@
 #!/bin/sh
+
+# Setup:
+# sudo apt install xdotools wmctrl
 # Add this to the bashrc so you can run this script in any directory:
 # export PATH=$PATH:~/Documents/ardupilot_gazebo/scripts/SITLInterface/
 
 
+# Ctrl C signal catch
+# trap_ctrlc()
+# {
+#     # perform cleanup here
+#     echo "Ctrl-C caught...performing clean up"
+ 
+#     echo "Doing cleanup"
+ 
+#     # exit shell script with error code 2
+#     # if omitted, shell script will continue execution
+#     #xdotool windowkill `xdotool getactivewindow`
+#     xdotool key Control+Page_Up
+#     xdotool key Control+C `xdotool getactivewindow`
+#     #xdotool key Control+C
+#     #exit
+#     #xdotools key Control+C
+#     #exit 0
+
+# }
+
+#trap "trap_ctrlc" 2
 
 echo "Launching Ardupilot SITL"
 
-gnome-terminal --tab -e "bash -c \"python ~/Documents/ardupilot_beta/Tools/autotest/sim_vehicle.py -v ArduCopter -f gazebo-iris --console; exec bash\""
+gnome-terminal --tab --working-directory=Documents/ardupilot_beta/Tools/autotest -e "bash -c \"python sim_vehicle.py -v ArduCopter -f gazebo-iris --console; exec bash\""
 
 echo "Running Joystick SITL interface"
 # gnome-terminal -e "bash -c \"!!; exec bash\"" to run commands in a new terminal
