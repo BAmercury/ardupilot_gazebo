@@ -114,8 +114,8 @@ void AnglePlugin::OnUpdate(const common::UpdateInfo &_info)
         packet.timestamp = static_cast<uint64_t>
             ((this->current_time - this->start_time) * 1.0e3);
         packet.num_targets = static_cast<uint16_t>(1);
-        packet.pos_x = 0;
-        packet.pos_y = 0;
+        packet.pos_x = corrected_pos.X();
+        packet.pos_y = corrected_pos.Y();
         packet.size_x = static_cast<float>(1);
         packet.size_y = static_cast<float>(1);
 
@@ -124,8 +124,8 @@ void AnglePlugin::OnUpdate(const common::UpdateInfo &_info)
         sizeof(packet), 0,
         (struct sockaddr *)&this->servaddr, sizeof(this->servaddr) 
         );
-        //gzdbg << "Angle X: " << angle_x << std::endl;
-        //gzdbg << "Angle Y: " << angle_y << std::endl;
+        gzdbg << "Angle X: " << corrected_pos.X() << std::endl;
+        gzdbg << "Angle Y: " << corrected_pos.Y() << std::endl;
 
 
         // Save start time

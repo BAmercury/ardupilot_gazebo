@@ -156,7 +156,7 @@ else:
 sys.tracebacklimit = 0 # Supresses traceback output
 try:
     # Connect to the UDP endpoint
-    vehicle = connect(str(config_map['UDP']), wait_ready=False)
+    vehicle = connect(str(config_map['UDP']), wait_ready=True)
     vehicle.mode = VehicleMode("LOITER") # Change the mode to LOITER at startup
     #print("Mode: %s" % vehicle.mode.name)
     print("Waiting for vehicle to initialize...")
