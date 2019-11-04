@@ -110,8 +110,10 @@ void AnglePlugin::OnUpdate(const common::UpdateInfo &_info)
 
         // Publish Data
         DataPacket packet;
+       
+        packet.timestamp = static_cast<uint64_t>
+            ((this->current_time - this->start_time) * 1.0e3);
         packet.num_targets = static_cast<uint16_t>(1);
-        packet.timestamp = static_cast<uint64_t>(this->current_time * 1.0e3);
         packet.pos_x = 0;
         packet.pos_y = 0;
         packet.size_x = static_cast<float>(1);
