@@ -157,6 +157,7 @@ ax13[0].set_title("IR Data X and Angle X")
 ax13[1].plot(range(len(x)), x)
 # Find time delay between the two signals
 # https://stackoverflow.com/questions/4688715/find-time-shift-between-two-similar-waveforms
+# https://www.mathworks.com/help/signal/ref/finddelay.html
 ir_f = scipy.fft(ir_x)
 a_f = scipy.fft(x)
 #c = scipy.ifft(a_f * scipy.conj(ir_f))
