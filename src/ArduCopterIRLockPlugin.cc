@@ -193,6 +193,9 @@ void ArduCopterIRLockPlugin::Load(sensors::SensorPtr _sensor, sdf::ElementPtr _s
 
   this->dataPtr->parentSensor->SetActive(true);
 
+  // Log data to CSV file
+  myFile.open("IR_data.csv");
+
   this->dataPtr->connections.push_back(this->dataPtr->parentSensor->Camera()->ConnectNewImageFrame(
     std::bind(&ArduCopterIRLockPlugin::OnNewFrame, this,
     std::placeholders::_1, std::placeholders::_2, std::placeholders::_3,
@@ -288,9 +291,11 @@ void ArduCopterIRLockPlugin::Publish(const std::string &/*_fiducial*/,
 
   // Attempting to Log Data
   //gzdbg << "Angle X: " << angleX << "Angle Y: " << angleY << std::endl;
-  // std::cerr << "fiducial '" << _fiducial << "':" << _x << ", " << _y
+  //std::cerr << "fiducial '" << _fiducial << "':" << _x << ", " << _y
   //     << ", pos: " << pkt.pos_x << ", " << pkt.pos_y << std::endl;
 
+  // Log data to CSV file
+  myFile << angleX << "," << angleY << std::endl;
   struct sockaddr_in sockaddr;
   memset(&sockaddr, 0, sizeof(sockaddr));
   sockaddr.sin_port = htons(this->dataPtr->irlock_port);

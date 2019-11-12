@@ -5,16 +5,16 @@
       <camera name="user_camera">
 
         <!-- If you want a stationary camera, uncomment this line -->
-        <!-- pose>-3.012870 0.455695 15.817830 -0.000002 1.393796 0.013203</pose -->
+        <pose>-3.012870 0.455695 15.817830 -0.000002 1.393796 0.013203</pose>
         
         <!-- If you want a moving camera, uncomment the following track_visual tag block -->
-        <track_visual>
+        <!-- <track_visual>
           <name>rail_system</name>
           <static>true</static>
           <use_model_frame>true</use_model_frame>
           <xyz>-3 0 20</xyz>
           <inherit_yaw>false</inherit_yaw>
-        </track_visual>
+        </track_visual> -->
 
 
       </camera>
@@ -22,7 +22,11 @@
     </gui>
 
     <!-- plugin name="listen" filename="libResetWorld.so"/ -->
-
+    <!-- plugin name="listen" filename="libResetWorld.so"/ -->
+    <plugin name="AnglePub" filename="libAnglePlugin.so">
+      <target>rail_system</target>
+      <update_rate>50</update_rate> <!-- Hz -->
+    </plugin>
 
     <!-- Physics ODE Solver Configuration -->
     <physics type="ode">
@@ -108,7 +112,7 @@
             </clip>
           </camera>
           <always_on>1</always_on>
-          <update_rate>10</update_rate>
+          <update_rate>50</update_rate>
           <visualize>true</visualize>
 
           <plugin name="irlock" filename="libArduCopterIRLockPlugin.so">
@@ -179,7 +183,7 @@
                If the type tag is not 1, the following will be ignored 
           -->
           <amplitude>2.0</amplitude> <!-- Meters, from center to edge -->
-          <max_velocity>0</max_velocity> <!-- meters per second -->
+          <max_velocity>1</max_velocity> <!-- meters per second -->
           <direction>0 1</direction> <!-- Unit Vector for X and Y -->
           <!-- Optional for motion profile 1: Add forward movement -->
           <forward_direction>0</forward_direction> <!-- 0=No added movement, 1=Enable added movement-->

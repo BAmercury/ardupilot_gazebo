@@ -48,4 +48,6 @@ elif [ "$1" = "nocam_rail" ]
     then gazebo --verbose iris_irlock_nocam_rail_sim.world
 elif [ "$1" = "cam_no_rail" ]
     then gazebo --verbose iris_irlock_demo.world
+else
+    echo "Argument not valid, please try again"
 fi

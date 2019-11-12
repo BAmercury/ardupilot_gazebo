@@ -103,3 +103,5 @@ scripts/SITL Interface/mav.tlog
 scripts/SITL Interface/mav.tlog.raw
 
 scripts/SITLInterface/eeprom.bin
+
+.vscode/tasks.json
