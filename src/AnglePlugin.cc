@@ -71,14 +71,17 @@ void AnglePlugin::OnUpdate(const common::UpdateInfo &_info)
         //gzdbg << "Relative Distance X: " << x_rel << "Relative Distance Y: " << y_rel << std::endl;
         
         // Get Height
-        const double height = drone_pose.Pos().Z();
+        //const double height = drone_pose.Pos().Z();
+        gzdbg << "NWU H: " << drone_pose.Pos().Z() << std::endl;
+        const double height = -1.00;
         const ignition::math::Vector3d rel_pos = ignition::math::Vector3d(
             x_rel, y_rel, height
         );
 
-        // Convert from Gazebo NWU to Ardupilot NED
+        // Convert from Gazebo NWU to Ardupilot NED, flip 180 degrees along the roll axis
         const ignition::math::Pose3d gazeboXYZTONED = ignition::math::Pose3d(0, 0, 0, IGN_PI, 0, 0);
         ignition::math::Vector3d rel_pos_NED = gazeboXYZTONED.Rot().RotateVectorReverse(rel_pos);
+        gzdbg << "NED H: " << rel_pos_NED.Z() << std::endl;
         // Construct rotation matrix (From Gazebo World frame to Vehicle body frame)
         const ignition::math::Vector3d drone_angle = drone_pose.Rot().Euler(); // Roll, Pitch, yaw
         const double sin_roll_align = sinf(drone_angle.X());
@@ -108,11 +111,12 @@ void AnglePlugin::OnUpdate(const common::UpdateInfo &_info)
         ignition::math::Vector3d corrected_pos = rot * rel_pos_NED;
         // Normalize the vector
         // http://mathworld.wolfram.com/NormalizedVector.html
-        //corrected_pos  = corrected_pos.Normalized();
-        
+        gzdbg << "BF H: " << corrected_pos.Z() << std::endl;
+        corrected_pos  = corrected_pos.Normalized();
+        gzdbg << "NormBf H: " << corrected_pos.Z() << std::endl;
         //float angle_x = atan2(corrected_pos.X(),  corrected_pos.Z()); // In Radians
         //float angle_y = atan2(corrected_pos.Y(), corrected_pos.Z());
-        corrected_pos = corrected_pos / height;
+        //corrected_pos = corrected_pos / height;
         //corrected_pos  = corrected_pos.Normalized();
         // Gazebo has NWU (FLU) and Ardupilot has (NED, FRD)
         // Get angles
