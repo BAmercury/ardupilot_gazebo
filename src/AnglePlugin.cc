@@ -90,35 +90,19 @@ void AnglePlugin::OnUpdate(const common::UpdateInfo &_info)
 
         const ignition::math::Matrix3d Rx = ignition::math::Matrix3d(
             1, 0, 0,
-            0, cos_roll_align, sin_roll_align,
-            0, -sin_roll_align, cos_roll_align
+            0, cos_roll_align, -sin_roll_align,
+            0, sin_roll_align, cos_roll_align
         );
         const ignition::math::Matrix3d Ry = ignition::math::Matrix3d(
-            cos_pitch_align, 0, -sin_pitch_align,
+            cos_pitch_align, 0, sin_pitch_align,
             0, 1, 0,
-            sin_pitch_align, 0, cos_pitch_align
+            -sin_pitch_align, 0, cos_pitch_align
         );
         const ignition::math::Matrix3d Rz = ignition::math::Matrix3d(
-            cos_yaw_align, sin_yaw_align, 0,
-            -sin_yaw_align, cos_yaw_align, 0,
+            cos_yaw_align, -sin_yaw_align, 0,
+            sin_yaw_align, cos_yaw_align, 0,
             0, 0, 1
         );
-
-        // const ignition::math::Matrix3f Rx = ignition::math::Matrix3f(
-        //     1, 0, 0,
-        //     0, cos_roll_align, -sin_roll_align,
-        //     0, sin_roll_align, cos_roll_align
-        // );
-        // const ignition::math::Matrix3f Ry = ignition::math::Matrix3f(
-        //     cos_pitch_align, 0, sin_pitch_align,
-        //     0, 1, 0,
-        //     -sin_pitch_align, 0, cos_pitch_align
-        // );
-        // const ignition::math::Matrix3f Rz = ignition::math::Matrix3f(
-        //     cos_yaw_align, -sin_yaw_align, 0,
-        //     sin_yaw_align, cos_yaw_align, 0,
-        //     0, 0, 1
-        // );
         // Rotation from gazebo world frame to gazebo body frame
         const ignition::math::Matrix3d rot = Rx * Ry * Rz;
         ignition::math::Vector3d corrected_pos = rot * rel_pos_NED;
@@ -141,8 +125,8 @@ void AnglePlugin::OnUpdate(const common::UpdateInfo &_info)
         packet.timestamp = static_cast<uint64_t>
             (1.0e3 * this->current_time);
         packet.num_targets = static_cast<uint16_t>(1);
-        packet.pos_x = corrected_pos.X();
-        packet.pos_y = corrected_pos.Y();
+        packet.pos_x = corrected_pos.Y();
+        packet.pos_y = -corrected_pos.X();
         packet.size_x = static_cast<float>(1);
         packet.size_y = static_cast<float>(1);
 
