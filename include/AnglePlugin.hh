@@ -42,6 +42,18 @@ namespace gazebo
         private: struct sockaddr_in servaddr;
         private: uint16_t server_port = 9005;
 
+        // Coordinate Transformation Variables
+        // Convert from Gazebo NWU to Ardupilot NED, flip 180 degrees along the roll axis
+        private: ignition::math::Pose3d gazeboXYZTONED = ignition::math::Pose3d(0, 0, 0, IGN_PI, 0, 0);
+        private: ignition::math::Vector3d rel_pos_NED; // Relative Position in Arudpilot Inertial NED coordinates
+        private: ignition::math::Vector3d rel_pos; // Relative Position in Gazebo Inertial Coordinates
+        private: ignition::math::Vector3d drone_angle;
+        private: ignition::math::Matrix3d rot; // Rotation matrix from NED to BF
+        private: ignition::math::Pose3d drone_pose; // Drone inertial position in Gazebo coordinates
+        private: ignition::math::Pose3d target_pose; // Target inertial position in Gazebo coordinates
+
+
+
         private: physics::WorldPtr world;
         private: event::ConnectionPtr updateConnection;
         private: physics::ModelPtr model_drone;

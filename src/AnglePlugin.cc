@@ -62,31 +62,30 @@ void AnglePlugin::OnUpdate(const common::UpdateInfo &_info)
     if (this->current_time - this->start_time >= this->period)
     {
         // Get position vectors of both objects
-        const ignition::math::Pose3d drone_pose = this->model_drone->WorldPose();
-        const ignition::math::Pose3d target_pose = this->model_target->WorldPose();
+        this->drone_pose = this->model_drone->WorldPose();
+        this->target_pose = this->model_target->WorldPose();
 
         // Find relative distance (In gazebo world frame) in meters
-        const double x_rel = target_pose.Pos().X() - drone_pose.Pos().X();
-        const double y_rel = target_pose.Pos().Y() - drone_pose.Pos().Y();
+        double x_rel = this->target_pose.Pos().X() - this->drone_pose.Pos().X();
+        double y_rel = this->target_pose.Pos().Y() - this->drone_pose.Pos().Y();
         //gzdbg << "Relative Distance X: " << x_rel << "Relative Distance Y: " << y_rel << std::endl;
         
         // Get Height
-        const double height = drone_pose.Pos().Z();
-        const ignition::math::Vector3d rel_pos = ignition::math::Vector3d(
+        double height = this->drone_pose.Pos().Z();
+        this->rel_pos = ignition::math::Vector3d(
             x_rel, y_rel, height
         );
 
         // Convert from Gazebo NWU to Ardupilot NED, flip 180 degrees along the roll axis
-        const ignition::math::Pose3d gazeboXYZTONED = ignition::math::Pose3d(0, 0, 0, IGN_PI, 0, 0);
-        ignition::math::Vector3d rel_pos_NED = gazeboXYZTONED.Rot().RotateVectorReverse(rel_pos);
+        this->rel_pos_NED = this->gazeboXYZTONED.Rot().RotateVectorReverse(rel_pos);
         // Construct rotation matrix (From Gazebo World frame to Vehicle body frame)
-        const ignition::math::Vector3d drone_angle = drone_pose.Rot().Euler(); // Roll, Pitch, yaw
-        const double sin_roll_align = sinf(drone_angle.X());
-        const double cos_roll_align = cosf(drone_angle.X());
-        const double sin_pitch_align = sinf(drone_angle.Y());
-        const double cos_pitch_align = cosf(drone_angle.Y());
-        const double sin_yaw_align = sinf(drone_angle.Z());
-        const double cos_yaw_align = cosf(drone_angle.Z());
+        this->drone_angle = this->drone_pose.Rot().Euler(); // Roll, Pitch, yaw
+        double sin_roll_align = sinf(this->drone_angle.X());
+        double cos_roll_align = cosf(this->drone_angle.X());
+        double sin_pitch_align = sinf(this->drone_angle.Y());
+        double cos_pitch_align = cosf(this->drone_angle.Y());
+        double sin_yaw_align = sinf(this->drone_angle.Z());
+        double cos_yaw_align = cosf(this->drone_angle.Z());
 
         const ignition::math::Matrix3d Rx = ignition::math::Matrix3d(
             1, 0, 0,
@@ -104,15 +103,10 @@ void AnglePlugin::OnUpdate(const common::UpdateInfo &_info)
             0, 0, 1
         );
         // Rotation from gazebo world frame to gazebo body frame
-        const ignition::math::Matrix3d rot = Rx * Ry * Rz;
-        ignition::math::Vector3d corrected_pos = rot * rel_pos_NED;
-        // Normalize the vector
-        // http://mathworld.wolfram.com/NormalizedVector.html
-        //float angle_x = atan2(corrected_pos.X(),  corrected_pos.Z()); // In Radians
-        //float angle_y = atan2(corrected_pos.Y(), corrected_pos.Z());
+        this->rot = Rx * Ry * Rz;
+        ignition::math::Vector3d corrected_pos = this->rot * this->rel_pos_NED;
+
         corrected_pos = corrected_pos / height;
-        //corrected_pos  = corrected_pos.Normalized();
-        // Gazebo has NWU (FLU) and Ardupilot has (NED, FRD)
         // Get angles
         //float angle_x = atan2(corrected_pos.X(),  corrected_pos.Z()); // In Radians
         //float angle_y = atan2(corrected_pos.Y(), corrected_pos.Z());
