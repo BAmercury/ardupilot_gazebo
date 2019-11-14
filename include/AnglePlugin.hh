@@ -49,6 +49,7 @@ namespace gazebo
         private: ignition::math::Vector3d rel_pos; // Relative Position in Gazebo Inertial Coordinates
         private: ignition::math::Vector3d drone_angle;
         private: ignition::math::Matrix3d rot; // Rotation matrix from NED to BF
+        private: ignition::math::Matrix3d Rx, Ry, Rz; // Roll, Pitch, yaw rotation matrices
         private: ignition::math::Pose3d drone_pose; // Drone inertial position in Gazebo coordinates
         private: ignition::math::Pose3d target_pose; // Target inertial position in Gazebo coordinates
 

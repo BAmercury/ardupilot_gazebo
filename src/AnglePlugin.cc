@@ -80,30 +80,30 @@ void AnglePlugin::OnUpdate(const common::UpdateInfo &_info)
         this->rel_pos_NED = this->gazeboXYZTONED.Rot().RotateVectorReverse(rel_pos);
         // Construct rotation matrix (From Gazebo World frame to Vehicle body frame)
         this->drone_angle = this->drone_pose.Rot().Euler(); // Roll, Pitch, yaw
-        double sin_roll_align = sinf(this->drone_angle.X());
-        double cos_roll_align = cosf(this->drone_angle.X());
-        double sin_pitch_align = sinf(this->drone_angle.Y());
-        double cos_pitch_align = cosf(this->drone_angle.Y());
-        double sin_yaw_align = sinf(this->drone_angle.Z());
-        double cos_yaw_align = cosf(this->drone_angle.Z());
+        double sin_roll_align = sin(this->drone_angle.X());
+        double cos_roll_align = cos(this->drone_angle.X());
+        double sin_pitch_align = sin(this->drone_angle.Y());
+        double cos_pitch_align = cos(this->drone_angle.Y());
+        double sin_yaw_align = sin(this->drone_angle.Z());
+        double cos_yaw_align = cos(this->drone_angle.Z());
 
-        const ignition::math::Matrix3d Rx = ignition::math::Matrix3d(
+        this->Rx = ignition::math::Matrix3d(
             1, 0, 0,
             0, cos_roll_align, -sin_roll_align,
             0, sin_roll_align, cos_roll_align
         );
-        const ignition::math::Matrix3d Ry = ignition::math::Matrix3d(
+        this->Ry = ignition::math::Matrix3d(
             cos_pitch_align, 0, sin_pitch_align,
             0, 1, 0,
             -sin_pitch_align, 0, cos_pitch_align
         );
-        const ignition::math::Matrix3d Rz = ignition::math::Matrix3d(
+        this->Rz = ignition::math::Matrix3d(
             cos_yaw_align, -sin_yaw_align, 0,
             sin_yaw_align, cos_yaw_align, 0,
             0, 0, 1
         );
         // Rotation from gazebo world frame to gazebo body frame
-        this->rot = Rx * Ry * Rz;
+        this->rot = this->Rx * this->Ry * this->Rz;
         ignition::math::Vector3d corrected_pos = this->rot * this->rel_pos_NED;
 
         corrected_pos = corrected_pos / height;
