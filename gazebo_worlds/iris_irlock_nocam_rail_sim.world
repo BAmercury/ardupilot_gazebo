@@ -114,8 +114,8 @@
           <!-- Motion Profile 1: Velocity Sine Wave Profile
                If the type tag is not 1, the following will be ignored 
           -->
-          <amplitude>2.0</amplitude> <!-- Meters, from center to edge -->
-          <max_velocity>0</max_velocity> <!-- meters per second -->
+          <amplitude>4.0</amplitude> <!-- Meters, from center to edge -->
+          <max_velocity>1</max_velocity> <!-- meters per second -->
           <direction>0 1</direction> <!-- Unit Vector for X and Y -->
           <!-- Optional for motion profile 1: Add forward movement -->
           <forward_direction>0</forward_direction> <!-- 0=No added movement, 1=Enable added movement-->
