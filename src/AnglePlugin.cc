@@ -11,9 +11,27 @@ void AnglePlugin::Load(physics::WorldPtr _world, sdf::ElementPtr _sdf)
 
     if (_sdf->HasElement("target"))
     {
-        sdf::ElementPtr elem = _sdf->GetElement("target");
-        this->model_target_name = elem->Get<std::string>();
+        this->model_target_name = _sdf->GetElement("target")->Get<std::string>();
     }
+    if (_sdf->HasElement("update_rate"))
+    {
+        this->update_rate = _sdf->GetElement("update_rate")->Get<int>();
+        //gzdbg << update_rate << std::endl;
+        this->period = 1.0/this->update_rate;
+    }
+    // Log data to CSV file if user wants too
+    if (_sdf->HasElement("debug_log"))
+    {
+       if (_sdf->GetElement("debug_log")->Get<int>())
+       {
+           // Enable data logging, start new CSV file
+           myFile.open("data.csv");
+           this->enable_log = true;
+       } 
+       
+    }
+    
+
 
     // Setup UDP Client
 
@@ -34,8 +52,7 @@ void AnglePlugin::Load(physics::WorldPtr _world, sdf::ElementPtr _sdf)
     this->model_drone = this->world->ModelByName("iris");
     this->model_target = this->world->ModelByName(this->model_target_name);
 
-    // Log data to CSV file
-    myFile.open("data.csv");
+
 
 
 
@@ -66,15 +83,9 @@ void AnglePlugin::OnUpdate(const common::UpdateInfo &_info)
         this->target_pose = this->model_target->WorldPose();
 
         // Find relative distance (In gazebo world frame) in meters
-        double x_rel = this->target_pose.Pos().X() - this->drone_pose.Pos().X();
-        double y_rel = this->target_pose.Pos().Y() - this->drone_pose.Pos().Y();
-        //gzdbg << "Relative Distance X: " << x_rel << "Relative Distance Y: " << y_rel << std::endl;
-        
-        // Get Height
-        double height = this->drone_pose.Pos().Z();
-        this->rel_pos = ignition::math::Vector3d(
-            x_rel, y_rel, height
-        );
+        this->rel_pos.X(this->target_pose.Pos().X() - this->drone_pose.Pos().X());
+        this->rel_pos.Y(this->target_pose.Pos().Y() - this->drone_pose.Pos().Y());
+        this->rel_pos.Z(this->drone_pose.Pos().Z());
 
         // Convert from Gazebo NWU to Ardupilot NED, flip 180 degrees along the roll axis
         this->rel_pos_NED = this->gazeboXYZTONED.Rot().RotateVectorReverse(rel_pos);
@@ -106,7 +117,7 @@ void AnglePlugin::OnUpdate(const common::UpdateInfo &_info)
         this->rot = this->Rx * this->Ry * this->Rz;
         ignition::math::Vector3d corrected_pos = this->rot * this->rel_pos_NED;
 
-        corrected_pos = corrected_pos / height;
+        corrected_pos = corrected_pos / corrected_pos.Z();
         // Get angles
         //float angle_x = atan2(corrected_pos.X(),  corrected_pos.Z()); // In Radians
         //float angle_y = atan2(corrected_pos.Y(), corrected_pos.Z());
@@ -121,7 +132,7 @@ void AnglePlugin::OnUpdate(const common::UpdateInfo &_info)
         packet.pos_y = -corrected_pos.X();
         packet.size_x = static_cast<float>(1);
         packet.size_y = static_cast<float>(1);
-
+        // Send UDP packet to server
         sendto(this->sock_fd, 
         reinterpret_cast<raw_type *>(&packet),
         sizeof(packet), 0,
@@ -129,11 +140,17 @@ void AnglePlugin::OnUpdate(const common::UpdateInfo &_info)
         );
 
 
-        // Log data to CSV file
-        // myFile << -corrected_pos.Y() << "," << corrected_pos.X() << "," 
-        //     << -pos_norm_h.Y() << "," << pos_norm_h.X() << "," 
-        //     << std::endl;
-        //myFile << packet.timestamp << std::endl;
+        // Log data to CSV file if enabled
+        // Going to log Gazebo ground truth, Rel Pos Gazebo and NED, Drone angles, and final data packet
+        if (this->enable_log)
+        {
+            myFile << this->drone_pose.Pos().X() << "," << this->drone_pose.Pos().Y() 
+            << "," << this->drone_pose.Pos().Z() << "," << this->rel_pos.X() << ","
+            << this->rel_pos.Y() << "," << this->rel_pos.Z() << "," << this->rel_pos_NED.X()
+            << "," << this->rel_pos_NED.Y() << "," << this->rel_pos_NED.Z() << "," 
+            << this->drone_angle.X() << "," << this->drone_angle.Y() << "," << this->drone_angle.Z()
+            << "," << packet.pos_x << "," << packet.pos_y << "," <<packet.timestamp << std::endl;
+        }
 
         // Save start time
         this->start_time = this->current_time;

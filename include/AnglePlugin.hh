@@ -37,6 +37,7 @@ namespace gazebo
         };
         // Log data to csv file
         public: std::ofstream myFile;
+        private: bool enable_log = false;
         // UDP Client
         private: int sock_fd = 0;
         private: struct sockaddr_in servaddr;
@@ -60,7 +61,7 @@ namespace gazebo
         private: physics::ModelPtr model_drone;
         private: physics::ModelPtr model_target;
         private: std::string model_target_name;
-        private: int update_rate = 10; // Hz
+        private: int update_rate = 10; // Hz, 10 for default
         private: double start_time;
         private: double current_time;
         private: double period = 1.0/update_rate;

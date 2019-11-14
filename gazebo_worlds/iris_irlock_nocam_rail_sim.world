@@ -25,6 +25,7 @@
     <plugin name="AnglePub" filename="libAnglePlugin.so">
       <target>rail_system</target>
       <update_rate>50</update_rate> <!-- Hz -->
+      <debug_log>0</debug_log>
     </plugin>
 
     <!-- Physics ODE Solver Configuration -->
