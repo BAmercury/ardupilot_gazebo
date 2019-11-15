@@ -117,7 +117,8 @@ void AnglePlugin::OnUpdate(const common::UpdateInfo &_info)
         this->rot = this->Rx * this->Ry * this->Rz;
         ignition::math::Vector3d corrected_pos = this->rot * this->rel_pos_NED;
 
-        corrected_pos = corrected_pos / this->drone_pose.Pos().Z();
+        //corrected_pos = corrected_pos / this->drone_pose.Pos().Z();
+        corrected_pos /= corrected_pos.Length();
         // Get angles
         //float angle_x = atan2(corrected_pos.X(),  corrected_pos.Z()); // In Radians
         //float angle_y = atan2(corrected_pos.Y(), corrected_pos.Z());
