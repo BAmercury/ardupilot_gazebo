@@ -24,6 +24,9 @@
 #include "gazebo/common/Plugin.hh"
 #include "gazebo/util/system.hh"
 
+#include <iostream>
+#include <fstream>
+
 namespace gazebo
 {
   // Forward declare private class.
@@ -58,9 +61,17 @@ namespace gazebo
     public: virtual void Publish(const std::string &_fiducial, unsigned int _x,
         unsigned int _y);
 
+
+    // Log data to a CSV file
+    public: std::ofstream myFile;
+
     /// \internal
     /// \brief Pointer to private data.
     private: std::unique_ptr<ArduCopterIRLockPluginPrivate> dataPtr;
+  
+  
+  
+  
   };
 }
 #endif

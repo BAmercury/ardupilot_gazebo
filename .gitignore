@@ -95,3 +95,13 @@ cmake-build-debug
 
 # Catkin custom files
 CATKIN_IGNORE
+
+scripts/SITL Interface/eeprom.bin
+
+scripts/SITL Interface/mav.tlog
+
+scripts/SITL Interface/mav.tlog.raw
+
+scripts/SITLInterface/eeprom.bin
+
+.vscode/tasks.json

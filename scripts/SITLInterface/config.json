@@ -1,0 +1,17 @@
+{
+    "Prec" : "0",
+    "Arm" : "1",
+    "Loiter" : "2",
+    "Land" : "3",
+    "Macro1" : "4",
+    "Macro2" : "6",
+    "CustomMode1" : "7",
+    "AltHold" : "8",
+    "Roll" : "2",
+    "Pitch" : "3",
+    "Yaw" : "0",
+    "Throttle" : "1",
+    "UDP" : "127.0.0.1:14550",
+    "UpdateRate" : "0.005"
+}
+

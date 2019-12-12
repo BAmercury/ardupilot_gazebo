@@ -23,7 +23,7 @@ T, yout = control.step_response(u*sys)
 plt.plot(T, yout)
 plt.title("Open Loop Response")
 
-# State feedback with feedforward gain for tracking
+# State feedback with feedforward gain for possible steady state error
 G = 19.5 # places poles at -5
 #G = 7.8
 #G = 1
